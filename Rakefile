@@ -4,3 +4,15 @@
 require_relative "config/application"
 
 Rails.application.load_tasks
+
+if Rails.env.local?
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+
+  require 'bundler/audit/task'
+  Bundler::Audit::Task.new
+
+  # remove code:yarn_audit due to unpatched packages
+  # task default: %i[rubocop:auto_correct code:eslint code:prettier code:brakeman code:yarn_audit bundle:audit spec]
+  task default: %i[rubocop:autocorrect bundle:audit parallel:spec]
+end

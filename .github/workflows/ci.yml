@@ -98,3 +98,19 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  stages:
+  - security
+
+  brakeman_scan:
+    stage: security
+    image: ruby:3.0
+    script:
+      - gem install brakeman
+      - brakeman --no-pager -o brakeman_report.html
+    artifacts:
+      paths:
+        - brakeman_report.html
+    only:
+      - merge_requests
+      - master

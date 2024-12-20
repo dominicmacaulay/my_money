@@ -84,12 +84,17 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run tests
+      - name: Run Brakeman audit
+        run: bin/brakeman --no-pager
+
+      - name: Run parallel tests
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/my_money_test
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare spec
+        run: |
+          bin/rails db:test:prepare
+          bin/parallel_rspec spec
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
@@ -99,18 +104,3 @@ jobs:
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
 
-  stages:
-  - security
-
-  brakeman_scan:
-    stage: security
-    image: ruby:3.0
-    script:
-      - gem install brakeman
-      - brakeman --no-pager -o brakeman_report.html
-    artifacts:
-      paths:
-        - brakeman_report.html
-    only:
-      - merge_requests
-      - master

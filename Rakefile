@@ -12,7 +12,5 @@ if Rails.env.local?
   require 'bundler/audit/task'
   Bundler::Audit::Task.new
 
-  # remove code:yarn_audit due to unpatched packages
-  # task default: %i[rubocop:auto_correct code:eslint code:prettier code:brakeman code:yarn_audit bundle:audit spec]
   task default: %i[rubocop:autocorrect bundle:audit parallel:spec]
 end

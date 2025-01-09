@@ -72,3 +72,4 @@ group :test do
 end
 
 gem "slim", "~> 5.2"
+gem "simple_form"

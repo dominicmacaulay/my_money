@@ -1,0 +1,28 @@
+.session-form,
+.registration-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--op-space-small);
+  padding-top: var(--op-space-medium);
+
+  .form-inputs {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      display: flex;
+      gap: var(--op-space-small)
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    padding-top: var(--op-space-medium);
+    gap: var(--op-space-small);
+  }
+}
+
+.new_user {
+  width: 50%;
+}

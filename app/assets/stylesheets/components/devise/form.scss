@@ -6,20 +6,25 @@
   gap: var(--op-space-small);
   padding-top: var(--op-space-medium);
 
-  .form-inputs {
-    display: flex;
-    flex-direction: column;
+  .card {
+    width: 100%;
 
-    .name {
-      display: flex;
-      gap: var(--op-space-small)
+    padding-inline: var(--op-space-2x-large);
+    padding-bottom: var(--op-space-large);
+
+    >* {
+      width: 100%;
     }
   }
 
   .form-actions {
     display: flex;
-    padding-top: var(--op-space-medium);
-    gap: var(--op-space-small);
+    flex-direction: column;
+    gap: var(--op-space-2x-small);
+
+    .btn {
+      max-width: fit-content;
+    }
   }
 }
 

@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/RoleModel/rolemodel_rails.git
+  revision: 3e1e522c45881410a76b87fa609c22578c36f6b8
+  specs:
+    rolemodel_rails (0.11.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -444,6 +450,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.1)
+  rolemodel_rails!
   rspec-rails
   rubocop-rails-omakase
   sassc-rails

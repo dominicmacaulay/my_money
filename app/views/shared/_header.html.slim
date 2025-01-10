@@ -1,0 +1,12 @@
+.app-header
+  sl-dropdown placement='bottom-end'
+    button.btn type='button' slot="trigger"
+      = material_icon 'account_circle'
+    sl-menu
+      sl-menu-item
+        = link_to edit_user_registration_path do
+          | Settings
+      sl-menu-item
+        = link_to root_path do
+          | Companies
+

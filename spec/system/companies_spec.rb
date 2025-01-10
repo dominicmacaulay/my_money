@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Companies', type: :system do
-  include Warden::Test::Helpers
   let(:user) { create(:user) }
 
   before do
@@ -9,7 +8,10 @@ RSpec.describe 'Companies', type: :system do
     visit root_path
   end
 
-  it 'shows the companies' do
+  it 'can be created' do
+    click_on 'account_circle'
+    click_on 'companies'
+
     expect(page).to have_content('Companies')
   end
 end

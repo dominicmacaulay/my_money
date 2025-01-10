@@ -5,15 +5,16 @@
     = f.error_notification
 
     .form-inputs
+      .name
+        = f.input :first_name, required: true
+        = f.input :last_name, required: true
+
       .email
         = f.input :email, required: true, autofocus: true
 
       - if devise_mapping.confirmable? && resource.pending_reconfirmation?
         p Currently waiting confirmation for: #{resource.unconfirmed_email}
 
-      .name
-        = f.input :first_name, required: true
-        = f.input :last_name, required: true
       .password
         = f.input :password, required: false, input_html: { autocomplete: "new-password" }
         = f.input :password_confirmation, hint: "leave it blank if you don't want to change it", required: false, input_html: { autocomplete: "new-password" }

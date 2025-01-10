@@ -4,11 +4,9 @@ import "./controllers"
 import './initializers/honeybadger'
 
 // Shoelace
-import '@shoelace-style/shoelace/dist/themes/light.css'; // Import the theme
-import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js'; // Dropdown component
-import '@shoelace-style/shoelace/dist/components/menu/menu.js'; // Menu component
-import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'; // Menu-item component
-import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
+import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library";
+registerIconLibrary('system', {resolver: (_name) => ''}) // No Icons needed for this project
 
-// Set the base path to the folder you copied Shoelace's assets to
-setBasePath('/node_modules/@shoelace-style/shoelace/dist');
+import '@shoelace-style/shoelace/dist/components/dropdown/dropdown'; // Dropdown component
+import '@shoelace-style/shoelace/dist/components/menu/menu'; // Menu component
+import '@shoelace-style/shoelace/dist/components/menu-item/menu-item'; // Menu-item component

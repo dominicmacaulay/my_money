@@ -1,15 +1,9 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
 import webpack from 'webpack'
 import TerserPlugin from 'terser-webpack-plugin'
 import HoneybadgerSourceMapPlugin from '@honeybadger-io/webpack'
-import CopyPlugin from 'copy-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
-
-// Define __dirname for ES module scope
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 let mode = 'development'
 
@@ -86,16 +80,6 @@ export default {
   plugins: [
     // Extract CSS into its own file for the Rails asset pipeline to pick up
     new MiniCssExtractPlugin(),
-
-    new CopyPlugin({
-      patterns: [
-        // Copy Shoelace assets to dist/shoelace
-        {
-          from: path.resolve(__dirname, 'node_modules/@shoelace-style/shoelace/dist/components/dropdown'),
-          to: path.resolve(__dirname, 'dist/shoelace/assets')
-        }
-      ]
-    }),
 
     // We're compiling all JS to a single application.js file
     new webpack.optimize.LimitChunkCountPlugin({

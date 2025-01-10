@@ -1,2 +1,5 @@
-h1 Companies#edit
-p Find me in app/views/companies/edit.html.slim
+h1 "Edit #{@company.name.capitalize}"
+
+= simple_form_for @company do |f|
+  = f.input :name
+  = f.button :submit

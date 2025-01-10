@@ -1,2 +1,7 @@
-h1 Companies#index
-p Find me in app/views/companies/index.html.slim
+= link_to 'New Company', new_company_path
+
+.companies-list
+  - @companies.each do |company|
+    .company
+      = company.name
+      = link_to 'Edit', edit_company_path(company)

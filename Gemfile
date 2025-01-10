@@ -64,7 +64,7 @@ group :development do
 
   gem "bundler-audit", require: false
 
-  gem 'rolemodel_rails', github: 'RoleModel/rolemodel_rails'
+  gem "rolemodel_rails", github: "RoleModel/rolemodel_rails"
 end
 
 group :test do

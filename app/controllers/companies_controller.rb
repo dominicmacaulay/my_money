@@ -13,10 +13,11 @@ class CompaniesController < ApplicationController
 
     if @company.save
       @company.users << current_user
-      respond_to do |format|
-        format.html { redirect_to companies_path, notice: "#{@company.name} was successfully created" }
-        format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
-      end
+      redirect_to companies_path, notice: "#{@company.name} was successfully created"
+      # respond_to do |format|
+      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully created" }
+      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
+      # end
     else
       render :new, status: :unprocessable_entity, layout: 'modal'
     end
@@ -27,10 +28,11 @@ class CompaniesController < ApplicationController
 
   def update
     if @company.update(company_params)
-      respond_to do |format|
-        format.html { redirect_to companies_path, notice: "#{@company.name} was successfully updated" }
-        format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
-      end
+      redirect_to companies_path, notice: "#{@company.name} was successfully updated"
+      # respond_to do |format|
+      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully updated" }
+      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
+      # end
     else
       render :edit, status: :unprocessable_entity, layout: 'modal'
     end
@@ -38,10 +40,11 @@ class CompaniesController < ApplicationController
 
   def destroy
     if @company.destroy
-      respond_to do |format|
-        format.html { redirect_to companies_path, notice: "#{@company.name} was successfully destroyed" }
-        format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully destroyed" }
-      end
+      redirect_to companies_path, notice: "#{@company.name} was successfully destroyed"
+      # respond_to do |format|
+      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully destroyed" }
+      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully destroyed" }
+      # end
     else
       redirect_to companies_path, notice: "#{@company.name} could not be destroyed"
     end

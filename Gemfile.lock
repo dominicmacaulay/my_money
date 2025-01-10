@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/RoleModel/rolemodel_rails.git
+  revision: 3e1e522c45881410a76b87fa609c22578c36f6b8
+  specs:
+    rolemodel_rails (0.11.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -341,6 +347,9 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    simple_form (5.3.1)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     slim (5.2.1)
       temple (~> 0.10.0)
       tilt (>= 2.1.0)
@@ -441,10 +450,12 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.1)
+  rolemodel_rails!
   rspec-rails
   rubocop-rails-omakase
   sassc-rails
   selenium-webdriver
+  simple_form
   slim (~> 5.2)
   solid_cable
   solid_cache

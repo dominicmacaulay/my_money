@@ -1,0 +1,33 @@
+.session-form,
+.registration-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--op-space-small);
+  padding-top: var(--op-space-medium);
+
+  .card {
+    width: 100%;
+
+    padding-inline: var(--op-space-2x-large);
+    padding-bottom: var(--op-space-large);
+
+    >* {
+      width: 100%;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--op-space-2x-small);
+
+    .btn {
+      max-width: fit-content;
+    }
+  }
+}
+
+.new_user {
+  width: 50%;
+}

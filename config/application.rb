@@ -23,5 +23,11 @@ module MyMoney
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.generators do |g|
+      g.view_specs false # Specifically disable view specs
+      g.request_specs false
+      g.helper_specs false
+    end
   end
 end

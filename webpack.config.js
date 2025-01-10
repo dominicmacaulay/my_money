@@ -5,6 +5,8 @@ import HoneybadgerSourceMapPlugin from '@honeybadger-io/webpack'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 
+const webpackPort = process.env.WEBPACK_PORT || 3000
+
 let mode = 'development'
 
 if (process.env.RAILS_ENV === 'production' || process.env.CI === 'true') {
@@ -76,6 +78,11 @@ export default {
       new TerserPlugin(),
       new CssMinimizerPlugin()
     ]
+  },
+  devServer: {
+    port: webpackPort,
+    host: 'localhost',
+    hot: true
   },
   plugins: [
     // Extract CSS into its own file for the Rails asset pipeline to pick up

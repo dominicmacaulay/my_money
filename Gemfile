@@ -56,6 +56,8 @@ group :development, :test do
 
   gem "rspec-rails"
   gem "parallel_tests"
+
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -71,6 +73,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "webdrivers"
 end
 
 gem "slim", "~> 5.2"

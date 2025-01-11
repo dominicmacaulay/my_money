@@ -1,15 +1,22 @@
 {
   "name": "my_money",
   "version": "1.0.0",
+  "private": true,
   "main": "index.js",
   "repository": "git@github.com:dominicmacaulay/my_money.git",
   "author": "dominicmacaulay <dominic.62502@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@esbuild/darwin-arm64": "^0.24.2",
+    "@floating-ui/dom": "^1.6.13",
+    "@floating-ui/utils": "^0.2.5",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.12",
     "@rolemodel/optics": "^1.1.0",
-    "@shoelace-style/shoelace": "^2.19.1"
+    "@shoelace-style/shoelace": "^2.19.1",
+    "@types/react": "^19.0.4",
+    "modern-css-reset": "^1.4.0",
+    "yarn": "^1.22.22"
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",

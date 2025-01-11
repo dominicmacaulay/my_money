@@ -75,6 +75,9 @@ jobs:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
 
+      - name: Install Yarn
+        run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && sudo apt-get update && sudo apt-get install yarn
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -83,6 +86,9 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Run bundle install
+        run: bundle install
 
       - name: Run Brakeman audit
         run: bin/brakeman --no-pager

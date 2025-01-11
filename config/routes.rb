@@ -13,5 +13,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :companies
+  resources :companies do
+    member do
+      post :set_current
+    end
+  end
 end

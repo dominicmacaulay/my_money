@@ -50,6 +50,16 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def set_current
+    company = Company.find(params[:id])
+    if current_user.set_current_company(company)
+      reload_current_company
+      redirect_to root_path, notice: "Current company set to #{company.name}"
+    else
+      redirect_to companies_path, alert: "Could not set current company"
+    end
+  end
+
   private
 
   def set_company

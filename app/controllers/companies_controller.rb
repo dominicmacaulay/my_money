@@ -19,7 +19,7 @@ class CompaniesController < ApplicationController
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
       # end
     else
-      render :new, status: :unprocessable_entity, layout: 'modal'
+      render :new, status: :unprocessable_entity, layout: "modal"
     end
   end
 
@@ -34,7 +34,7 @@ class CompaniesController < ApplicationController
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
       # end
     else
-      render :edit, status: :unprocessable_entity, layout: 'modal'
+      render :edit, status: :unprocessable_entity, layout: "modal"
     end
   end
 

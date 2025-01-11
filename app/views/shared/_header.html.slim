@@ -1,0 +1,25 @@
+.app-header
+  .navbar
+    a.navbar__brand href="/"
+      = image_tag 'logo.png', alt: 'Logo', class: 'navbar__logo'
+      | My Money
+
+    .navbar__content
+      - if current_company
+        = current_company.name
+      - else
+        = link_to new_company_path do
+          | Create Your Company
+
+    .navbar__content
+      sl-dropdown placement='bottom-end'
+        button.btn type='button' slot="trigger"
+          = material_icon 'account_circle'
+        sl-menu
+          sl-menu-item
+            = link_to edit_user_registration_path do
+              | Settings
+          sl-menu-item
+            = link_to companies_path do
+              | Companies
+

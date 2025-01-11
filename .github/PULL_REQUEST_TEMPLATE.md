@@ -1,7 +1,3 @@
-## Task
-
-[MM#XXX]()
-
 ## Why?
 
 Why were the changes needed? What issues were the changes addressing?

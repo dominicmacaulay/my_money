@@ -1,0 +1,9 @@
+= link_to 'New Company', new_company_path
+
+.companies-list
+  - @companies.each do |company|
+    .company
+      = company.name
+      = link_to 'Edit', edit_company_path(company)
+      - unless company == current_company
+        = button_to "Switch to #{company.name}", set_current_company_path(company)

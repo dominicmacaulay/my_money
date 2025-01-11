@@ -37,6 +37,10 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :system
   config.after(type: :system) { Warden.test_reset! }
 
+  # This is for validation tests
+  config.include Shoulda::Matchers::ActiveModel, type: :model
+  config.include Shoulda::Matchers::ActiveRecord, type: :model
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = Rails.root.join('spec/fixtures')
 

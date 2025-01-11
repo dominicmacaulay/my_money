@@ -82,7 +82,8 @@ export default {
   devServer: {
     port: webpackPort,
     host: 'localhost',
-    hot: true
+    hot: true,
+    cache: false
   },
   plugins: [
     // Extract CSS into its own file for the Rails asset pipeline to pick up

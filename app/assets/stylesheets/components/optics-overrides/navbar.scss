@@ -1,0 +1,9 @@
+.navbar {
+  @extend %navbar-global;
+
+  justify-content: space-between;
+
+  .navbar__brand {
+    display: flex;
+  }
+}

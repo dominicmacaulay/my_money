@@ -2,6 +2,9 @@
 
 @import '@shoelace-style/shoelace/dist/themes/light.css'; // Import the Shoelace theme
 
+// optics overrides
+@import 'components/optics-overrides/navbar.scss';
+
 // components
 @import 'components/card.scss';
 // devise

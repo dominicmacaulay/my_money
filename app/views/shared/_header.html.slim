@@ -1,12 +1,17 @@
 .app-header
-  sl-dropdown placement='bottom-end'
-    button.btn type='button' slot="trigger"
-      = material_icon 'account_circle'
-    sl-menu
-      sl-menu-item
-        = link_to edit_user_registration_path do
-          | Settings
-      sl-menu-item
-        = link_to companies_path do
-          | Companies
+  .navbar
+    a.navbar__brand href="/"
+      = image_tag 'logo.png', alt: 'Logo', class: 'navbar__logo'
+      | My Money
+    .navbar__content
+      sl-dropdown placement='bottom-end'
+        button.btn type='button' slot="trigger"
+          = material_icon 'account_circle'
+        sl-menu
+          sl-menu-item
+            = link_to edit_user_registration_path do
+              | Settings
+          sl-menu-item
+            = link_to companies_path do
+              | Companies
 

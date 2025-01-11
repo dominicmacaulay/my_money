@@ -1,5 +1,5 @@
 require_relative "boot"
-require_relative "../.env"
+require_relative "../env"
 
 require "rails/all"
 

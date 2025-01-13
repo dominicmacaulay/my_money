@@ -40,5 +40,8 @@
     "postcss-scss": "^4.0.9",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
+  },
+  "resolutions": {
+    "sass": "1.79.6"
   }
 }

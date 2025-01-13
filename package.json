@@ -14,7 +14,7 @@
     "@hotwired/turbo-rails": "^8.0.12",
     "@rolemodel/optics": "^1.1.0",
     "@shoelace-style/shoelace": "^2.19.1",
-    "@types/react": "^19.0.4",
+    "@types/react": "19.0.4",
     "modern-css-reset": "^1.4.0",
     "yarn": "^1.22.22"
   },

@@ -60,21 +60,22 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres
         ports:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: my_money_test
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
@@ -89,13 +90,11 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run parallel tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/my_money_test
-        run: |
-          bin/rails db:test:prepare
-          bundle exec rspec spec
+      - name: Setup Database
+        run: bundle exec rake db:test:prepare
+
+      - name: Run RSpec Tests
+        run: bundle exec rspec --format documentation
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
@@ -104,4 +103,3 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
-

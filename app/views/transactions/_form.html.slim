@@ -1,10 +1,8 @@
-= form_with(model: transaction) do |form|
-  - if transaction.errors.any?
-    div style="color: red"
-      h2 = "#{pluralize(transaction.errors.count, "error")} prohibited this transaction from being saved:"
-      ul
-        - transaction.errors.each do |error|
-          li = error.full_message
+= simple_form_for @transaction do |f|
+  = f.hidden_field :company_id, value: current_company.id
 
-  div
-    = form.submit
+  = f.input :date
+  = f.input :description, required: false
+  = f.input :transaction_type, collection: Transaction.transaction_types.keys
+  = f.input :amount
+  = f.button :submit

@@ -3,7 +3,7 @@ class Transaction < ApplicationRecord
 
   enum :transaction_type, [ :income, :expense ]
 
-  validates :date, :description, :amount, :transaction_type, presence: true
+  validates :date, :amount, :transaction_type, presence: true
   validates :amount, numericality: true
   validate :amount_has_two_decimal_places
 

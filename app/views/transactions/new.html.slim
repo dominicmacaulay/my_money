@@ -1,8 +1,5 @@
-h1 New transaction
+h1 Create New Transaction
 
-== render "form", transaction: @transaction
+= render 'form'
 
-br
-
-div
-  = link_to "Back to transactions", transactions_path
+= link_to 'Back', transactions_path

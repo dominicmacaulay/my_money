@@ -7,6 +7,7 @@ on:
 
 jobs:
   scan_ruby:
+    name: Scan Ruby
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +24,7 @@ jobs:
         run: bin/brakeman --no-pager
 
   scan_js:
+    name: Scan JavaScript
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +41,9 @@ jobs:
         run: bin/importmap audit
 
   lint:
+    name: Lint Code
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,29 +58,28 @@ jobs:
         run: bin/rubocop -f github
 
   test:
+    name: Ruby Tests
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres
         ports:
           - 5432:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: my_money_test
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
-
-      - name: Install Yarn
-        run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && sudo apt-get update && sudo apt-get install yarn
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -87,20 +90,11 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run bundle install
-        run: bundle install
+      - name: Setup Database
+        run: bundle exec rake db:test:prepare
 
-      - name: Run Brakeman audit
-        run: bin/brakeman --no-pager
-
-      - name: Run parallel tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/my_money_test
-          # REDIS_URL: redis://localhost:6379/0
-        run: |
-          bin/rails db:test:prepare
-          bundle exec parallel_rspec spec
+      - name: Run non-system tests
+        run: bundle exec rspec --exclude-pattern "spec/system/**/*_spec.rb" --format documentation
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
@@ -110,3 +104,61 @@ jobs:
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
 
+  system_test:
+    name: System Tests
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
+
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: .node-version
+          cache: yarn
+
+      - name: Yarn Install
+        run: yarn install --frozen-lockfile
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Build assets
+        run: yarn build
+
+      - name: Setup Database
+        run: bundle exec rake db:test:prepare
+
+      - name: Run system tests
+        run: bundle exec rspec spec/system --format documentation
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore

@@ -1,5 +1,7 @@
+= link_to 'Back', companies_path, class: 'btn'
 h1 Create New Company
 
 = simple_form_for @company do |f|
   = f.input :name
-  = f.button :submit
+  = f.button :submit, class: 'btn btn-primary'
+

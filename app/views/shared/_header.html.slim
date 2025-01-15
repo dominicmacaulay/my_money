@@ -12,6 +12,10 @@
           | Create Your Company
 
     .navbar__content
+      - if current_company
+        = link_to transactions_path do
+          | Transactions
+
       sl-dropdown placement='bottom-end'
         button.btn type='button' slot="trigger"
           = material_icon 'account_circle'

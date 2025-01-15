@@ -4,6 +4,7 @@ FactoryBot.define do
     sequence(:description) { |n| "Transaction ##{n}" }
     amount { 100.00 }
     company { create(:company) }
+    transaction_type { 0 }
 
     trait :income do
       transaction_type { 0 }

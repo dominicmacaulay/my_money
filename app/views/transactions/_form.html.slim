@@ -1,3 +1,5 @@
+-# locals: (show_delete_button: false)
+
 = simple_form_for @transaction do |f|
   = f.hidden_field :company_id, value: current_company.id
 
@@ -5,4 +7,9 @@
   = f.input :description, required: false
   = f.input :transaction_type, collection: Transaction.transaction_types.keys
   = f.input :amount
-  = f.button :submit, class: 'btn btn-primary'
+
+- if show_delete_button
+  = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
+
+- submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Transaction' : 'Update Transaction'
+= submit_button @transaction, submit_text, class: 'btn btn-primary'

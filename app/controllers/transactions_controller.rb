@@ -22,7 +22,7 @@ class TransactionsController < ApplicationController
     if @transaction.save
       redirect_to transactions_path, notice: "Transaction was successfully created."
     else
-      render :new, status: :unprocessable
+      render :new, status: :unprocessable_entity
     end
     # respond_to do |format|
     #   if @transaction.save
@@ -40,7 +40,7 @@ class TransactionsController < ApplicationController
     if @transaction.update(transaction_params)
       redirect_to transactions_path, notice: "Transaction was successfully updated."
     else
-      render :edit, status: :unprocessable
+      render :edit, status: :unprocessable_entity
     end
     # respond_to do |format|
     #   if @transaction.update(transaction_params)
@@ -55,13 +55,16 @@ class TransactionsController < ApplicationController
 
   # DELETE /transactions/1 or /transactions/1.json
   def destroy
-    @transaction.destroy!
+    if @transaction.destroy
 
-    redirect_to transactions_path, notice: "Transaction was successfully destroyed."
+      redirect_to transactions_path, notice: "Transaction was successfully destroyed."
     # respond_to do |format|
     #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." }
     #   format.json { head :no_content }
     # end
+    else
+      redirect_to transactions_path, notice: "Transaction could not be destroyed."
+    end
   end
 
   private

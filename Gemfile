@@ -55,6 +55,13 @@ group :development, :test do
   gem 'rspec-rails'
 
   gem 'factory_bot_rails'
+
+  gem 'rubocop'
+  gem 'rubocop-capybara'
+  gem 'rubocop-factory_bot'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+  gem 'rubocop-rspec_rails'
 end
 
 group :development do
@@ -72,12 +79,6 @@ group :test do
   gem 'webdrivers'
 
   gem 'shoulda-matchers'
-
-  gem 'rubocop-capybara', require: false
-  gem 'rubocop-factory_bot', require: false
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'rubocop-rspec_rails', require: false
 end
 
 gem 'simple_form'

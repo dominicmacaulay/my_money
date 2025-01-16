@@ -441,6 +441,7 @@ DEPENDENCIES
   rails (~> 8.0.1)
   rolemodel_rails!
   rspec-rails
+  rubocop
   rubocop-capybara
   rubocop-factory_bot
   rubocop-rails

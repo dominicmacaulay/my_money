@@ -16,6 +16,6 @@ table.table
         td = transaction.date
         td = transaction.transaction_type.titleize
         td = transaction.description
-        td = transaction.amount
+        td = number_to_currency(transaction.amount)
         td = link_to 'View', edit_transaction_path(transaction)
 

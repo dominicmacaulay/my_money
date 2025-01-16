@@ -25,7 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_225037) do
     t.datetime "updated_at", null: false
     t.date "date", null: false
     t.string "description"
-    t.decimal "amount", null: false
+    t.decimal "amount_cents", null: false
     t.string "transaction_type", null: false
     t.bigint "company_id", null: false
     t.index ["company_id"], name: "index_transactions_on_company_id"

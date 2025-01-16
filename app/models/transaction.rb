@@ -5,15 +5,7 @@ class Transaction < ApplicationRecord
 
   enum :transaction_type, { income: 'income', expense: 'expense' }, validate: true
 
-  validates :date, :amount, :transaction_type, presence: true
-  validates :amount, numericality: true
-  validate :amount_has_two_decimal_places
+  monetize :amount_cents
 
-  private
-
-  def amount_has_two_decimal_places
-    return unless amount.present? && amount.to_s.split('.').last.size > 2
-
-    errors.add(:amount, 'must have at most two decimal places')
-  end
+  validates :date, :amount_cents, :transaction_type, presence: true
 end

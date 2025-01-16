@@ -3,7 +3,7 @@
 class Transaction < ApplicationRecord
   belongs_to :company
 
-  enum :transaction_type, { income: 'income', expense: 'expense' }
+  enum :transaction_type, { income: 'income', expense: 'expense' }, validate: true
 
   validates :date, :amount, :transaction_type, presence: true
   validates :amount, numericality: true

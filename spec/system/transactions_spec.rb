@@ -49,15 +49,15 @@ RSpec.describe 'Transactions', type: :system do
 
       expect(page).to have_content('Transaction was successfully updated')
       expect(transaction.reload.description).to eql 'My Updated Transaction'
-      expect(transaction.transaction_type).to eql 'Expense'
+      expect(transaction.transaction_type).to eql 'expense'
       expect(transaction.amount).to eql 50
     end
 
     it 'can be deleted' do
-      expect {
+      expect do
         click_on 'Delete'
         expect(page).to have_content('Transaction was successfully destroyed')
-      }.to change(Transaction, :count).by(-1)
+      end.to change(Transaction, :count).by(-1)
     end
   end
 end

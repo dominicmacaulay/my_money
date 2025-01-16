@@ -6,16 +6,28 @@ RSpec.describe Transaction, type: :model do
     it { should validate_presence_of(:amount) }
     it { should validate_presence_of(:transaction_type) }
 
-    it "is valid with an amount having at most two decimal places" do
+    it 'validates that the type is either income or expense' do
+      transaction = Transaction.new(transaction_type: "m'thinks")
+      expect(transaction).to be_invalid
+      expect(transaction.errors[:transaction_type]).to include('is not included in the list')
+    end
+
+    it 'validates the numericality of amount' do
+      transaction = Transaction.new(amount: 'abc')
+      expect(transaction).to be_invalid
+      expect(transaction.errors[:amount]).to include('is not a number')
+    end
+
+    it 'is valid with an amount having at most two decimal places' do
       transaction = Transaction.new(amount: 123.45)
-      transaction.valid?
+      expect(transaction).to be_invalid
       expect(transaction.errors[:amount]).to be_empty
     end
 
     it 'is invalid with an amount having more than two decimal places' do
       transaction = Transaction.new(amount: 123.456)
-      transaction.valid?
-      expect(transaction.errors[:amount]).to include("must have at most two decimal places")
+      expect(transaction).to be_invalid
+      expect(transaction.errors[:amount]).to include('must have at most two decimal places')
     end
   end
 

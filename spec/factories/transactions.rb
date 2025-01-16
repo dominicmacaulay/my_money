@@ -4,14 +4,14 @@ FactoryBot.define do
     sequence(:description) { |n| "Transaction ##{n}" }
     amount { 100.00 }
     company { create(:company) }
-    transaction_type { 0 }
+    transaction_type { 'income' }
 
     trait :income do
-      transaction_type { 0 }
+      transaction_type { 'income' }
     end
 
     trait :expense do
-      transaction_type { 1 }
+      transaction_type { 'expense' }
     end
   end
 end

@@ -5,7 +5,7 @@ FactoryBot.define do
     date { Time.zone.today }
     sequence(:description) { |n| "Transaction ##{n}" }
     amount { 100.00 }
-    company { create(:company) }
+    company
     transaction_type { 'income' }
 
     trait :income do

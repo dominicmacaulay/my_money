@@ -2,10 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Companies', type: :system do
+RSpec.describe 'Companies' do
   let(:user) { create(:user) }
-  let(:company) { create(:company) }
-  let!(:user_company) { create(:user_company, user:, company:) }
+  let!(:company) { create(:company, users: [user]) }
 
   before do
     login_as user

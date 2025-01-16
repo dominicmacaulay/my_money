@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Transactions', type: :system do
+RSpec.describe 'Transactions' do
   let(:user) { create(:user, current_company: company) }
   let(:company) { create(:company) }
 
@@ -30,7 +30,7 @@ RSpec.describe 'Transactions', type: :system do
 
     it 'does not show a delete button' do
       expect(page).to have_content('Create Transaction')
-      expect(page).not_to have_content('Delete')
+      expect(page).to have_no_content('Delete')
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe 'Transactions', type: :system do
       expect(page).to have_content('Transaction was successfully updated')
       expect(transaction.reload.description).to eql 'My Updated Transaction'
       expect(transaction.transaction_type).to eql 'expense'
-      expect(transaction.amount).to eql 50
+      expect(transaction.amount).to eq 50
     end
 
     it 'can be deleted' do

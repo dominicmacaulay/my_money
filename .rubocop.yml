@@ -1,5 +1,9 @@
 require:
   - rubocop-rails
+  - rubocop-capybara
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
   - ./lib/cops/form_error_response.rb
 
 AllCops:
@@ -67,3 +71,15 @@ Style/EachWithObject:
 
 Style/Documentation:
   Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+RSpec/ImplicitExpect:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 15

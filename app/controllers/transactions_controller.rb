@@ -60,7 +60,7 @@ class TransactionsController < ApplicationController
 
       redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
     # respond_to do |format|
-    #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." }
+    #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." } # rubocop:disable Layout/LineLength
     #   format.json { head :no_content }
     # end
     else

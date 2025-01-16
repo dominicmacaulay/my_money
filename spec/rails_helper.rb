@@ -75,7 +75,7 @@ RSpec.configure do |config|
       ENV['ASSET_PRECOMPILE_SUCCESSFUL'] = 'true'
 
       unless prep_passed
-        abort "\nYour assets didn't compile. Exiting WITHOUT running any tests. Review the output above to resolve any errors."
+        abort "\nYour assets didn't compile. Exiting WITHOUT running any tests. Review the output above to resolve any errors." # rubocop:disable Layout/LineLength
       end
     end
   end

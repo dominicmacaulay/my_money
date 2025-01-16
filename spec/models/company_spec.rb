@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Company, type: :model do
+RSpec.describe Company do
   let(:company) { create(:company) }
 
   describe 'validations' do

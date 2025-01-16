@@ -14,5 +14,5 @@ if Rails.env.local?
   require 'bundler/audit/task'
   Bundler::Audit::Task.new
 
-  task default: %i[rubocop:autocorrect bundle:audit parallel:spec]
+  task default: %i[rubocop:autocorrect bundle:audit spec]
 end

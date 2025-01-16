@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Pages', type: :system do
+RSpec.describe 'Pages' do
   let(:user) { create(:user) }
 
   before do
@@ -14,10 +14,12 @@ RSpec.describe 'Pages', type: :system do
     let!(:company) { create(:company) }
 
     context 'when user has a current company' do
-      let!(:user_company) { create(:user_company, user:, company:) }
+      before do
+        user.companies << company
+      end
 
       it 'displays the company name' do
-        user.set_current_company(company)
+        user.switch_current_company(company)
 
         page.refresh
 
@@ -28,7 +30,7 @@ RSpec.describe 'Pages', type: :system do
     context 'when user does not have a current company' do
       it 'displays a link to set the current company' do
         expect(page).to have_link('Create Your Company')
-        expect(page).not_to have_content(company.name)
+        expect(page).to have_no_content(company.name)
       end
     end
   end

@@ -4,7 +4,7 @@
       = image_tag 'logo.png', alt: 'Logo', class: 'navbar__logo'
       | My Money
 
-    .navbar__content
+    .navbar__content.navbar__content--justify-center
       - if current_company
         = current_company.name
       - else

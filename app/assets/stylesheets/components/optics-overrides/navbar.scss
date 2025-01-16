@@ -1,9 +1,7 @@
-.navbar {
-  @extend %navbar-global;
-
-  justify-content: space-between;
-
+%navbar-global {
   .navbar__brand {
     display: flex;
+    align-items: center;
+    gap: var(--op-space-small);
   }
 }

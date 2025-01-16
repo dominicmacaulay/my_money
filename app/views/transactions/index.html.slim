@@ -14,7 +14,7 @@ table.table
     - @transactions.each do |transaction|
       tr
         td = transaction.date
-        td = transaction.transaction_type
+        td = transaction.transaction_type.titleize
         td = transaction.description
         td = transaction.amount
         td = link_to 'View', edit_transaction_path(transaction)

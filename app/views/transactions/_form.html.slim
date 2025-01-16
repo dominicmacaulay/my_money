@@ -5,7 +5,7 @@
 
   = f.input :date
   = f.input :description, required: false
-  = f.input :transaction_type, collection: Transaction.transaction_types.keys
+  = f.input :transaction_type, collection: transaction_type_options
   = f.input :amount
 
 - if show_delete_button

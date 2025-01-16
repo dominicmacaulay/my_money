@@ -12,7 +12,7 @@ RSpec.describe Transaction, type: :model do
       expect(transaction.errors[:amount]).to be_empty
     end
 
-    it "is invalid with an amount having more than two decimal places" do
+    it 'is invalid with an amount having more than two decimal places' do
       transaction = Transaction.new(amount: 123.456)
       transaction.valid?
       expect(transaction.errors[:amount]).to include("must have at most two decimal places")
@@ -29,7 +29,7 @@ RSpec.describe Transaction, type: :model do
         income_transaction = create(:transaction, :income)
         create(:transaction, :expense)
 
-        expect(Transaction.income).to eq([ income_transaction ])
+        expect(Transaction.income).to eq([income_transaction])
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe Transaction, type: :model do
         expense_transaction = create(:transaction, :expense)
         create(:transaction, :income)
 
-        expect(Transaction.expense).to eq([ expense_transaction ])
+        expect(Transaction.expense).to eq([expense_transaction])
       end
     end
   end

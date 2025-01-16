@@ -8,6 +8,8 @@ class CompaniesController < ApplicationController
     @company = Company.build
   end
 
+  def edit; end
+
   def create
     @company = Company.build(company_params)
 
@@ -20,11 +22,8 @@ class CompaniesController < ApplicationController
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
       # end
     else
-      render :new, status: :unprocessable_entity, layout: "modal"
+      render :new, status: :unprocessable_entity, layout: 'modal'
     end
-  end
-
-  def edit
   end
 
   def update
@@ -35,7 +34,7 @@ class CompaniesController < ApplicationController
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
       # end
     else
-      render :edit, status: :unprocessable_entity, layout: "modal"
+      render :edit, status: :unprocessable_entity, layout: 'modal'
     end
   end
 
@@ -57,7 +56,7 @@ class CompaniesController < ApplicationController
       reload_current_company
       redirect_to root_path, notice: "Current company set to #{company.name}"
     else
-      redirect_to companies_path, alert: "Could not set current company"
+      redirect_to companies_path, alert: 'Could not set current company'
     end
   end
 

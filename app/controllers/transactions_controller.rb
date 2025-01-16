@@ -1,5 +1,5 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: %i[ edit update destroy ]
+  before_action :set_transaction, only: %i[edit update destroy]
 
   # GET /transactions or /transactions.json
   def index
@@ -12,15 +12,14 @@ class TransactionsController < ApplicationController
   end
 
   # GET /transactions/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /transactions or /transactions.json
   def create
     @transaction = Transaction.new(transaction_params)
 
     if @transaction.save
-      redirect_to transactions_path, notice: "Transaction was successfully created."
+      redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +37,7 @@ class TransactionsController < ApplicationController
   # PATCH/PUT /transactions/1 or /transactions/1.json
   def update
     if @transaction.update(transaction_params)
-      redirect_to transactions_path, notice: "Transaction was successfully updated."
+      redirect_to transactions_path, notice: 'Transaction was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -57,24 +56,25 @@ class TransactionsController < ApplicationController
   def destroy
     if @transaction.destroy
 
-      redirect_to transactions_path, notice: "Transaction was successfully destroyed."
+      redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
     # respond_to do |format|
     #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." }
     #   format.json { head :no_content }
     # end
     else
-      redirect_to transactions_path, notice: "Transaction could not be destroyed."
+      redirect_to transactions_path, notice: 'Transaction could not be destroyed.'
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_transaction
-      @transaction = Transaction.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def transaction_params
-      params.require(:transaction).permit(:date, :description, :amount, :transaction_type, :company_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_transaction
+    @transaction = Transaction.find(params.expect(:id))
+  end
+
+  # Only allow a list of trusted parameters through.
+  def transaction_params
+    params.require(:transaction).permit(:date, :description, :amount, :transaction_type, :company_id)
+  end
 end

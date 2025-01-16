@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def submit_button(model, label = nil, form: nil, **options, &)
     model = model.last if model.is_a?(Array)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Companies', type: :system do
@@ -18,7 +20,7 @@ RSpec.describe 'Companies', type: :system do
     fill_in 'Name', with: name
     click_on 'Create Company'
     expect(page).to have_content("#{name} was successfully created")
-    expect(page).to have_content("#{name}")
+    expect(page).to have_content(name.to_s)
   end
 
   it 'can be edited' do
@@ -27,7 +29,7 @@ RSpec.describe 'Companies', type: :system do
     fill_in 'Name', with: name
     click_on 'Update Company'
     expect(page).to have_content("#{name} was successfully updated")
-    expect(page).to have_content("#{name}")
+    expect(page).to have_content(name.to_s)
   end
 
   it 'can be destroyed' do

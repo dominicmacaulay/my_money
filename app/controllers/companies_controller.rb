@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[edit update destroy]
   def index

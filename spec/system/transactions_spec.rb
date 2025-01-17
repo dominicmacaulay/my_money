@@ -46,13 +46,14 @@ RSpec.describe 'Transactions' do
     it 'can be edited' do
       fill_in 'Description', with: 'My Updated Transaction'
       select 'Expense', from: 'Transaction type'
-      fill_in 'Amount', with: '50'
+      find_field('Amount').send_keys(%i[command backspace]) # Clear the value in place
+      fill_in 'Amount', with: '50.00'
       click_on 'Update Transaction'
 
       expect(page).to have_content('Transaction was successfully updated')
       expect(transaction.reload.description).to eql 'My Updated Transaction'
       expect(transaction.transaction_type).to eql 'expense'
-      expect(transaction.amount).to eq 50
+      expect(transaction.amount).to eq Money.new(5000, 'USD') # 50.00 USD
     end
 
     it 'can be deleted' do

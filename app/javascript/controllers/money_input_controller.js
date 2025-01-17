@@ -49,6 +49,11 @@ export default class extends Controller {
 
       this.updateInputValue()
     }
+
+    if (event.key === "Backspace" && (event.metaKey || event.ctrlKey)) {
+      this.value = 0
+      this.updateInputValue()
+    }
   }
 
   updateInputValue() {

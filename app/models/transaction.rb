@@ -5,7 +5,7 @@ class Transaction < ApplicationRecord
 
   enum :transaction_type, { income: 'income', expense: 'expense' }, validate: true
 
-  monetize :amount_cents
+  monetize :amount_cents, numericality: { greater_than: 0 }
 
   validates :date, :amount_cents, :transaction_type, presence: true
 end

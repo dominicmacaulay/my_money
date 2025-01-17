@@ -1284,6 +1284,11 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
+autonumeric@^4.10.7:
+  version "4.10.7"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.10.7.tgz#c35cd9ef12ae2918754be75be1b16152e44705c9"
+  integrity sha512-SaETmDDYgmc45hpqlB42a+WOHuMPYxmC9secx5s/GLnyBwPo01beX1mWHjk+ihCozz15ycc/c9A7Wf+SGcoIyg==
+
 autoprefixer@^10.4.19:
   version "10.4.20"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.20.tgz#5caec14d43976ef42e32dcb4bd62878e96be5b3b"

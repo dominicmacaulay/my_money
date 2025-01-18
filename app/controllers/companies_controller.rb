@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[edit update destroy]
   def index
@@ -8,23 +10,22 @@ class CompaniesController < ApplicationController
     @company = Company.build
   end
 
+  def edit; end
+
   def create
     @company = Company.build(company_params)
 
     if @company.save
       @company.users << current_user
-      current_user.set_current_company(@company)
+      current_user.switch_current_company(@company)
       redirect_to companies_path, notice: "#{@company.name} was successfully created"
       # respond_to do |format|
       #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully created" }
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
       # end
     else
-      render :new, status: :unprocessable_entity, layout: "modal"
+      render :new, status: :unprocessable_entity, layout: 'modal'
     end
-  end
-
-  def edit
   end
 
   def update
@@ -35,7 +36,7 @@ class CompaniesController < ApplicationController
       #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
       # end
     else
-      render :edit, status: :unprocessable_entity, layout: "modal"
+      render :edit, status: :unprocessable_entity, layout: 'modal'
     end
   end
 
@@ -53,11 +54,11 @@ class CompaniesController < ApplicationController
 
   def set_current
     company = Company.find(params[:id])
-    if current_user.set_current_company(company)
+    if current_user.switch_current_company(company)
       reload_current_company
       redirect_to root_path, notice: "Current company set to #{company.name}"
     else
-      redirect_to companies_path, alert: "Could not set current company"
+      redirect_to companies_path, alert: 'Could not set current company'
     end
   end
 

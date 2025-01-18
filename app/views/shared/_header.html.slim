@@ -1,10 +1,10 @@
 .app-header
   .navbar
     a.navbar__brand href="/"
-      = image_tag 'logo.png', alt: 'Logo', class: 'navbar__logo'
+      = image_tag 'logo.png', alt: 'Logo'
       | My Money
 
-    .navbar__content
+    .navbar__content.navbar__content--justify-center
       - if current_company
         = current_company.name
       - else
@@ -12,6 +12,10 @@
           | Create Your Company
 
     .navbar__content
+      - if current_company
+        = link_to transactions_path do
+          | Transactions
+
       sl-dropdown placement='bottom-end'
         button.btn type='button' slot="trigger"
           = material_icon 'account_circle'

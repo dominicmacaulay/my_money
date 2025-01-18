@@ -1,11 +1,13 @@
 @import '@rolemodel/optics/dist/scss/optics';
 
 @import '@shoelace-style/shoelace/dist/themes/light.css'; // Import the Shoelace theme
+@import '@shoelace-style/shoelace/dist/themes/dark.css'; // Import the Dark Shoelace theme
+@import "flatpickr/dist/flatpickr.css"; // Import the Flatpickr theme
+@import "flatpickr/dist/themes/dark.css"; // Import the Dark Flatpickr theme
 
 // optics overrides
+@import 'components/optics-overrides/card.scss';
 @import 'components/optics-overrides/navbar.scss';
 
-// components
-@import 'components/card.scss';
 // devise
 @import 'components/devise/form.scss';

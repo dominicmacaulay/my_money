@@ -5,27 +5,30 @@
 module IconHelper
   def icon_name_for_flash(type)
     case type
-    when "notice"
-      "check_circle"
-    when "alert"
-      "cancel"
+    when 'notice'
+      'check_circle'
+    when 'alert'
+      'cancel'
     else
-        type
+      type
     end
   end
 
-  def material_icon(name, filled: false, size: "medium", weight: "normal", emphasis: "normal", color: nil, classes: nil, hover_text: name)
+  def material_icon(name, filled: false, size: 'medium', weight: 'normal', emphasis: 'normal', color: nil,
+                    classes: nil, hover_text: name)
     options = {
       class: classes(false, filled, size, weight, emphasis, classes),
       title: hover_text
     }
 
-    options[:style] = "color: var(--op-color-#{color}-base);" if color # primary, neutral, alerts-danger, alerts-warning, alerts-notice, alerts-notice
+    # primary, neutral, alerts-danger, alerts-warning, alerts-notice, alerts-notice
+    options[:style] = "color: var(--op-color-#{color}-base);" if color
 
     tag.span(name, **options)
   end
 
-  def icon(name, filled: false, size: "medium", weight: "normal", emphasis: "normal", color: nil, classes: nil, hover_text: name)
+  def icon(name, filled: false, size: 'medium', weight: 'normal', emphasis: 'normal', color: nil, classes: nil,
+           hover_text: name)
     using_custom_icon = custom_icon_path(name).present?
 
     contents = using_custom_icon ? embedded_svg("icons/#{name}.svg") : name
@@ -47,10 +50,10 @@ module IconHelper
     asset = Rails.application.assets_manifest.find_sources(filename).first
 
     if asset
-      file = asset.source.force_encoding("UTF-8")
+      file = asset.source.force_encoding('UTF-8')
       doc = Nokogiri::HTML::DocumentFragment.parse file
-      svg = doc.at_css "svg"
-      svg["class"] = options[:class] if options[:class].present?
+      svg = doc.at_css 'svg'
+      svg['class'] = options[:class] if options[:class].present?
     else
       doc = "<!-- SVG #{filename} not found -->"
     end
@@ -62,12 +65,12 @@ module IconHelper
   private
 
   def classes(using_custom_icon, filled, size, weight, emphasis, additional_classes = nil)
-    shape_class = filled ? "icon--filled" : "icon--outlined" # true, false
+    shape_class = filled ? 'icon--filled' : 'icon--outlined' # true, false
     size_class = "icon--#{size}" # normal, large, x-large
     weight_class = "icon--weight-#{weight}" # light, normal, semi-bold, bold
     emphasis_class = "icon--#{emphasis}-emphasis" # low, normal, high
 
-    base_class = using_custom_icon ? "custom-icons" : "material-symbols-outlined"
+    base_class = using_custom_icon ? 'custom-icons' : 'material-symbols-outlined'
     "#{base_class} #{shape_class} #{size_class} #{weight_class} #{emphasis_class} #{additional_classes}"
   end
   # rubocop:enable Metrics/ParameterLists

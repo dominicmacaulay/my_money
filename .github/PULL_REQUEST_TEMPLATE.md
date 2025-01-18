@@ -7,17 +7,17 @@ Why were the changes needed? What issues were the changes addressing?
 
 What changed in this PR?
 
-* [] Change 1
-* [] Change 2
-* [] ...
+* [ ] Change 1
+* [ ] Change 2
+* [ ] ...
 
 ## Health Checks
 
 These can be done by entering `rake` in the terminal
 
-* [] parallel_rspec
-* [] rubocop
-* [] audit
+* [ ] parallel_rspec
+* [ ] rubocop
+* [ ] audit
 
 ## Screenshots
 

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe 'Companies', type: :system do
+RSpec.describe 'Companies' do
   let(:user) { create(:user) }
-  let(:company) { create(:company) }
-  let!(:user_company) { create(:user_company, user:, company:) }
+  let!(:company) { create(:company, users: [user]) }
 
   before do
     login_as user
@@ -18,7 +19,7 @@ RSpec.describe 'Companies', type: :system do
     fill_in 'Name', with: name
     click_on 'Create Company'
     expect(page).to have_content("#{name} was successfully created")
-    expect(page).to have_content("#{name}")
+    expect(page).to have_content(name.to_s)
   end
 
   it 'can be edited' do
@@ -27,7 +28,7 @@ RSpec.describe 'Companies', type: :system do
     fill_in 'Name', with: name
     click_on 'Update Company'
     expect(page).to have_content("#{name} was successfully updated")
-    expect(page).to have_content("#{name}")
+    expect(page).to have_content(name.to_s)
   end
 
   it 'can be destroyed' do

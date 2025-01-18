@@ -19,6 +19,7 @@ RSpec.describe 'Transactions' do
     end
 
     it 'can be created' do
+      fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Income', from: 'Transaction type'
       fill_in 'Amount', with: '100'

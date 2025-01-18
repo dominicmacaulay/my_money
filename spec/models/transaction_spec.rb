@@ -28,6 +28,23 @@ RSpec.describe Transaction do
 
   describe 'associations' do
     it { should belong_to(:company) }
+
+    context 'when the transaction is an expense' do
+      it 'belongs to a categorizable' do
+        transaction = build(:transaction, :expense, categorizable: nil)
+
+        expect(transaction).not_to be_valid
+        expect(transaction.errors[:categorizable]).to include('must be present for expense transactions')
+      end
+    end
+
+    context 'when the transaction is an income' do
+      it 'does not belong to a categorizable' do
+        transaction = create(:transaction, :income)
+
+        expect(transaction).to be_valid
+      end
+    end
   end
 
   describe 'scopes' do

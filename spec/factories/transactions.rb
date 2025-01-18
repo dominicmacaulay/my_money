@@ -13,6 +13,7 @@ FactoryBot.define do
     end
 
     trait :expense do
+      categorizable factory: %i[category]
       transaction_type { 'expense' }
     end
   end

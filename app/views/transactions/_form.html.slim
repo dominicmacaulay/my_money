@@ -3,7 +3,7 @@
 = simple_form_for @transaction do |f|
   = f.hidden_field :company_id, value: current_company.id
 
-  = f.input :date
+  = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
   = f.input :description, required: false
   = f.input :transaction_type, collection: transaction_type_options, selected: f.object.transaction_type || transaction_type_options.first
   = f.input :amount, required: true, input_html: { value: f.object.amount || 0, data: { controller: 'money-input' } }

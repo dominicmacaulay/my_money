@@ -20,4 +20,18 @@ table.table
         td = transaction.description
         td = number_to_currency(transaction.amount)
         td = link_to 'View', edit_transaction_path(transaction)
-
+  tfoot
+    tr
+      td colspan="3"
+      td
+        | Total Income
+        br
+        = number_to_currency(@total_income)
+      td
+        | Total Expense
+        br
+        = number_to_currency(@total_expense)
+      td
+        | Total Balance
+        br
+        = number_to_currency(@total_income - @total_expense)

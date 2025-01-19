@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Transaction do
+  it { should monetize(:amount_cents) }
+
   describe 'validations' do
     it { should validate_presence_of(:date) }
     it { should validate_presence_of(:transaction_type) }

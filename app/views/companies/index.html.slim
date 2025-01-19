@@ -1,9 +1,16 @@
-= link_to 'New Company', new_company_path
+.companies
+  .companies__header
+    h1 Your Companies
+    = link_to 'New Company', new_company_path, class: 'btn'
 
-.companies-list
-  - @companies.each do |company|
-    .company
-      = company.name
-      = link_to 'Edit', edit_company_path(company)
-      - unless company == current_company
-        = button_to "Switch to #{company.name}", set_current_company_path(company)
+  .companies__list
+    - @companies.each do |company|
+      .company
+        .company__name = company.name
+        - unless company == current_company
+          = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn'
+
+        .company__actions
+          = link_to 'Edit', edit_company_path(company), class: 'btn'
+          - if current_user.destroy_company?(company)
+            = button_to 'Delete', @company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'

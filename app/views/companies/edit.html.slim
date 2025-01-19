@@ -4,7 +4,3 @@ h1 Edit #{@company.name.capitalize}
 = simple_form_for @company do |f|
   = f.input :name
   = f.button :submit, class: 'btn btn-primary'
-
-- if current_user.destroy_company?(@company)
-  = button_to 'Delete', @company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
-

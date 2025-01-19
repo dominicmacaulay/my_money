@@ -5,14 +5,5 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   helper_method :current_company
-
-  private
-
-  def current_company
-    @current_company ||= current_user&.current_company
-  end
-
-  def reload_current_company
-    @current_company = current_user&.current_company
-  end
+  delegate :current_company, to: :current_user
 end

@@ -5,6 +5,6 @@ h1 Edit #{@company.name.capitalize}
   = f.input :name
   = f.button :submit, class: 'btn btn-primary'
 
-- unless current_company == @company
+- if current_user.destroy_company?(@company)
   = button_to 'Delete', @company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
 

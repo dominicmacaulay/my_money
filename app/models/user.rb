@@ -15,4 +15,10 @@ class User < ApplicationRecord
 
     update!(current_company: company)
   end
+
+  def destroy_company?(company)
+    return false unless companies.include?(company)
+
+    user_companies.find_by(company:).admin?
+  end
 end

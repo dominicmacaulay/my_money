@@ -10,7 +10,7 @@ RSpec.describe User do
 
     context 'when the company is included in the user companies' do
       before do
-        user.companies << company
+        create(:user_company, user:, company:, role: 'admin')
       end
 
       it 'sets the current company' do

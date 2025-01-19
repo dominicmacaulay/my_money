@@ -10,14 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_11_225037) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_18_205534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "companies", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "subcategories", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_subcategories_on_category_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -28,6 +42,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_225037) do
     t.decimal "amount_cents", null: false
     t.string "transaction_type", null: false
     t.bigint "company_id", null: false
+    t.string "categorizable_type"
+    t.bigint "categorizable_id"
+    t.index ["categorizable_type", "categorizable_id"], name: "index_transactions_on_categorizable"
     t.index ["company_id"], name: "index_transactions_on_company_id"
   end
 
@@ -56,6 +73,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_225037) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "subcategories", "categories"
   add_foreign_key "transactions", "companies"
   add_foreign_key "user_companies", "companies"
   add_foreign_key "user_companies", "users"

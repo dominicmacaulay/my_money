@@ -12,6 +12,14 @@ class Transaction < ApplicationRecord
 
   validate :categorizable_presence_for_expense
 
+  def categorizable=(categorizable)
+    if categorizable.is_a?(String) # Check if it is a signed global id
+      super(GlobalID::Locator.locate_signed(categorizable))
+    else
+      super
+    end
+  end
+
   private
 
   def categorizable_presence_for_expense

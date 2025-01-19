@@ -5,4 +5,8 @@ class Company < ApplicationRecord
   has_many :users, through: :user_companies
 
   validates :name, presence: true
+
+  def add_user_with_role(user, role = :guest)
+    user_companies.create(user:, role:)
+  end
 end

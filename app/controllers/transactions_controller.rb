@@ -6,6 +6,8 @@ class TransactionsController < ApplicationController
   # GET /transactions or /transactions.json
   def index
     @transactions = Transaction.where(company_id: current_company.id)
+    @total_income = @transactions.where(transaction_type: 'income').sum(:amount_cents) / 100
+    @total_expense = @transactions.where(transaction_type: 'expense').sum(:amount_cents) / 100
   end
 
   # GET /transactions/new

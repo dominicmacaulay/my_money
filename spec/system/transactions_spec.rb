@@ -6,27 +6,54 @@ RSpec.describe 'Transactions' do
   let(:user) { create(:user, current_company: company) }
   let(:company) { create(:company) }
   let!(:category) { create(:category) }
-  let!(:transaction) { create(:transaction, :expense, company:) }
 
   before do
     login_as user
 
     visit root_path
-    click_on 'Transactions'
   end
 
-  it 'can be viewed' do
-    expect(page).to have_content('Transactions')
+  context 'when being listed' do
+    let!(:expense_transaction) { create(:transaction, :expense, company:, amount: '100.00') }
+    let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00') }
+    let!(:income_transaction) { create(:transaction, company:, amount: '200.00') }
+    let!(:income_transaction2) { create(:transaction, company:, amount: '250.00') }
 
-    expect(page).to have_content transaction.date
-    expect(page).to have_content transaction.description
-    expect(page).to have_content transaction.transaction_type.titleize
-    expect(page).to have_content transaction.categorizable&.name
-    expect(page).to have_content transaction.amount.format
+    before do
+      click_on 'Transactions'
+    end
+
+    it 'can be viewed' do
+      expect(page).to have_content('Transactions')
+
+      expect(page).to have_content expense_transaction.date
+      expect(page).to have_content expense_transaction.description
+      expect(page).to have_content expense_transaction.transaction_type.titleize
+      expect(page).to have_content expense_transaction.categorizable&.name
+      expect(page).to have_content expense_transaction.amount.format
+    end
+
+    it 'displays the total income' do
+      expect(page).to have_content('Total Income')
+      expect(page).to have_content((income_transaction.amount + income_transaction2.amount).format)
+    end
+
+    it 'displays the total expenses' do
+      expect(page).to have_content('Total Expense')
+      expect(page).to have_content((expense_transaction.amount + expense_transaction2.amount).format)
+    end
+
+    it 'displays the total balance' do
+      total_income = income_transaction.amount + income_transaction2.amount
+      total_expense = expense_transaction.amount + expense_transaction2.amount
+      expect(page).to have_content('Total Balance')
+      expect(page).to have_content((total_income - total_expense).format)
+    end
   end
 
   context 'when being created' do
     before do
+      click_on 'Transactions'
       click_on 'New Transaction'
     end
 

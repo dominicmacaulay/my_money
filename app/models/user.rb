@@ -21,4 +21,10 @@ class User < ApplicationRecord
 
     user_companies.find_by(company:).admin?
   end
+
+  def handle_company_destruction(company)
+    new_company = companies.where.not(id: company.id).first
+
+    update!(current_company: new_company)
+  end
 end

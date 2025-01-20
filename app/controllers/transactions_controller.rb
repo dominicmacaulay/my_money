@@ -79,7 +79,7 @@ class TransactionsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def transaction_params
-    params.require(:transaction).permit(:date, :description, :amount, :transaction_type, :company_id,
-                                        :categorizable)
+    params.expect(transaction: %i[date description amount transaction_type company_id
+                                        categorizable])
   end
 end

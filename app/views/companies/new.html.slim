@@ -1,6 +1,8 @@
 .page-header
   h1 Create New Company
-  = link_to 'Back', companies_path, class: 'btn'
+  = link_to companies_path, class: 'btn' do
+    = material_icon 'arrow_back'
+    | Back
 
 = simple_form_for @company do |f|
   = f.input :name

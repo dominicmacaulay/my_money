@@ -15,7 +15,7 @@ RSpec.describe 'Pages' do
 
     context 'when user has a current company' do
       before do
-        company.add_user_with_role(user, 'admin')
+        company.users << user
       end
 
       it 'displays the company name' do

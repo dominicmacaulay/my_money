@@ -16,7 +16,7 @@ class CompaniesController < ApplicationController
     @company = Company.build(company_params)
 
     if @company.save
-      @company.add_user_with_role(current_user, 'admin')
+      @company.users << current_user
       current_user.switch_current_company(@company)
 
       redirect_to companies_path, notice: "#{@company.name} was successfully created"

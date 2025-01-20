@@ -7,7 +7,7 @@ RSpec.describe 'Companies' do
   let(:company) { create(:company) }
 
   before do
-    create(:user_company, user:, company:, role: 'admin')
+    company.users << user
 
     login_as user
     visit root_path

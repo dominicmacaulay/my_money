@@ -1,0 +1,8 @@
+.table.table--companies {
+  .table--companies__actions {
+    display: flex;
+    justify-content: end;
+
+    gap: var(--op-space-medium);
+  }
+}

@@ -15,7 +15,7 @@ What changed in this PR?
 
 These can be done by entering `rake` in the terminal
 
-* [ ] parallel_rspec
+* [ ] rspec
 * [ ] rubocop
 * [ ] audit
 

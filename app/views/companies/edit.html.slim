@@ -1,10 +1,9 @@
-= link_to 'Back', companies_path, class: 'btn'
-h1 Edit #{@company.name.capitalize}
+.page-header
+  h1 Edit #{@company.name}
+  = link_to companies_path, class: 'btn btn' do
+    = material_icon 'arrow_back'
+    | Back
 
 = simple_form_for @company do |f|
   = f.input :name
   = f.button :submit, class: 'btn btn-primary'
-
-- unless current_company == @company
-  = button_to 'Delete', @company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
-

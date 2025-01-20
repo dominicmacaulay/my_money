@@ -15,7 +15,7 @@ RSpec.describe 'Pages' do
 
     context 'when user has a current company' do
       before do
-        user.companies << company
+        company.users << user
       end
 
       it 'displays the company name' do

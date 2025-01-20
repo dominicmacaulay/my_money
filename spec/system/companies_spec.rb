@@ -4,9 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Companies' do
   let(:user) { create(:user) }
-  let!(:company) { create(:company, users: [user]) }
+  let(:company) { create(:company) }
 
   before do
+    company.users << user
+
     login_as user
     visit root_path
     click_on 'account_circle'
@@ -32,7 +34,6 @@ RSpec.describe 'Companies' do
   end
 
   it 'can be destroyed' do
-    click_on 'Edit'
     click_on 'Delete'
     expect(page).to have_content("#{company.name} was successfully destroyed")
   end

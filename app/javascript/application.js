@@ -12,3 +12,19 @@ import '@shoelace-style/shoelace/dist/components/menu/menu' // Menu component
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item' // Menu-item component
 
 import flatpickr from "flatpickr"
+
+// Theme switching
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.replace('sl-theme-light', 'sl-theme-dark')
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+  const themeMap = {
+    true: 'dark',
+    false: 'light'
+  }
+
+  const oldTheme = `sl-theme-${themeMap[!event.matches]}`
+  const newTheme = `sl-theme-${themeMap[event.matches]}`
+  document.documentElement.classList.replace(oldTheme, newTheme)
+})

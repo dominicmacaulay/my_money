@@ -1,6 +1,6 @@
-h1 Transactions
-
-= link_to 'New Transaction', new_transaction_path
+.page-header
+  h1 Transactions
+  = link_to 'New Transaction', new_transaction_path, class: 'btn'
 
 table.table
   thead
@@ -19,7 +19,7 @@ table.table
         td = transaction.categorizable&.name
         td = transaction.description
         td = number_to_currency(transaction.amount)
-        td = link_to 'View', edit_transaction_path(transaction)
+        td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
       td colspan="3"

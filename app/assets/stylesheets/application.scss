@@ -6,10 +6,12 @@
 @import "flatpickr/dist/themes/dark.css"; // Import the Dark Flatpickr theme
 
 // components
+@import 'components/page-header.scss';
 @import 'components/companies.scss';
 
 // optics overrides
 @import 'components/optics-overrides/card.scss';
+@import 'components/optics-overrides/layout.scss';
 @import 'components/optics-overrides/navbar.scss';
 
 // devise

@@ -1,5 +1,6 @@
-= link_to 'Back', companies_path, class: 'btn'
-h1 Edit #{@company.name.capitalize}
+.page-header
+  h1 Edit #{@company.name}
+  = link_to 'Back', companies_path, class: 'btn'
 
 = simple_form_for @company do |f|
   = f.input :name

@@ -1,16 +1,19 @@
-.companies
-  .companies__header
-    h1 Your Companies
-    = link_to 'New Company', new_company_path, class: 'btn'
-
-  .companies__list
+table.table.table--comfortable-density.table--companies
+  thead
+    tr
+      td
+        | Your Companies
+      td
+        .table--companies__actions
+          = link_to 'New Company', new_company_path, class: 'btn'
+  tbody
     - @companies.each do |company|
-      .company
-        .company__name = company.name
-        - unless company == current_company
-          = button_to "Set as Current Company", set_current_company_path(company), class: 'btn company__switch-button'
-
-        .company__actions
-          = link_to 'Edit', edit_company_path(company), class: 'btn'
-          - if current_user.destroy_company?(company)
-            = button_to 'Delete', company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
+      tr
+        td #{company.name} #{company == current_company ? '(current)' : ''}
+        td
+          .table--companies__actions
+            - unless company == current_company
+              = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn company__switch-button'
+            = link_to 'Edit', edit_company_path(company), class: 'btn'
+            - if current_user.destroy_company?(company)
+              = button_to 'Delete', company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'

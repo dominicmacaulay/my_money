@@ -36,13 +36,14 @@
         text-align: center;
       }
 
+      .company__switch-button {
+        display: flex;
+        justify-self: center;
+      }
+
       .company__actions {
         display: flex;
         justify-content: space-between;
-      }
-
-      .btn {
-        text-wrap: inherit;
       }
     }
   }

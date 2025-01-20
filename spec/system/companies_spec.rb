@@ -4,9 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Companies' do
   let(:user) { create(:user) }
-  let!(:company) { create(:company, users: [user]) }
+  let(:company) { create(:company) }
 
   before do
+    create(:user_company, user:, company:, role: 'admin')
+
     login_as user
     visit root_path
     click_on 'account_circle'
@@ -32,13 +34,12 @@ RSpec.describe 'Companies' do
   end
 
   it 'can be destroyed' do
-    click_on 'Edit'
     click_on 'Delete'
     expect(page).to have_content("#{company.name} was successfully destroyed")
   end
 
   it 'can be set as the current company for the app' do
-    click_on "Switch to #{company.name}"
+    click_on 'Set as Current Company'
     expect(page).to have_content "Current company set to #{company.name}"
     expect(user.reload.current_company).to eql company
   end

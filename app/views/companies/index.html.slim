@@ -8,9 +8,9 @@
       .company
         .company__name = company.name
         - unless company == current_company
-          = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn'
+          = button_to "Set as Current Company", set_current_company_path(company), class: 'btn company__switch-button'
 
         .company__actions
           = link_to 'Edit', edit_company_path(company), class: 'btn'
           - if current_user.destroy_company?(company)
-            = button_to 'Delete', @company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
+            = button_to 'Delete', company, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'

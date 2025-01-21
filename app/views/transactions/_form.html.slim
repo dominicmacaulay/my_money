@@ -4,8 +4,8 @@
   = f.hidden_field :company_id, value: current_company.id
 
   = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
-  = f.input :description, required: false
-  = f.input :transaction_type, collection: transaction_type_options, selected: f.object.transaction_type || transaction_type_options.first
+  = f.input :description
+  = f.input :transaction_type, collection: transaction_type_options, include_black: false
 
   - options_for_categorizable = categorizable_options
   = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true

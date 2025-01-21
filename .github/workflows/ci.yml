@@ -91,15 +91,17 @@ jobs:
         run: bundle exec rake db:test:prepare
 
       - name: Run non-system tests
-        run: bundle exec rspec --exclude-pattern "spec/system/**/*_spec.rb" --format documentation
+        run: bundle exec rspec --exclude-pattern "spec/system/**/*_spec.rb" --format documentation --format RspecJunitFormatter --out tmp/rspec_ruby_results.xml
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
+      - name: Publish Rspec Test Results
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
         with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+          check_name: Ruby Test Results
+          report_paths: tmp/rspec_ruby_results.xml
+          detailed_summary: true
+        env:
+          GITHUB_STEP_SUMMARY: true
 
   system_test:
     name: System Tests
@@ -123,16 +125,18 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips && corepack enable
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips
 
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Set up node
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: yarn
 
       - name: Yarn Install
         run: yarn install --frozen-lockfile
@@ -150,12 +154,29 @@ jobs:
         run: bundle exec rake db:test:prepare
 
       - name: Run system tests
-        run: bundle exec rspec spec/system --format documentation
+        run: bundle exec rspec spec/system --format RspecJunitFormatter --out tmp/rspec_system_results.xml
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
+
+      - name: Publish System Test Results
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          check_name: System Test Results
+          report_paths: tmp/rspec_system_results.xml
+          detailed_summary: true
+        env:
+          GITHUB_STEP_SUMMARY: true
+
+      - name: Upload screenshots
         if: failure()
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+          path: tmp/capybara
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-logs
+          path: log

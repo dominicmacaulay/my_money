@@ -41,5 +41,6 @@
     "postcss-scss": "^4.0.9",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }

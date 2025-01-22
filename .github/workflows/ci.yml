@@ -94,7 +94,7 @@ jobs:
         run: bundle exec rspec --exclude-pattern "spec/system/**/*_spec.rb" --format documentation --format RspecJunitFormatter --out tmp/rspec_ruby_results.xml
 
       - name: Publish Rspec Test Results
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           check_name: Ruby Test Results
@@ -158,7 +158,7 @@ jobs:
 
 
       - name: Publish System Test Results
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           check_name: System Test Results

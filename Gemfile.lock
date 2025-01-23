@@ -262,6 +262,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.4.0)
+    rolemodel_sower (0.0.3)
     rspec-core (3.13.2)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -410,6 +411,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rails (~> 8.0.1)
   rolemodel_rails!
+  rolemodel_sower
   rspec-rails
   rspec_junit_formatter
   rubocop

@@ -15,8 +15,8 @@ table.table
     - @transactions.each do |transaction|
       tr
         td = transaction.date
-        td = transaction.transaction_type.titleize
-        td = transaction.categorizable&.name
+        td = transaction.transaction_type.humanize
+        td = transaction.categorizable_name
         td = transaction.description
         td = number_to_currency(transaction.amount)
         td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'

@@ -1,17 +1,17 @@
-table.table.table--comfortable-density.table--companies
+table.table.table--comfortable-density
   thead
     tr
       td
         | Your Companies
       td
-        .table--companies__actions
+        .table__actions
           = link_to 'New Company', new_company_path, class: 'btn'
   tbody
     - @companies.each do |company|
       tr
         td #{company.name} #{company == current_company ? '(current)' : ''}
         td
-          .table--companies__actions
+          .table__actions
             - unless company == current_company
               = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn company__switch-button'
             = link_to 'Edit', edit_company_path(company), class: 'btn'

@@ -14,5 +14,7 @@ table.table
       tr
         td = subcategory.name
         td = subcategory.category_name
-        td = link_to 'View', edit_subcategory_path(subcategory), class: 'btn btn--small'
+        td
+          .table__actions
+            = link_to 'View', edit_subcategory_path(subcategory), class: 'btn btn--small'
 

@@ -1,4 +1,7 @@
-= link_to subcategories_path, class: 'btn' do
+.page-header
+  h1 Edit #{@subcategory.name}
+  = link_to subcategories_path, class: 'btn btn' do
     = material_icon 'arrow_back'
     | Back
+
 = render 'form', show_delete_button: true

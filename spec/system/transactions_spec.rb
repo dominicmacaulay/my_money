@@ -66,6 +66,13 @@ RSpec.describe 'Transactions' do
 
       expect(page).to have_content('Transaction was successfully created')
       expect(page).to have_content('My New Transaction')
+
+      transaction = Transaction.all.max_by(&:id)
+      expect(transaction).to be_income
+      expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
+      expect(transaction.categorizable).to be_nil
+      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.description).to eq 'My New Transaction'
     end
 
     it 'can be created as an expense with a category' do
@@ -78,6 +85,13 @@ RSpec.describe 'Transactions' do
 
       expect(page).to have_content('Transaction was successfully created')
       expect(page).to have_content('My New Transaction')
+
+      transaction = Transaction.all.max_by(&:id)
+      expect(transaction).to be_expense
+      expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
+      expect(transaction.categorizable).to eq category
+      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.description).to eq 'My New Transaction'
     end
 
     it 'does not show a delete button' do
@@ -86,7 +100,7 @@ RSpec.describe 'Transactions' do
     end
   end
 
-  context 'when being viewed', :js do
+  context 'when being viewed' do
     let!(:transaction) { create(:transaction, company:) }
 
     before do
@@ -95,7 +109,7 @@ RSpec.describe 'Transactions' do
       click_on 'View'
     end
 
-    it 'can be edited' do
+    it 'can be edited', :js do
       fill_in 'Description', with: 'My Updated Transaction'
       find_field('Amount').send_keys(%i[command backspace]) # Clear the value in place
       fill_in 'Amount', with: '50.00'
@@ -103,7 +117,10 @@ RSpec.describe 'Transactions' do
 
       expect(page).to have_content('Transaction was successfully updated')
       expect(page).to have_content('My Updated Transaction')
-      expect(transaction.reload.amount).to eq Money.new(5000, 'USD') # 50.00 USD
+
+      transaction.reload
+      expect(transaction.amount).to eq Money.new(5000, 'USD') # 50.00 USD
+      expect(transaction.description).to eq 'My Updated Transaction'
     end
 
     it 'can be deleted' do

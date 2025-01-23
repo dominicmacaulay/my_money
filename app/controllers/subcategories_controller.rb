@@ -21,7 +21,7 @@ class SubcategoriesController < ApplicationController
     @subcategory = Subcategory.new(subcategory_params)
 
     if @subcategory.save
-      redirect_to subcategories_path, notice: 'Subcategory was successfully created.'
+      redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +39,7 @@ class SubcategoriesController < ApplicationController
   # PATCH/PUT /subcategories/1 or /subcategories/1.json
   def update
     if @subcategory.update(subcategory_params)
-      redirect_to subcategories_path, notice: 'Subcategory was successfully updated.'
+      redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -58,7 +58,7 @@ class SubcategoriesController < ApplicationController
   def destroy
     @subcategory.destroy!
 
-    redirect_to subcategories_path, notice: 'Subcategory was successfully destroyed.'
+    redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully destroyed."
     # respond_to do |format|
     #   format.html do
     #     redirect_to subcategories_path, status: :see_other, notice: 'Subcategory was successfully destroyed.'

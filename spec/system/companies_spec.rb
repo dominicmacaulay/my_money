@@ -20,8 +20,14 @@ RSpec.describe 'Companies' do
     click_on 'New Company'
     fill_in 'Name', with: name
     click_on 'Create Company'
+
     expect(page).to have_content("#{name} was successfully created")
     expect(page).to have_content(name.to_s)
+
+    company = Company.all.max_by(&:id)
+    expect(company.name).to eq(name)
+    expect(company.users).to include(user)
+    expect(company.user_companies.find_by(user: user)).to be_admin
   end
 
   it 'can be edited' do
@@ -29,8 +35,12 @@ RSpec.describe 'Companies' do
     click_on 'Edit'
     fill_in 'Name', with: name
     click_on 'Update Company'
+
     expect(page).to have_content("#{name} was successfully updated")
     expect(page).to have_content(name.to_s)
+
+    company.reload
+    expect(company.name).to eq(name)
   end
 
   it 'can be destroyed' do

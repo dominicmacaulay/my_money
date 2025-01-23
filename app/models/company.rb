@@ -3,6 +3,7 @@
 class Company < ApplicationRecord
   has_many :user_companies, dependent: :destroy
   has_many :users, through: :user_companies
+  has_many :subcategories, dependent: :destroy
   has_many :transactions, dependent: :destroy
 
   validates :name, presence: true

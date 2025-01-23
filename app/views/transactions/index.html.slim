@@ -19,7 +19,9 @@ table.table
         td = transaction.categorizable_name
         td = transaction.description
         td = number_to_currency(transaction.amount)
-        td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
+        td
+          .table__actions
+            = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
       td colspan="3"

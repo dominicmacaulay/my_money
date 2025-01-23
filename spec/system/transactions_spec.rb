@@ -52,6 +52,8 @@ RSpec.describe 'Transactions' do
   end
 
   context 'when being created' do
+    let!(:subcategory) { create(:subcategory, category:, company:) }
+
     before do
       click_on 'Transactions'
       click_on 'New Transaction'
@@ -75,7 +77,7 @@ RSpec.describe 'Transactions' do
       expect(transaction.description).to eq 'My New Transaction'
     end
 
-    it 'can be created as an expense with a category' do
+    it 'can be created as an expense with a standard category' do
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
@@ -90,6 +92,26 @@ RSpec.describe 'Transactions' do
       expect(transaction).to be_expense
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to eq category
+      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.description).to eq 'My New Transaction'
+    end
+
+    it 'can be created as an expense with a subcategory' do
+      subcategory_name = "#{subcategory.name} (Subcategory of #{category.name})"
+      fill_in 'Date', with: '2021-01-01'
+      fill_in 'Description', with: 'My New Transaction'
+      select 'Expense', from: 'Transaction type'
+      fill_in 'Amount', with: '100'
+      select subcategory_name, from: 'Category'
+      click_on 'Create Transaction'
+
+      expect(page).to have_content('Transaction was successfully created')
+      expect(page).to have_content('My New Transaction')
+
+      transaction = Transaction.all.max_by(&:id)
+      expect(transaction).to be_expense
+      expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
+      expect(transaction.categorizable).to eq subcategory
       expect(transaction.date).to eq Date.new(2021, 1, 1)
       expect(transaction.description).to eq 'My New Transaction'
     end

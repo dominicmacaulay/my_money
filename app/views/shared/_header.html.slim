@@ -13,8 +13,8 @@
 
     .navbar__content
       - if current_company
-        = link_to transactions_path do
-          | Transactions
+        = link_to 'Transactions', transactions_path
+        = link_to 'Categories', subcategories_path
 
       sl-dropdown placement='bottom-end'
         button.btn type='button' slot="trigger"
@@ -22,7 +22,7 @@
         sl-menu
           = link_to edit_user_registration_path do
             sl-menu-item Settings
-            
+
           = link_to companies_path do
             sl-menu-item Companies
 

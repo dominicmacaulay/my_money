@@ -1,0 +1,18 @@
+.page-header
+  h1 Subcategories
+  = link_to 'New Subcategory', new_subcategory_path, class: 'btn'
+
+table.table
+  thead
+    tr
+      th Name
+      th Parent Category
+      th
+
+  tbody
+    - @subcategories.each do |subcategory|
+      tr
+        td = subcategory.name
+        td = subcategory.category.name
+        td = link_to 'View', edit_subcategory_path(subcategory), class: 'btn btn--small'
+

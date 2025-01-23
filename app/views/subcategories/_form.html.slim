@@ -1,0 +1,13 @@
+-# locals: (show_delete_button: false)
+
+= simple_form_for @subcategory do |f|
+  = f.hidden_field :company_id, value: current_company.id
+
+  = f.input :name
+  = f.input :category_id, collection: Category.all
+
+- if show_delete_button
+  = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
+
+- submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Subcategory' : 'Update Subcategory'
+= submit_button @subcategory, submit_text, class: 'btn btn-primary'

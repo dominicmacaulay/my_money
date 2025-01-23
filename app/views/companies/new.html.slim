@@ -4,7 +4,5 @@
     = material_icon 'arrow_back'
     | Back
 
-= simple_form_for @company do |f|
-  = f.input :name
-  = f.button :submit, class: 'btn btn-primary'
+= render 'form'
 

@@ -3,15 +3,19 @@
 module TransactionHelper
   def transaction_type_options
     Transaction.transaction_types.keys.map do |type|
-      [type.titleize, type]
+      [type.humanize, type]
     end
   end
 
   def categorizable_options
-    # categories = Category.all.concat current_company.categories.to_a # THIS WILL BE THE EVENTUAL CHANGES
-    categories = Category.all
+    categories = current_company.subcategories.to_a.concat(Category.all)
     categories.map do |category|
-      [category.name, category.to_signed_global_id]
+      name = category.name
+      name.concat(" (Subcategory of #{category.category_name})") unless category.is_a?(Category)
+      [
+        name,
+        category.to_signed_global_id
+      ]
     end
   end
 

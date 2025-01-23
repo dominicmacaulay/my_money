@@ -13,10 +13,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :transactions, expect: %i[show]
+  resources :transactions, except: :show
   resources :companies do
     member do
       post :set_current
     end
   end
+  resources :subcategories, except: :show
 end

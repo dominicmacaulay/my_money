@@ -39,10 +39,6 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :system
   config.after(type: :system) { Warden.test_reset! }
 
-  # This is for validation tests
-  config.include Shoulda::Matchers::ActiveModel, type: :model
-  config.include Shoulda::Matchers::ActiveRecord, type: :model
-
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = Rails.root.join('spec/fixtures')
 
@@ -80,5 +76,12 @@ RSpec.configure do |config|
         abort "\nYour assets didn't compile. Exiting WITHOUT running any tests. Review the output above to resolve any errors." # rubocop:disable Layout/LineLength
       end
     end
+  end
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
   end
 end

@@ -2,5 +2,11 @@
 
 class Subcategory < ApplicationRecord
   belongs_to :category
+  belongs_to :company
+
   has_many :transactions, as: :categorizable, dependent: :destroy
+
+  validates :name, presence: true
+
+  delegate :name, to: :category, prefix: true
 end

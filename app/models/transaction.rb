@@ -20,6 +20,10 @@ class Transaction < ApplicationRecord
     end
   end
 
+  def categorizable_name
+    categorizable&.name
+  end
+
   private
 
   def categorizable_presence_for_expense

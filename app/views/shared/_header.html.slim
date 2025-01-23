@@ -12,9 +12,10 @@
           | Create Your Company
 
     .navbar__content
-      - if current_company
-        = link_to transactions_path do
-          | Transactions
+      .navbar__content__links
+        - if current_company
+          = link_to 'Transactions', transactions_path, class: 'btn btn--small'
+          = link_to 'Subcategories', subcategories_path, class: 'btn btn--small'
 
       sl-dropdown placement='bottom-end'
         button.btn type='button' slot="trigger"
@@ -22,7 +23,7 @@
         sl-menu
           = link_to edit_user_registration_path do
             sl-menu-item Settings
-            
+
           = link_to companies_path do
             sl-menu-item Companies
 

@@ -14,7 +14,7 @@ class SubcategoryPolicy < ApplicationPolicy
   end
 
   def create?
-    current_company_exists?
+    allow_action?
   end
 
   def update?
@@ -40,6 +40,6 @@ class SubcategoryPolicy < ApplicationPolicy
   end
 
   def user_admin?
-    user.user_companies.find_by(company: user.current_company).admin?
+    user.admin_for_company?(record.company)
   end
 end

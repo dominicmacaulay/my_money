@@ -28,3 +28,5 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev
   const newTheme = `sl-theme-${themeMap[event.matches]}`
   document.documentElement.classList.replace(oldTheme, newTheme)
 })
+import './initializers/turbo_confirm'
+import './initializers/frame_missing_handler'

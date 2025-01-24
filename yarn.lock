@@ -1333,6 +1333,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rolemodel/turbo-confirm@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@rolemodel/turbo-confirm@npm:2.1.1"
+  checksum: 10c0/706a3815155337f33726cde5634849d950bf0906f65dcfad0f4709940fcbb32afb7cda7310cd93c50e350398929d2996d3a7e822ba4b2395eba7ed2387a751d1
+  languageName: node
+  linkType: hard
+
 "@shoelace-style/animations@npm:^1.2.0":
   version: 1.2.0
   resolution: "@shoelace-style/animations@npm:1.2.0"
@@ -3681,6 +3688,7 @@ __metadata:
     "@hotwired/stimulus": "npm:^3.2.2"
     "@hotwired/turbo-rails": "npm:^8.0.12"
     "@rolemodel/optics": "npm:^1.1.0"
+    "@rolemodel/turbo-confirm": "npm:^2.1.1"
     "@shoelace-style/shoelace": "npm:^2.19.1"
     "@types/react": "npm:19.0.7"
     autonumeric: "npm:^4.10.7"

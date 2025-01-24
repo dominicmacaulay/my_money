@@ -3,17 +3,23 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[edit update destroy]
   def index
+    authorize Company
     @companies = current_user.companies
   end
 
   def new
+    authorize Company
     @company = Company.build
   end
 
-  def edit; end
+  def edit
+    @company = Company.find(params[:id])
+    authorize @company
+  end
 
   def create
     @company = Company.build(company_params)
+    authorize @company
 
     if @company.save
       @company.users << current_user
@@ -30,6 +36,9 @@ class CompaniesController < ApplicationController
   end
 
   def update
+    @company = Company.find(params[:id])
+    authorize @company
+
     if @company.update(company_params)
       redirect_to companies_path, notice: "#{@company.name} was successfully updated"
       # respond_to do |format|
@@ -42,19 +51,22 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    if @company.destroy
-      redirect_to companies_path, notice: "#{@company.name} was successfully destroyed"
-      # respond_to do |format|
-      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully destroyed" }
-      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully destroyed" }
-      # end
-    else
-      redirect_to companies_path, notice: "#{@company.name} could not be destroyed"
-    end
+    @company = Company.find(params[:id])
+    authorize @company
+
+    @company.destroy
+
+    redirect_to companies_path, notice: "#{@company.name} was successfully destroyed"
+    # respond_to do |format|
+    #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully destroyed" }
+    #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully destroyed" }
+    # end
   end
 
   def set_current
     company = Company.find(params[:id])
+    authorize company
+
     if current_user.switch_current_company(company)
       redirect_to root_path, notice: "Current company set to #{company.name}"
     else

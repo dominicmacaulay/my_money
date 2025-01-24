@@ -5,6 +5,10 @@ class CompanyPolicy < ApplicationPolicy
     true
   end
 
+  def set_current?
+    true
+  end
+
   def new?
     true
   end

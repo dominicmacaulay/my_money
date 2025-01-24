@@ -5,20 +5,26 @@ class SubcategoriesController < ApplicationController
 
   # GET /subcategories or /subcategories.json
   def index
+    authorize Subcategory
     @subcategories = Subcategory.all
   end
 
   # GET /subcategories/new
   def new
+    authorize Subcategory
     @subcategory = Subcategory.new
   end
 
   # GET /subcategories/1/edit
-  def edit; end
+  def edit
+    @subcategory = Subcategory.find(params[:id])
+    authorize @subcategory
+  end
 
   # POST /subcategories or /subcategories.json
   def create
     @subcategory = Subcategory.new(subcategory_params)
+    authorize @subcategory
 
     if @subcategory.save
       redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully created."
@@ -38,6 +44,9 @@ class SubcategoriesController < ApplicationController
 
   # PATCH/PUT /subcategories/1 or /subcategories/1.json
   def update
+    @subcategory = Subcategory.find(params[:id])
+    authorize @subcategory
+
     if @subcategory.update(subcategory_params)
       redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully updated."
     else
@@ -56,7 +65,10 @@ class SubcategoriesController < ApplicationController
 
   # DELETE /subcategories/1 or /subcategories/1.json
   def destroy
-    @subcategory.destroy!
+    @subcategory = Subcategory.find(params[:id])
+    authorize @subcategory
+
+    @subcategory.destroy
 
     redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully destroyed."
     # respond_to do |format|

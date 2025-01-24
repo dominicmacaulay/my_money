@@ -28,7 +28,7 @@ RSpec.describe User do
     end
   end
 
-  describe '#admin_form_company?' do
+  describe '#admin_for_company?' do
     context 'when the user is an admin' do
       it 'returns true' do
         expect(user.admin_for_company?(company)).to be_truthy # rubocop:disable RSpec/PredicateMatcher

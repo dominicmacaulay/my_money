@@ -1,6 +1,7 @@
 .page-header
   h1 Transactions
-  = link_to 'New Transaction', new_transaction_path, class: 'btn'
+  - if policy(Transaction).new?
+    = link_to 'New Transaction', new_transaction_path, class: 'btn'
 
 table.table
   thead
@@ -19,9 +20,10 @@ table.table
         td = transaction.categorizable_name
         td = transaction.description
         td = number_to_currency(transaction.amount)
-        td
-          .table__actions
-            = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
+        - if policy(transaction).edit?
+          td
+            .table__actions
+              = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
       td colspan="3"

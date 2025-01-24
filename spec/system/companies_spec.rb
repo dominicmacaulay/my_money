@@ -45,9 +45,8 @@ RSpec.describe 'Companies' do
 
   it 'can be destroyed', :js do
     expect do
-      accept_confirm do
-        click_on 'Delete'
-      end
+      click_on 'Delete'
+      click_on "Yes, I'm Sure"
       expect(page).to have_content("#{company.name} was successfully destroyed")
     end.to change(Company, :count).by(-1)
   end

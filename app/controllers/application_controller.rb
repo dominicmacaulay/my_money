@@ -8,9 +8,12 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   helper_method :current_company
-  delegate :current_company, to: :current_user
 
   private
+
+  def current_company
+    current_user&.current_company
+  end
 
   def user_not_authorized
     redirect_to(request.referer || root_path, alert: 'You are not authorized to perform this action.')

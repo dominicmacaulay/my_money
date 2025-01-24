@@ -150,9 +150,8 @@ RSpec.describe 'Transactions' do
 
     it 'can be deleted' do
       expect do
-        accept_confirm do
-          click_on 'Delete'
-        end
+        click_on 'Delete'
+        click_on "Yes, I'm Sure"
         expect(page).to have_content('Transaction was successfully destroyed')
       end.to change(Transaction, :count).by(-1)
     end

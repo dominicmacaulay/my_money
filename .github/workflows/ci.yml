@@ -95,7 +95,7 @@ jobs:
 
       - name: Publish Rspec Test Results
         uses: mikepenz/action-junit-report@v5
-        if: success() || failure()
+        if: always()
         with:
           check_name: Ruby Test Results
           report_paths: tmp/rspec_ruby_results.xml
@@ -159,7 +159,7 @@ jobs:
 
       - name: Publish System Test Results
         uses: mikepenz/action-junit-report@v5
-        if: success() || failure()
+        if: always()
         with:
           check_name: System Test Results
           report_paths: tmp/rspec_system_results.xml

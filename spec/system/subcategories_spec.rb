@@ -69,9 +69,8 @@ RSpec.describe 'Subcategories' do
 
     it 'can be destroyed' do
       expect do
-        accept_confirm do
-          click_on 'Delete'
-        end
+        click_on 'Delete'
+        click_on "Yes, I'm Sure"
         expect(page).to have_content('Subcategory was successfully destroyed')
       end.to change(Subcategory, :count).by(-1)
     end

@@ -28,10 +28,10 @@ RSpec.describe User do
     end
   end
 
-  describe '#destroy_company?' do
+  describe '#admin_for_company?' do
     context 'when the user is an admin' do
       it 'returns true' do
-        expect(user.destroy_company?(company)).to be_truthy # rubocop:disable RSpec/PredicateMatcher
+        expect(user.admin_for_company?(company)).to be_truthy # rubocop:disable RSpec/PredicateMatcher
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe User do
       end
 
       it 'returns false' do
-        expect(user.destroy_company?(company)).to be_falsey # rubocop:disable RSpec/PredicateMatcher
+        expect(user.admin_for_company?(company)).to be_falsey # rubocop:disable RSpec/PredicateMatcher
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe User do
       let(:other_company) { create(:company) }
 
       it 'returns false' do
-        expect(user.destroy_company?(other_company)).to be_falsey # rubocop:disable RSpec/PredicateMatcher
+        expect(user.admin_for_company?(other_company)).to be_falsey # rubocop:disable RSpec/PredicateMatcher
       end
     end
   end

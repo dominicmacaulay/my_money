@@ -5,7 +5,8 @@ table.table.table--comfortable-density
         | Your Companies
       td
         .table__actions
-          = link_to 'New Company', new_company_path, class: 'btn'
+          - if policy(Company).new?
+            = link_to 'New Company', new_company_path, class: 'btn'
   tbody
     - @companies.each do |company|
       tr
@@ -14,6 +15,8 @@ table.table.table--comfortable-density
           .table__actions
             - unless company == current_company
               = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn company__switch-button'
-            = link_to 'Edit', edit_company_path(company), class: 'btn'
+
+            - if policy(company).edit?
+              = link_to 'Edit', edit_company_path(company), class: 'btn'
             - if policy(company).destroy?
               = button_to 'Delete', company, method: :delete, class: 'btn btn-destructive'

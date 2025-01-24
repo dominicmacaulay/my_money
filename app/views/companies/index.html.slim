@@ -15,5 +15,5 @@ table.table.table--comfortable-density
             - unless company == current_company
               = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn company__switch-button'
             = link_to 'Edit', edit_company_path(company), class: 'btn'
-            - if current_user.destroy_company?(company)
-              = button_to 'Delete', company, method: :delete, form: { data: { turbo_confirm: 'Are you sure? This action cannot be done. p' } }, class: 'btn btn-destructive'
+            - if policy(company).destroy?
+              = button_to 'Delete', company, method: :delete, class: 'btn btn-destructive'

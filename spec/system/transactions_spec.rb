@@ -3,11 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Transactions' do
-  let(:user) { create(:user, current_company: company) }
+  let(:user) { create(:user) }
   let(:company) { create(:company) }
   let!(:category) { create(:category) }
 
   before do
+    company.users << user
+    user.switch_current_company(company)
+
     login_as user
 
     visit root_path

@@ -5,6 +5,8 @@ class TransactionsController < ApplicationController
 
   # GET /transactions or /transactions.json
   def index
+    authorize Transaction
+
     @transactions = Transaction.where(company_id: current_company.id)
     @total_income = @transactions.where(transaction_type: 'income').sum(:amount_cents) / 100
     @total_expense = @transactions.where(transaction_type: 'expense').sum(:amount_cents) / 100
@@ -12,15 +14,20 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
+    authorize Transaction
     @transaction = Transaction.new
   end
 
   # GET /transactions/1/edit
-  def edit; end
+  def edit
+    @transaction = Transaction.find(params[:id])
+    authorize @transaction
+  end
 
   # POST /transactions or /transactions.json
   def create
     @transaction = Transaction.new(transaction_params)
+    authorize @transaction
 
     if @transaction.save
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
@@ -40,6 +47,9 @@ class TransactionsController < ApplicationController
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
   def update
+    @transaction = Transaction.find(params[:id])
+    authorize @transaction
+
     if @transaction.update(transaction_params)
       redirect_to transactions_path, notice: 'Transaction was successfully updated.'
     else
@@ -58,16 +68,16 @@ class TransactionsController < ApplicationController
 
   # DELETE /transactions/1 or /transactions/1.json
   def destroy
-    if @transaction.destroy
+    @transaction = Transaction.find(params[:id])
+    authorize @transaction
 
-      redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
+    @transaction.destroy
+
+    redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
     # respond_to do |format|
     #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." } # rubocop:disable Layout/LineLength
     #   format.json { head :no_content }
     # end
-    else
-      redirect_to transactions_path, notice: 'Transaction could not be destroyed.'
-    end
   end
 
   private

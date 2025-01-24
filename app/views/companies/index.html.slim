@@ -19,4 +19,4 @@ table.table.table--comfortable-density
             - if policy(company).edit?
               = link_to 'Edit', edit_company_path(company), class: 'btn'
             - if policy(company).destroy?
-              = button_to 'Delete', company, method: :delete, class: 'btn btn-destructive'
+              = button_to 'Delete', company, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-destructive'

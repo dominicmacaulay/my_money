@@ -42,7 +42,7 @@ RSpec.describe 'Subcategories' do
     end
   end
 
-  context 'when being viewed' do
+  context 'when being viewed', :js do
     let!(:subcategory) { create(:subcategory, category:, company:) }
     let!(:category2) { create(:category) }
 
@@ -68,9 +68,12 @@ RSpec.describe 'Subcategories' do
     end
 
     it 'can be destroyed' do
-      click_on 'Delete'
-
-      expect(page).to have_content("#{subcategory.name} was successfully destroyed")
+      expect do
+        accept_confirm do
+          click_on 'Delete'
+        end
+        expect(page).to have_content('Subcategory was successfully destroyed')
+      end.to change(Subcategory, :count).by(-1)
     end
   end
 end

@@ -3,17 +3,18 @@
 = simple_form_for @transaction do |f|
   = f.hidden_field :company_id, value: current_company.id
 
-  = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
-  = f.input :description
-  = f.input :transaction_type, collection: transaction_type_options, include_black: false
+  .form-row
+    = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
+    = f.input :amount, required: true, input_html: { value: f.object.amount || 0, data: { controller: 'money-input' } }
+    = f.input :transaction_type, collection: transaction_type_options, include_black: false
 
   - options_for_categorizable = categorizable_options
   = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true
+  = f.input :description
 
-  = f.input :amount, required: true, input_html: { value: f.object.amount || 0, data: { controller: 'money-input' } }
+.flex.justify-between
+  - if show_delete_button && policy(@transaction).destroy?
+    = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-destructive'
 
-- if show_delete_button && policy(@transaction).destroy?
-  = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-destructive'
-
-- submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Transaction' : 'Update Transaction'
-= submit_button @transaction, submit_text, class: 'btn btn-primary'
+  - submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Transaction' : 'Update Transaction'
+  = submit_button @transaction, submit_text, class: 'btn btn-primary'

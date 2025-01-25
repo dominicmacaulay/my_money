@@ -23,6 +23,7 @@ RSpec.describe 'Transactions' do
     let!(:income_transaction2) { create(:transaction, company:, amount: '250.00') }
 
     before do
+      click_on 'account_circle'
       click_on 'Transactions'
     end
 
@@ -58,15 +59,16 @@ RSpec.describe 'Transactions' do
     let!(:subcategory) { create(:subcategory, category:, company:) }
 
     before do
+      click_on 'account_circle'
       click_on 'Transactions'
       click_on 'New Transaction'
     end
 
-    it 'can be created as an income without a category' do
+    it 'can be created as an income without a category', :js do
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Income', from: 'Transaction type'
-      fill_in 'Amount', with: '100'
+      fill_in 'Amount', with: '10000'
       click_on 'Create Transaction'
 
       expect(page).to have_content('Transaction was successfully created')
@@ -80,11 +82,11 @@ RSpec.describe 'Transactions' do
       expect(transaction.description).to eq 'My New Transaction'
     end
 
-    it 'can be created as an expense with a standard category' do
+    it 'can be created as an expense with a standard category', :js do
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
-      fill_in 'Amount', with: '100'
+      fill_in 'Amount', with: '10000'
       select category.name, from: 'Category'
       click_on 'Create Transaction'
 
@@ -99,12 +101,12 @@ RSpec.describe 'Transactions' do
       expect(transaction.description).to eq 'My New Transaction'
     end
 
-    it 'can be created as an expense with a subcategory' do
+    it 'can be created as an expense with a subcategory', :js do
       subcategory_name = "#{subcategory.name} (Subcategory of #{category.name})"
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
-      fill_in 'Amount', with: '100'
+      fill_in 'Amount', with: '10000'
       select subcategory_name, from: 'Category'
       click_on 'Create Transaction'
 

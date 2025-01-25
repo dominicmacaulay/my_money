@@ -1,16 +1,17 @@
 -# locals: (show_delete_button: false)
 
 = simple_form_for @transaction do |f|
-  = f.hidden_field :company_id, value: current_company.id
+  div data-controller='conditional-input' data-conditional-input-condition-value='expense'
+    = f.hidden_field :company_id, value: current_company.id
 
-  .form-row
-    = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
-    = f.input :amount, required: true, input_html: { value: f.object.amount || 0, data: { controller: 'money-input' } }
-    = f.input :transaction_type, collection: transaction_type_options, include_black: false
+    .form-row
+      = f.input :date, as: :string, input_html: { data: { controller: 'date-input' } }
+      = f.input :amount, required: true, input_html: { value: f.object.amount || 0, data: { controller: 'money-input' } }
+      = f.input :transaction_type, collection: transaction_type_options, include_blank: false, input_html: { data: { conditional_input_target: 'trigger' } }
 
-  - options_for_categorizable = categorizable_options
-  = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true
-  = f.input :description
+    - options_for_categorizable = categorizable_options
+    = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true, wrapper_html: { data: { conditional_input_target: 'conditionalInput' } }
+    = f.input :description
 
 .flex.justify-between
   - if show_delete_button && policy(@transaction).destroy?

@@ -2,10 +2,6 @@
   padding-block: var(--op-space-3x-large);
 }
 
-.navbar__content {
-  .navbar__content__links {
-    display: flex;
-    align-self: flex-end;
-    gap: var(--op-space-3x-small);
-  }
+.navbar__content--centered {
+  justify-self: center;
 }

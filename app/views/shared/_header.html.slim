@@ -4,7 +4,7 @@
       = image_tag 'logo.png', alt: 'Logo'
       | My Money
 
-    .navbar__content.navbar__content--justify-center
+    .navbar__content.navbar__content--justify-end
       - if current_company
         = current_company.name
       - else
@@ -28,3 +28,6 @@
 
           = link_to edit_user_registration_path do
             sl-menu-item Settings
+
+          = button_to destroy_user_session_path, method: :delete, class: 'full-width text-left' do
+            sl-menu-item Logout

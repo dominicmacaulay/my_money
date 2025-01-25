@@ -10,7 +10,9 @@
       = f.input :transaction_type, collection: transaction_type_options, include_blank: false, input_html: { data: { conditional_input_target: 'trigger' } }
 
     - options_for_categorizable = categorizable_options
-    = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true, wrapper_html: { data: { conditional_input_target: 'conditionalInput' } }
+    = f.input :categorizable, label: 'Category', collection: options_for_categorizable, selected: selected_categorizable_option(f.object, options_for_categorizable), include_blank: true,
+        wrapper_html: { data: { conditional_input_target: 'conditionalInputWrapper' } },
+        input_html: { data: {conditional_input_target: 'conditionalInput' } }
     = f.input :description
 
 .flex.justify-between

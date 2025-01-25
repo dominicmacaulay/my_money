@@ -2,19 +2,20 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="conditional-input"
 export default class extends Controller {
-  static targets = ["trigger", "conditionalInput"]
+  static targets = ["trigger", "conditionalInputWrapper", "conditionalInput"]
   static values = { condition: String }
 
   connect() {
-    this.conditionalInputTarget.classList.add("hidden")
+    this.checkCondition()
     this.triggerTarget.addEventListener("change", this.checkCondition.bind(this))
   }
 
   checkCondition() {
     if (this.triggerTarget.value === this.conditionValue) {
-      this.conditionalInputTarget.classList.remove("hidden")
+      this.conditionalInputWrapperTarget.classList.remove("hidden")
     } else {
-      this.conditionalInputTarget.classList.add("hidden")
+      this.conditionalInputWrapperTarget.classList.add("hidden")
+      this.conditionalInputTarget.value = ""
     }
   }
 }

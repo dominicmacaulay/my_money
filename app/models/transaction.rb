@@ -10,7 +10,7 @@ class Transaction < ApplicationRecord
 
   validates :date, :amount_cents, :transaction_type, presence: true
 
-  validates :categorizable, presence: false, if: -> { income? }
+  validates :categorizable, absence: { message: 'cannot be present for income transactions' }, if: -> { income? }
   validates :categorizable, presence: { message: 'must be present for expense transactions' }, if: -> { expense? }
 
   def categorizable=(categorizable)

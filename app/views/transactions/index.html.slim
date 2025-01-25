@@ -3,15 +3,15 @@
   - if policy(Transaction).new?
     = link_to 'New Transaction', new_transaction_path, class: 'btn'
 
-table.table
+table.table-primary.table--comfortable-density.table--transactions
   thead
     tr
-      th Date
-      th Type
+      th.table--transactions__date Date
+      th.table--transactions__type Type
       th Category
       th Description
       th Amount
-      th
+      th.table--transactions__actions
   tbody
     - @transactions.each do |transaction|
       tr
@@ -21,12 +21,10 @@ table.table
         td = transaction.description
         td = number_to_currency(transaction.amount)
         - if policy(transaction).edit?
-          td
-            .table__actions
-              = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
+          td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
-      td colspan="3"
+      td colspan="2"
       td
         | Total Income
         br
@@ -35,7 +33,7 @@ table.table
         | Total Expense
         br
         = number_to_currency(@total_expense)
-      td
+      td colspan="2"
         | Total Balance
         br
         = number_to_currency(@total_income - @total_expense)

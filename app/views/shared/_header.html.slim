@@ -8,8 +8,7 @@
       - if current_company
         = current_company.name
       - else
-        = link_to new_company_path do
-          | Create Your Company
+        = link_to 'Create Your Company', new_company_path, class: 'btn-primary'
 
     .navbar__content
       .navbar__content__links

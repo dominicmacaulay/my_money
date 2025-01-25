@@ -9,7 +9,7 @@
 
 .flex.justify-between
   - if show_delete_button && policy(@subcategory).destroy?
-    = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-destructive'
+    = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-destructive'
 
   - submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Subcategory' : 'Update Subcategory'
   = submit_button @subcategory, submit_text, class: 'btn btn-primary'

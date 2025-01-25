@@ -125,7 +125,7 @@ RSpec.describe 'Transactions' do
     end
   end
 
-  context 'when being viewed' do
+  context 'when being viewed', :js do
     let!(:transaction) { create(:transaction, company:) }
 
     before do
@@ -134,7 +134,7 @@ RSpec.describe 'Transactions' do
       click_on 'View'
     end
 
-    it 'can be edited', :js do
+    it 'can be edited' do
       fill_in 'Description', with: 'My Updated Transaction'
       find_field('Amount').send_keys(%i[command backspace]) # Clear the value in place
       fill_in 'Amount', with: '50.00'
@@ -151,6 +151,7 @@ RSpec.describe 'Transactions' do
     it 'can be deleted' do
       expect do
         click_on 'Delete'
+        click_on "Yes, I'm Sure"
         expect(page).to have_content('Transaction was successfully destroyed')
       end.to change(Transaction, :count).by(-1)
     end

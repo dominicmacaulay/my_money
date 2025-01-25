@@ -70,7 +70,7 @@ class SubcategoriesController < ApplicationController
 
     @subcategory.destroy
 
-    redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully destroyed."
+    redirect_to subcategories_path, notice: 'Subcategory was successfully destroyed.'
     # respond_to do |format|
     #   format.html do
     #     redirect_to subcategories_path, status: :see_other, notice: 'Subcategory was successfully destroyed.'

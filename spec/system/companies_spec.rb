@@ -43,9 +43,12 @@ RSpec.describe 'Companies' do
     expect(company.name).to eq(name)
   end
 
-  it 'can be destroyed' do
-    click_on 'Delete'
-    expect(page).to have_content("#{company.name} was successfully destroyed")
+  it 'can be destroyed', :js do
+    expect do
+      click_on 'Delete'
+      click_on "Yes, I'm Sure"
+      expect(page).to have_content("#{company.name} was successfully destroyed")
+    end.to change(Company, :count).by(-1)
   end
 
   it 'can be set as the current company for the app' do

@@ -12,6 +12,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.12",
     "@rolemodel/optics": "^1.1.0",
+    "@rolemodel/turbo-confirm": "^2.1.1",
     "@shoelace-style/shoelace": "^2.19.1",
     "@types/react": "19.0.7",
     "autonumeric": "^4.10.7",

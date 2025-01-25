@@ -11,18 +11,20 @@
         = link_to 'Create Your Company', new_company_path, class: 'btn-primary'
 
     .navbar__content
-      .navbar__content__links
-        - if current_company
-          = link_to 'Transactions', transactions_path, class: 'btn btn--small'
-          = link_to 'Subcategories', subcategories_path, class: 'btn btn--small'
-
       sl-dropdown placement='bottom-end'
         button.btn type='button' slot="trigger"
           = material_icon 'account_circle'
         sl-menu
-          = link_to edit_user_registration_path do
-            sl-menu-item Settings
+          - if current_company
+            = link_to transactions_path do
+              sl-menu-item Transactions
+            = link_to subcategories_path do
+              sl-menu-item Subcategories
 
           = link_to companies_path do
             sl-menu-item Companies
 
+          sl-divider
+
+          = link_to edit_user_registration_path do
+            sl-menu-item Settings

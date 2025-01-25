@@ -129,6 +129,7 @@ RSpec.describe 'Transactions' do
     let!(:transaction) { create(:transaction, company:) }
 
     before do
+      click_on 'account_circle'
       click_on 'Transactions'
 
       click_on 'View'

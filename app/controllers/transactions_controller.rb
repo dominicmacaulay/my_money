@@ -7,9 +7,9 @@ class TransactionsController < ApplicationController
   def index
     authorize Transaction
 
-    @transactions = Transaction.where(company_id: current_company.id)
-    @total_income = @transactions.where(transaction_type: 'income').sum(:amount_cents) / 100
-    @total_expense = @transactions.where(transaction_type: 'expense').sum(:amount_cents) / 100
+    @transactions = current_company.transactions.order(date: :desc)
+    @total_income = @transactions.income.sum(:amount_cents) / 100
+    @total_expense = @transactions.expense.sum(:amount_cents) / 100
   end
 
   # GET /transactions/new
@@ -20,7 +20,6 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/1/edit
   def edit
-    @transaction = Transaction.find(params[:id])
     authorize @transaction
   end
 
@@ -47,7 +46,6 @@ class TransactionsController < ApplicationController
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
   def update
-    @transaction = Transaction.find(params[:id])
     authorize @transaction
 
     if @transaction.update(transaction_params)
@@ -68,7 +66,6 @@ class TransactionsController < ApplicationController
 
   # DELETE /transactions/1 or /transactions/1.json
   def destroy
-    @transaction = Transaction.find(params[:id])
     authorize @transaction
 
     @transaction.destroy

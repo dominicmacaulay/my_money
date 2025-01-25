@@ -47,6 +47,7 @@ RSpec.describe 'Subcategories' do
     let!(:category2) { create(:category) }
 
     before do
+      click_on 'account_circle'
       click_on 'Subcategories'
 
       click_on 'View'

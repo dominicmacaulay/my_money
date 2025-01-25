@@ -11,6 +11,7 @@
 
 // optics overrides
 @import 'components/optics-overrides/card.scss';
+@import 'components/optics-overrides/form.scss';
 @import 'components/optics-overrides/layout.scss';
 @import 'components/optics-overrides/navbar.scss';
 @import 'components/optics-overrides/table.scss';
@@ -21,3 +22,6 @@
 // Vendors
 @import 'vendors/shoelace/sl-menu-item.scss';
 @import 'vendors/shoelace/tokens.scss';
+
+// Utilities
+@import 'utilities/hidden.scss';

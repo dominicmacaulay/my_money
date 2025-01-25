@@ -10,7 +10,8 @@ class Transaction < ApplicationRecord
 
   validates :date, :amount_cents, :transaction_type, presence: true
 
-  validate :categorizable_presence_for_expense
+  validates :categorizable, absence: { message: 'cannot be present for income transactions' }, if: -> { income? }
+  validates :categorizable, presence: { message: 'must be present for expense transactions' }, if: -> { expense? }
 
   def categorizable=(categorizable)
     if categorizable.is_a?(String) # Check if it is a signed global id
@@ -22,13 +23,5 @@ class Transaction < ApplicationRecord
 
   def categorizable_name
     categorizable&.name
-  end
-
-  private
-
-  def categorizable_presence_for_expense
-    return unless expense? && categorizable.nil?
-
-    errors.add(:categorizable, 'must be present for expense transactions')
   end
 end

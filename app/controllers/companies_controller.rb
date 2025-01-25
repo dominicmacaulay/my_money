@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CompaniesController < ApplicationController
-  before_action :set_company, only: %i[edit update destroy]
+  before_action :set_company, only: %i[edit update destroy set_current]
   def index
     authorize Company
     @companies = current_user.companies
@@ -13,7 +13,6 @@ class CompaniesController < ApplicationController
   end
 
   def edit
-    @company = Company.find(params[:id])
     authorize @company
   end
 
@@ -36,7 +35,6 @@ class CompaniesController < ApplicationController
   end
 
   def update
-    @company = Company.find(params[:id])
     authorize @company
 
     if @company.update(company_params)
@@ -51,7 +49,6 @@ class CompaniesController < ApplicationController
   end
 
   def destroy
-    @company = Company.find(params[:id])
     authorize @company
 
     @company.destroy
@@ -64,11 +61,10 @@ class CompaniesController < ApplicationController
   end
 
   def set_current
-    company = Company.find(params[:id])
-    authorize company
+    authorize @company
 
-    if current_user.switch_current_company(company)
-      redirect_to root_path, notice: "Current company set to #{company.name}"
+    if current_user.switch_current_company(@company)
+      redirect_to root_path, notice: "Current company set to #{@company.name}"
     else
       redirect_to companies_path, alert: 'Could not set current company'
     end

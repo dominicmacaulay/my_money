@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import ConditionalInputController from "./conditional_input_controller"
+application.register("conditional-input", ConditionalInputController)
+
 import DateInputController from "./date_input_controller"
 application.register("date-input", DateInputController)
 

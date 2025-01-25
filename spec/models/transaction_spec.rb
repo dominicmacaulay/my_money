@@ -42,9 +42,10 @@ RSpec.describe Transaction do
 
     context 'when the transaction is an income' do
       it 'does not belong to a categorizable' do
-        transaction = create(:transaction, :income)
+        transaction = build(:transaction, :income, categorizable: create(:category))
 
-        expect(transaction).to be_valid
+        expect(transaction).not_to be_valid
+        expect(transaction.errors[:categorizable]).to include('cannot be present for income transactions')
       end
     end
   end

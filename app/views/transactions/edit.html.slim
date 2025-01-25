@@ -1,4 +1,7 @@
-= link_to transactions_path, class: 'btn' do
+.page-header
+  h1 Update Transaction
+  = link_to transactions_path, class: 'btn' do
     = material_icon 'arrow_back'
     | Back
+
 = render 'form', show_delete_button: true

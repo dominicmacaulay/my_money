@@ -17,7 +17,6 @@ class SubcategoriesController < ApplicationController
 
   # GET /subcategories/1/edit
   def edit
-    @subcategory = Subcategory.find(params[:id])
     authorize @subcategory
   end
 
@@ -44,7 +43,6 @@ class SubcategoriesController < ApplicationController
 
   # PATCH/PUT /subcategories/1 or /subcategories/1.json
   def update
-    @subcategory = Subcategory.find(params[:id])
     authorize @subcategory
 
     if @subcategory.update(subcategory_params)
@@ -65,7 +63,6 @@ class SubcategoriesController < ApplicationController
 
   # DELETE /subcategories/1 or /subcategories/1.json
   def destroy
-    @subcategory = Subcategory.find(params[:id])
     authorize @subcategory
 
     @subcategory.destroy

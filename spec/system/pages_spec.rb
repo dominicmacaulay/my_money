@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Pages' do
   let(:user) { create(:user) }
+  let!(:company) { create(:company) }
 
   before do
     login_as user
@@ -11,16 +12,13 @@ RSpec.describe 'Pages' do
   end
 
   describe 'Shared header' do
-    let!(:company) { create(:company) }
-
     context 'when user has a current company' do
       before do
         company.users << user
+        user.switch_current_company(company)
       end
 
       it 'displays the company name' do
-        user.switch_current_company(company)
-
         page.refresh
 
         expect(page).to have_content(company.name)
@@ -31,6 +29,59 @@ RSpec.describe 'Pages' do
       it 'displays a link to set the current company' do
         expect(page).to have_link('Create Your Company')
         expect(page).to have_no_content(company.name)
+      end
+    end
+  end
+
+  describe 'Home page' do
+    context 'when user has a current company' do
+      let(:current_year) { 2025 }
+
+      before do
+        company.users << user
+        user.switch_current_company(company)
+
+        create_list(:transaction, 10, :income, company:, amount: 100, date: Date.new(2025, 1, 1))
+        create_list(:transaction, 5, :expense, company:, amount: 50, date: Date.new(2025, 1, 1))
+      end
+
+      describe 'Yearly summary' do # rubocop:disable RSpec/NestedGroups
+        before do
+          visit root_path
+        end
+
+        it 'displays the current year' do
+          expect(page).to have_content(current_year)
+        end
+
+        it 'displays the total income for the current year' do
+          total_income = Money.new(company.income_for_year(current_year)).format
+
+          expect(page).to have_content('Total Income')
+          expect(page).to have_content(total_income)
+        end
+
+        it 'displays the total expenses for the current year' do
+          total_expenses = Money.new(company.expense_for_year(current_year)).format
+
+          expect(page).to have_content('Total Expense')
+          expect(page).to have_content(total_expenses)
+        end
+
+        it 'displays the total balance for the current year' do
+          total_income = company.income_for_year(current_year)
+          total_expenses = company.expense_for_year(current_year)
+          total_balance = Money.new(total_income - total_expenses).format
+
+          expect(page).to have_content('Total Balance')
+          expect(page).to have_content(total_balance)
+        end
+      end
+    end
+
+    context 'when user does not have a current company' do
+      it 'displays a welcome message' do
+        expect(page).to have_content('Welcome to My Money!')
       end
     end
   end

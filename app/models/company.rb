@@ -14,6 +14,14 @@ class Company < ApplicationRecord
     user_companies.create(user:, role:)
   end
 
+  def income_for_year(year)
+    transactions.income.where(date: Date.new(year).all_year).sum(:amount_cents)
+  end
+
+  def expense_for_year(year)
+    transactions.expense.where(date: Date.new(year).all_year).sum(:amount_cents)
+  end
+
   private
 
   def handle_destruction

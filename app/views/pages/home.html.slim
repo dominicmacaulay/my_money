@@ -1,2 +1,14 @@
-h1 Pages#home
-p Find me in app/views/pages/home.html.slim
+.home-page
+  - if current_company
+    .home-page__header
+      h1 = current_company.name
+      .divider
+    = render 'yearly_summary'
+    = render 'monthly_summary'
+    = render 'tax_breakdown'
+
+  - else
+    .home-page__header
+      h1 Welcome to My Money!
+      - welcome_messages.each do |message|
+        p = message

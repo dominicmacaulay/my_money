@@ -1,7 +1,19 @@
+require File.expand_path('../../env', __FILE__)
 require_relative "boot"
-require_relative "../env"
 
-require "rails/all"
+require "rails"
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "active_storage/engine"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_mailbox/engine"
+require "action_text/engine"
+require "action_view/railtie"
+require "action_cable/engine"
+# require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -25,10 +37,7 @@ module MyMoney
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.generators do |g|
-      g.view_specs false # Specifically disable view specs
-      g.request_specs false
-      g.helper_specs false
-    end
+    # Don't generate system test files.
+    config.generators.system_tests = nil
   end
 end

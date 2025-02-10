@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Local override
+dotenv = File.expand_path('.env_overrides.rb', __dir__)
+require dotenv if File.exist?(dotenv)
+
 # env.rb
-ENV['WEBPACK_PORT'] ||= '3001'  # Default to 3001 if not set
-ENV['RAILS_PORT'] ||= '3001'    # Default to 3000 if not set
+ENV['PORT'] ||= '3000' # Default to 3000 if not set

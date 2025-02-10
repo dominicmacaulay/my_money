@@ -6,10 +6,12 @@ source 'https://rubygems.org'
 gem 'rails', '~> 8.0.1'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft'
-# Use sqlite3 as the database for Active Record
-gem 'pg'
+# Use postgresql as the database for Active Record
+gem 'pg', '~> 1.1'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
+# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
+gem 'jsbundling-rails'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem 'turbo-rails'
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
@@ -52,6 +54,8 @@ gem 'rolemodel_sower'
 # Use Pundit for permissions
 gem 'pundit'
 
+gem 'rubocop'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
@@ -63,7 +67,6 @@ group :development, :test do
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
 
-  gem 'rubocop'
   gem 'rubocop-capybara'
   gem 'rubocop-factory_bot'
   gem 'rubocop-rails'
@@ -75,14 +78,16 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
-  gem 'bundler-audit', require: false
-
   gem 'rolemodel_rails', github: 'RoleModel/rolemodel_rails'
+
+  gem 'dockerfile-rails', '>= 1.7'
+
+  gem 'bundler-audit'
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
+  gem 'test-prof'
   gem 'webdrivers'
 
   gem 'shoulda-matchers'

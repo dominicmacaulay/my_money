@@ -1,12 +1,12 @@
 class AddRoleToUserCompany < ActiveRecord::Migration[8.0]
   def up
-    add_column :user_companies, :role, :string, default: 'guest'
+    add_column :user_companies, :role, :string, default: 'admin'
 
     UserCompany.find_each do |user_company|
       if user_company.company.users.count == 1
         user_company.update(role: 'admin')
       else
-        user_company.update(role: 'guest')
+        user_company.update(role: 'member')
       end
     end
 

@@ -1,5 +1,5 @@
 .form-row {
-  --minimum-item-width: calc(var(--op-size-unit) * 50); // 200px
+  --minimum-item-width: calc(var(--op-size-unit) * 50); /* 200px */
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--minimum-item-width), 1fr));

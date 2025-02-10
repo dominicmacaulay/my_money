@@ -1,9 +1,9 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+// Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
 import "./controllers"
-import './initializers/frame_missing_handler'
-import './initializers/honeybadger'
-import './initializers/turbo_confirm'
+import './initializers/turbo_confirm.js'
+import './initializers/frame_missing_handler.js'
+import './initializers/before_morph_handler.js'
 
 // Shoelace
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library"
@@ -29,4 +29,3 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev
   const newTheme = `sl-theme-${themeMap[event.matches]}`
   document.documentElement.classList.replace(oldTheme, newTheme)
 })
-

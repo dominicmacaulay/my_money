@@ -2,7 +2,7 @@
 :host,
 .sl-theme-light,
 .sl-theme-dark {
-  // Spacing
+  /* Spacing */
   --sl-spacing-3x-small: var(--op-space-3x-small);
   --sl-spacing-2x-small: var(--op-space-2x-small);
   --sl-spacing-x-small: var(--op-space-x-small);
@@ -14,7 +14,7 @@
   --sl-spacing-3x-large: var(--op-space-3x-large);
   --sl-spacing-4x-large: var(--op-space-4x-large);
 
-  // Border Radius Overrides
+  /* Border Radius Overrides */
   --sl-border-radius-small: var(--op-radius-small);
   --sl-border-radius-medium: var(--op-radius-medium);
   --sl-border-radius-large: var(--op-radius-large);
@@ -22,10 +22,10 @@
   --sl-border-radius-circle: var(--op-radius-circle);
   --sl-border-radius-pill: var(--op-radius-pill);
 
-  // Font Family Overrides
+  /* Font Family Overrides */
   --sl-font-sans: var(--op-font-family);
 
-  // Font Scale Overrides
+  /* Font Scale Overrides */
   --sl-font-size-2x-small: var(--op-font-2x-small);
   --sl-font-size-x-small: var(--op-font-x-small);
   --sl-font-size-small: var(--op-font-small);
@@ -36,27 +36,27 @@
   --sl-font-size-3x-large: var(--op-font-4x-large);
   --sl-font-size-4x-large: var(--op-font-5x-large);
 
-  // Font Weight Overrides
+  /* Font Weight Overrides */
   --sl-font-weight-light: var(--op-font-weight-light);
   --sl-font-weight-normal: var(--op-font-weight-normal);
   --sl-font-weight-semibold: var(--op-font-weight-semi-bold);
   --sl-font-weight-bold: var(--op-font-weight-bold);
 
-  // line Height Overrides
+  /* line Height Overrides */
   --sl-line-height-denser: var(--op-line-height-denser);
   --sl-line-height-dense: var(--op-line-height-dense);
   --sl-line-height-normal: var(--op-line-height-base);
   --sl-line-height-loose: var(--op-line-height-loose);
   --sl-line-height-looser: var(--op-line-height-looser);
 
-  // Z-index Overrides
+  /* Z-index Overrides */
   --sl-z-index-drawer: var(--op-z-index-drawer);
   --sl-z-index-dialog: var(--op-z-index-dialog);
   --sl-z-index-dropdown: calc(var(--op-z-index-dialog-backdrop) - 2);
   --sl-z-index-alert-group: var(rm-z-index-alert-group);
   --sl-z-index-tooltip: var(rm-z-index-tooltip);
 
-  // Input Style Overrides
+  /* Input Style Overrides */
   --sl-input-height-small: var(--op-input-height-small);
   --sl-input-height-medium: var(--op-input-height-medium);
   --sl-input-height-large: var(--op-input-height-large);
@@ -68,15 +68,15 @@
   --sl-input-border-radius-circle: var(--op-radius-circle);
   --sl-input-border-radius-pill: var(--op-radius-pill);
 
-  // Input Focus Ring Overrides
+  /* Input Focus Ring Overrides */
   --sl-focus-ring-alpha: 30%;
   --sl-focus-ring-width: 3px;
   --sl-focus-ring: 0 0 0 var(--sl-focus-ring-width) hsl(var(--op-color-primary-h) var(--op-color-primary-s) var(--op-color-primary-l) / var(--sl-focus-ring-alpha));
 
-  // Overlay Style Overrides
+  /* Overlay Style Overrides */
   --sl-overlay-background-color: hsl(240 3.8% 46.1% / 33%);
 
-  // Button Token Overrides
+  /* Button Token Overrides */
   --sl-button-font-size-small: var(--op-font-x-small);
   --sl-button-font-size-medium: var(--op-font-small);
   --sl-button-font-size-large: var(--op-font-medium);

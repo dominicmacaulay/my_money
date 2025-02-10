@@ -15,6 +15,6 @@ html.sl-theme-light
     = turbo_frame_tag 'panel'
 
     .app__content
-      = render "layouts/flash"
-      = render 'shared/confirm'
+      = render "application/flash"
+      = render 'application/confirm'
       = yield

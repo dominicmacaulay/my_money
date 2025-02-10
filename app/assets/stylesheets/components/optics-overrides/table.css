@@ -1,12 +1,12 @@
-%table-global {
+.table {
   &.table--transactions {
     .table--transactions__type,
     .table--transactions__date {
-      width: calc(30 * var(--op-size-unit)); // 100px
+      width: calc(30 * var(--op-size-unit)); /* 100px */
     }
 
     .table--transactions__actions {
-      width: calc(18.75 * var(--op-size-unit)); // 75px
+      width: calc(18.75 * var(--op-size-unit)); /* 75px */
     }
   }
 

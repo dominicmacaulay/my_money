@@ -1,0 +1,23 @@
+.page-header
+  .page-header__title = t "devise.invitations.new.header"
+
+  .breadcrumbs
+    = link_to 'Dashboard', root_path, class: 'breadcrumbs__link'
+    .breadcrumbs__separator
+      = material_icon('arrow_right')
+    .breadcrumbs__text Invite Client
+
+.page-sections
+  = simple_form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post, class: 'card' }) do |f|
+    .card__body
+      = f.input :first_name, required: true, autofocus: true, input_html: { autocomplete: "first_name" }
+      = f.input :last_name, required: true, input_html: { autocomplete: "last_name" }
+
+      - resource.class.invite_key_fields.each do |field|
+        = f.input field, required: true
+
+      = f.hidden_field :organization_id, value: current_organization.id
+    .card__footer
+      .flex.items-center.justify-end.gap-sm
+        = link_to 'Cancel', root_path, class: 'btn'
+        = f.submit t("devise.invitations.new.submit_button"), class: 'btn-primary'

@@ -10,9 +10,6 @@ application.register("conditional-input", ConditionalInputController)
 import DateInputController from "./date_input_controller"
 application.register("date-input", DateInputController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
 import MoneyInputController from "./money_input_controller"
 application.register("money-input", MoneyInputController)
 

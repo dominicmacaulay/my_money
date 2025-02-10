@@ -1,13 +1,13 @@
-.session-form
-  h2 Log in
+.app__login
+  = simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'card app__login-form' }) do |f|
+    .card__body
+      h1 = t(".sign_in", default: "Sign In")
+      = f.input :email, required: true, autofocus: true, autocomplete: 'email'
+      = f.input :password, required: true, autocomplete: 'current-password'
 
-  .card.container--xs = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    .form-inputs
-      = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }
-      = f.input :password, required: false, input_html: { autocomplete: "current-password" }
+      - if devise_mapping.rememberable?
+        = f.input :remember_me, as: :boolean
 
-    .form-actions
-      = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
-      = f.button :submit, "Log in", class: "btn-primary"
-
-  = render "devise/shared/links"
+    .card__footer
+      = render "devise/shared/links"
+      = f.submit t(".sign_in", default: "Log in"), class: "btn btn--primary"

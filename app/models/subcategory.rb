@@ -4,7 +4,7 @@ class Subcategory < ApplicationRecord
   belongs_to :category
   belongs_to :company
 
-  has_many :transactions, as: :categorizable, dependent: :destroy
+  has_many :transactions, as: :categorizable, dependent: :nullify
 
   validates :name, presence: true
 

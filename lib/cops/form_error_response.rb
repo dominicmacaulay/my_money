@@ -14,7 +14,7 @@
 
 # Custom Cop to Ensure Form Error Response Statuses
 module Cops
-  class FormErrorResponse < RuboCop::Cop::Base
+  class FormErrorResponse < ::RuboCop::Cop::Base
     # Match code in the else branch that either: is the only line and looks like `render :something, ...`
     # or is not the first line and looks like the same.
     def_node_matcher :form_error, <<~PATTERN

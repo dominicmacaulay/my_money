@@ -9,7 +9,7 @@ RSpec.describe Subcategory do
 
   describe 'associations' do
     it { should belong_to(:category) }
-    it { should have_many(:transactions).dependent(:destroy) }
+    it { should have_many(:transactions).dependent(:nullify) }
   end
 
   describe 'delegations' do

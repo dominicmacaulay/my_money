@@ -1,6 +1,8 @@
 # Overview
-## Name and aliases
+## Project
 The project is named "MyMoney".
+
+You can visit the website [here](https://btsb-my-money.fly.dev/).
 
 ## Purpose
 The system is designed to help Sole Proprieter, single employee business owners manage and track their incomes and expenses. Effective use of this tool with allow the business owner to cut out the unnecessary accounting fees and services they may otherwise pay for.

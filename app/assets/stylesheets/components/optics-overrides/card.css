@@ -1,0 +1,4 @@
+.card {
+  padding-inline: var(--op-space-medium);
+  padding-bottom: var(--op-space-medium);
+}

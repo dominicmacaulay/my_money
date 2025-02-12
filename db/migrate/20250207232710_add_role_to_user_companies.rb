@@ -1,4 +1,4 @@
-class AddRoleToUserCompany < ActiveRecord::Migration[8.0]
+class AddRoleToUserCompanies < ActiveRecord::Migration[8.0]
   def up
     add_column :user_companies, :role, :string, default: 'admin'
 

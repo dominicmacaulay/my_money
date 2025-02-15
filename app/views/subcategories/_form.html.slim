@@ -1,6 +1,6 @@
 -# locals: (show_delete_button: false)
 
-= simple_form_for @subcategory do |f|
+= simple_form_for @subcategory, html: { autocomplete: 'off' } do |f|
   = f.hidden_field :company_id, value: current_company.id
 
   = f.input :name

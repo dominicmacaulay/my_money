@@ -1,6 +1,6 @@
 -# locals: (show_delete_button: false)
 
-= simple_form_for @transaction do |f|
+= simple_form_for @transaction, html: { autocomplete: 'off' } do |f|
   div data-controller='conditional-input' data-conditional-input-condition-value='expense'
     = f.hidden_field :company_id, value: current_company.id
 

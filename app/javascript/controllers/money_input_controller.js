@@ -31,6 +31,8 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
+    if (event.key ==="Enter") return
+
     event.preventDefault()
 
     if (isFinite(event.key) && this.value.toString().length < this.maxDigits) {

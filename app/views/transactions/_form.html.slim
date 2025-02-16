@@ -1,5 +1,3 @@
--# locals: (show_delete_button: false)
-
 = simple_form_for @transaction, html: { autocomplete: 'off' } do |f|
   div data-controller='conditional-input' data-conditional-input-condition-value='expense'
     = f.hidden_field :company_id, value: current_company.id
@@ -18,6 +16,7 @@
     = f.input :description
 
 .flex.justify-between
+  - show_delete_button = action_name === 'update' || action_name === 'edit'
   - if show_delete_button && policy(@transaction).destroy?
     = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 

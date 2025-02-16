@@ -16,6 +16,7 @@ class TransactionsController < ApplicationController
   def new
     authorize Transaction
     @transaction = Transaction.new
+    @transaction.transaction_type = params[:transaction_type]
   end
 
   # GET /transactions/1/edit
@@ -24,12 +25,17 @@ class TransactionsController < ApplicationController
   end
 
   # POST /transactions or /transactions.json
-  def create
+  def create # rubocop:disable Metrics/MethodLength
     @transaction = Transaction.new(transaction_params)
     authorize @transaction
 
     if @transaction.save
-      redirect_to transactions_path, notice: 'Transaction was successfully created.'
+      if params[:submit_and_new] == 'true'
+        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type),
+                    notice: 'Transaction was successfully created. Please create another.'
+      else
+        redirect_to transactions_path, notice: 'Transaction was successfully created.'
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -45,11 +51,16 @@ class TransactionsController < ApplicationController
   end
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
-  def update
+  def update # rubocop:disable Metrics/MethodLength
     authorize @transaction
 
     if @transaction.update(transaction_params)
-      redirect_to transactions_path, notice: 'Transaction was successfully updated.'
+      if params[:submit_and_new] == 'true'
+        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type),
+                    notice: 'Transaction was successfully updated. Please create another.'
+      else
+        redirect_to transactions_path, notice: 'Transaction was successfully updated.'
+      end
     else
       render :edit, status: :unprocessable_entity
     end

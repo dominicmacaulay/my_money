@@ -1,13 +1,12 @@
--# locals: (show_delete_button: false)
-
-= simple_form_for @subcategory do |f|
+= simple_form_for @subcategory, html: { autocomplete: 'off' } do |f|
   = f.hidden_field :company_id, value: current_company.id
 
   = f.input :name
-  = f.input :category_id, collection: Category.all
+  = f.input :category_id, collection: Category.all, required: true
 
 
 .flex.justify-between
+  - show_delete_button = action_name === 'update' || action_name === 'edit'
   - if show_delete_button && policy(@subcategory).destroy?
     = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 

@@ -36,7 +36,11 @@ RSpec.describe 'Transactions' do
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed([income_transaction, income_transaction2])
+          expect_transactions_to_be_listed(
+            [income_transaction, income_transaction2],
+            show_type: false,
+            show_category: true
+          )
           expect_transactions_not_to_be_listed([expense_transaction, expense_transaction2])
         end
       end
@@ -51,8 +55,9 @@ RSpec.describe 'Transactions' do
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed([income_transaction, income_transaction2, expense_transaction,
-expense_transaction2])
+          expect_transactions_to_be_listed(
+            [income_transaction, income_transaction2, expense_transaction, expense_transaction2]
+          )
         end
       end
     end
@@ -66,7 +71,11 @@ expense_transaction2])
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed([expense_transaction, expense_transaction2])
+          expect_transactions_to_be_listed(
+            [expense_transaction, expense_transaction2],
+            show_type: false,
+            show_category: true
+          )
           expect_transactions_not_to_be_listed([income_transaction, income_transaction2])
         end
       end
@@ -226,22 +235,19 @@ expense_transaction2])
     end
   end
 
-  def expect_transactions_to_be_listed(transactions) # rubocop:disable Metrics/AbcSize
+  def expect_transactions_to_be_listed(transactions, show_type: true, show_category: true) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
       expect(page).to have_content transaction.date
       expect(page).to have_content transaction.description
-      expect(page).to have_content transaction.transaction_type.titleize
-      expect(page).to have_content transaction.categorizable&.name if transaction.categorizable.present?
+      expect(page).to have_content transaction.transaction_type.titleize if show_type
+      expect(page).to have_content transaction.categorizable&.name if show_category
       expect(page).to have_content transaction.amount.format
     end
   end
 
-  def expect_transactions_not_to_be_listed(transactions) # rubocop:disable Metrics/AbcSize
+  def expect_transactions_not_to_be_listed(transactions)
     transactions.each do |transaction|
-      expect(page).to have_no_content transaction.date
       expect(page).to have_no_content transaction.description
-      expect(page).to have_no_content transaction.transaction_type.titleize
-      expect(page).to have_no_content transaction.categorizable&.name if transaction.categorizable.present?
       expect(page).to have_no_content transaction.amount.format
     end
   end

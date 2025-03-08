@@ -14,6 +14,7 @@
  @import 'components/optics-overrides/form.css';
  @import 'components/optics-overrides/layout.css';
  @import 'components/optics-overrides/navbar.css';
+ @import 'components/optics-overrides/pagination.css';
  @import 'components/optics-overrides/table.css';
 
  /* devise */

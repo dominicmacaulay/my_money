@@ -73,7 +73,7 @@ class TransactionsController < ApplicationController
   private
 
   def session_transaction_grouping
-    session[:transaction_grouping] || DEFAULT_TRANSACTION_GROUPING
+    session[:transaction_grouping]&.to_sym || DEFAULT_TRANSACTION_GROUPING
   end
 
   def set_session_transaction_grouping

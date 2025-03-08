@@ -18,7 +18,7 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
       th Amount
       th.table--transactions__actions
   tbody
-    - @transactions_presenter.transactions.each do |transaction|
+    - @transactions.each do |transaction|
       tr
         td = transaction.date
         td = transaction.transaction_type.humanize
@@ -29,16 +29,18 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
           td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
+      td colspan="4"
+        = paginate @transactions
       td colspan="2"
-      td
-        | Total Income
-        br
-        = number_to_currency(@transactions_presenter.total_income)
-      td
-        | Total Expense
-        br
-        = number_to_currency(@transactions_presenter.total_expense)
-      td colspan="2"
-        | Total Balance
-        br
-        = number_to_currency(@transactions_presenter.balance)
+        .table--transactions__totals
+          .table--transactions__totals-pair
+            span Total Income
+            span = number_to_currency(@transactions_presenter.total_income)
+          .table--transactions__totals-pair
+            span Total Expense
+            span = number_to_currency(@transactions_presenter.total_expense)
+          .table--transactions__totals-pair
+            span Total Balance
+            span = number_to_currency(@transactions_presenter.balance)
+
+= paginate @transactions

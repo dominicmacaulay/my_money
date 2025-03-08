@@ -13,6 +13,8 @@ class Transaction < ApplicationRecord
   validates :categorizable, absence: { message: 'cannot be present for income transactions' }, if: -> { income? }
   validates :categorizable, presence: { message: 'must be present for expense transactions' }, if: -> { expense? }
 
+  paginates_per 50
+
   def categorizable=(categorizable)
     if categorizable.is_a?(String) # Check if it is a signed global id
       super(GlobalID::Locator.locate_signed(categorizable))

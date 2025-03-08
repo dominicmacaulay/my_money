@@ -13,6 +13,7 @@ class TransactionsController < ApplicationController
     set_session_transaction_grouping
 
     @transactions_presenter = TransactionsPresenter.new(current_company, session_transaction_grouping)
+    @transactions = @transactions_presenter.transactions.page(params[:page])
   end
 
   # GET /transactions/new

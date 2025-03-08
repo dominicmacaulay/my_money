@@ -8,6 +8,19 @@
     .table--transactions__actions {
       width: calc(18.75 * var(--op-size-unit)); /* 75px */
     }
+
+    .table--transactions__totals {
+      display: flex;
+      gap: var(--op-space-medium);
+
+      .table--transactions__totals-pair {
+        display: flex;
+        flex-direction: column;
+        gap: var(--op-space-small);
+
+        text-align: center;
+      }
+    }
   }
 
   .table__actions {

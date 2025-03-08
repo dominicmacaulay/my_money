@@ -17,24 +17,58 @@ RSpec.describe 'Transactions' do
   end
 
   context 'when being listed' do
-    let!(:expense_transaction) { create(:transaction, :expense, company:, amount: '100.00') }
-    let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00') }
-    let!(:income_transaction) { create(:transaction, company:, amount: '200.00') }
-    let!(:income_transaction2) { create(:transaction, company:, amount: '250.00') }
+    let!(:expense_transaction) { create(:transaction, :expense, company:, amount: '100.00', date: '2021-01-01') }
+    let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00', date: '2021-01-02') }
+    let!(:income_transaction) { create(:transaction, company:, amount: '200.00', date: '2021-01-03') }
+    let!(:income_transaction2) { create(:transaction, company:, amount: '250.00', date: '2021-01-04') }
 
     before do
       click_on 'account_circle'
       click_on 'Transactions'
     end
 
-    it 'can be viewed' do
-      expect(page).to have_content('Transactions')
+    context 'when on the Income tab' do
+      before do
+        click_on 'Income'
+      end
 
-      expect(page).to have_content expense_transaction.date
-      expect(page).to have_content expense_transaction.description
-      expect(page).to have_content expense_transaction.transaction_type.titleize
-      expect(page).to have_content expense_transaction.categorizable&.name
-      expect(page).to have_content expense_transaction.amount.format
+      it 'only lists income transactions' do
+        expect(page).to have_content('Transactions')
+
+        within('tbody') do
+          expect_transactions_to_be_listed([income_transaction, income_transaction2])
+          expect_transactions_not_to_be_listed([expense_transaction, expense_transaction2])
+        end
+      end
+    end
+
+    context 'when on the All tab' do
+      before do
+        click_on 'All'
+      end
+
+      it 'lists all transactions' do
+        expect(page).to have_content('Transactions')
+
+        within('tbody') do
+          expect_transactions_to_be_listed([income_transaction, income_transaction2, expense_transaction, expense_transaction2])
+        end
+      end
+    end
+
+    context 'when on the Expense tab' do
+      before do
+        click_on 'Expense'
+      end
+
+      it 'only lists expense transactions' do
+        expect(page).to have_content('Transactions')
+
+        within('tbody') do
+          expect_transactions_to_be_listed([expense_transaction, expense_transaction2])
+          expect_transactions_not_to_be_listed([income_transaction, income_transaction2])
+        end
+      end
     end
 
     it 'displays the total income' do
@@ -61,10 +95,11 @@ RSpec.describe 'Transactions' do
     before do
       click_on 'account_circle'
       click_on 'Transactions'
-      click_on 'New Transaction'
     end
 
     it 'can be created as an income without a category', :js do
+      click_on 'New Transaction'
+
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Income', from: 'Transaction type'
@@ -83,6 +118,8 @@ RSpec.describe 'Transactions' do
     end
 
     it 'can be created as an expense with a standard category', :js do
+      click_on 'New Transaction'
+
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
@@ -102,6 +139,8 @@ RSpec.describe 'Transactions' do
     end
 
     it 'can be created as an expense with a subcategory', :js do
+      click_on 'New Transaction'
+
       subcategory_name = "#{subcategory.name} (Subcategory of #{category.name})"
       fill_in 'Date', with: '2021-01-01'
       fill_in 'Description', with: 'My New Transaction'
@@ -122,8 +161,35 @@ RSpec.describe 'Transactions' do
     end
 
     it 'does not show a delete button' do
+      click_on 'New Transaction'
+
       expect(page).to have_content('Create Transaction')
       expect(page).to have_no_content('Delete')
+    end
+
+    context 'when navigating from the Income index page' do
+      it 'prefills income as the transaction type' do
+        click_on 'Income'
+        click_on 'New Transaction'
+        expect(page).to have_select('Transaction type', selected: 'Income')
+      end
+    end
+
+    context 'when navigating from the All index page' do
+      it 'prefills income as the transaction type' do
+        click_on 'All'
+        click_on 'New Transaction'
+        expect(page).to have_select('Transaction type', selected: 'Income')
+
+      end
+    end
+
+    context 'when navigating from the Expense index page' do
+      it 'prefills expense as the transaction type' do
+        click_on 'Expense'
+        click_on 'New Transaction'
+        expect(page).to have_select('Transaction type', selected: 'Expense')
+      end
     end
   end
 
@@ -157,6 +223,26 @@ RSpec.describe 'Transactions' do
         click_on "Yes, I'm Sure"
         expect(page).to have_content('Transaction was successfully destroyed')
       end.to change(Transaction, :count).by(-1)
+    end
+  end
+
+  def expect_transactions_to_be_listed(transactions)
+    transactions.each do |transaction|
+      expect(page).to have_content transaction.date
+      expect(page).to have_content transaction.description
+      expect(page).to have_content transaction.transaction_type.titleize
+      expect(page).to have_content transaction.categorizable&.name if transaction.categorizable.present?
+      expect(page).to have_content transaction.amount.format
+    end
+  end
+
+  def expect_transactions_not_to_be_listed(transactions)
+    transactions.each do |transaction|
+      expect(page).not_to have_content transaction.date
+      expect(page).not_to have_content transaction.description
+      expect(page).not_to have_content transaction.transaction_type.titleize
+      expect(page).not_to have_content transaction.categorizable&.name if transaction.categorizable.present?
+      expect(page).not_to have_content transaction.amount.format
     end
   end
 end

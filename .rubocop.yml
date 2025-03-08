@@ -82,7 +82,7 @@ RSpec/MultipleExpectations:
   Enabled: false
 
 RSpec/ExampleLength:
-  Max: 15
+  Max: 25
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false

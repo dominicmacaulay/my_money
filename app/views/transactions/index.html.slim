@@ -15,8 +15,10 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
   thead
     tr
       th.table--transactions__date Date
-      th.table--transactions__type Type
-      th Category
+      - if @transactions_presenter.show_transaction_type?
+        th.table--transactions__type Type
+      - if @transactions_presenter.show_category?
+        th Category
       th Description
       th Amount
       th.table--transactions__actions
@@ -24,15 +26,17 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
     - @transactions.each do |transaction|
       tr
         td = transaction.date
-        td = transaction.transaction_type.humanize
-        td = transaction.categorizable_name
+        - if @transactions_presenter.show_transaction_type?
+          td = transaction.transaction_type.humanize
+        - if @transactions_presenter.show_category?
+          td = transaction.categorizable_name
         td = transaction.description
         td = number_to_currency(transaction.amount)
         - if policy(transaction).edit?
           td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
-      td colspan="3"
+      td colspan="#{@transactions_presenter.pagination_colspan}"
         = paginate @transactions
       td colspan="3"
         .table--transactions__totals

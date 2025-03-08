@@ -101,4 +101,82 @@ RSpec.describe TransactionsPresenter do
       end
     end
   end
+
+  describe '#show_category?' do
+    context 'when grouping is expense' do
+      let(:grouping) { :expense }
+
+      it 'returns true' do
+        expect(presenter.show_category?).to be true
+      end
+    end
+
+    context 'when grouping is income' do
+      let(:grouping) { :income }
+
+      it 'returns false' do
+        expect(presenter.show_category?).to be false
+      end
+    end
+
+    context 'when grouping is all' do
+      let(:grouping) { :all }
+
+      it 'returns true' do
+        expect(presenter.show_category?).to be true
+      end
+    end
+  end
+
+  describe '#show_transaction_type?' do
+    context 'when grouping is expense' do
+      let(:grouping) { :expense }
+
+      it 'returns false' do
+        expect(presenter.show_transaction_type?).to be false
+      end
+    end
+
+    context 'when grouping is income' do
+      let(:grouping) { :income }
+
+      it 'returns false' do
+        expect(presenter.show_transaction_type?).to be false
+      end
+    end
+
+    context 'when grouping is all' do
+      let(:grouping) { :all }
+
+      it 'returns true' do
+        expect(presenter.show_transaction_type?).to be true
+      end
+    end
+  end
+
+  describe '#pagination_colspan' do
+    context 'when grouping is expense' do
+      let(:grouping) { :expense }
+
+      it 'returns 2' do
+        expect(presenter.pagination_colspan).to eq(2)
+      end
+    end
+
+    context 'when grouping is income' do
+      let(:grouping) { :income }
+
+      it 'returns 1' do
+        expect(presenter.pagination_colspan).to eq(1)
+      end
+    end
+
+    context 'when grouping is all' do
+      let(:grouping) { :all }
+
+      it 'returns 3' do
+        expect(presenter.pagination_colspan).to eq(3)
+      end
+    end
+  end
 end

@@ -28,6 +28,24 @@ class TransactionsPresenter
     grouping == :expense ? :expense : :income
   end
 
+  def show_category?
+    grouping != :income
+  end
+
+  def show_transaction_type?
+    grouping == :all
+  end
+
+  def pagination_colspan
+    if show_category? && show_transaction_type?
+      3
+    elsif show_category? || show_transaction_type?
+      2
+    else
+      1
+    end
+  end
+
   private
 
   def authorized_transactions

@@ -1,7 +1,8 @@
 .page-header
-  h1 Subcategories
-  - if policy(Subcategory).new?
-    = link_to 'New Subcategory', new_subcategory_path, class: 'btn'
+  h1.page-header__item Subcategories
+  .page-header__item
+    - if policy(Subcategory).new?
+      = link_to 'New Subcategory', new_subcategory_path, class: 'btn'
 
 table.table
   thead

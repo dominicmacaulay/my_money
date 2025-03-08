@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class TransactionsController < ApplicationController
+  DEFAULT_TRANSACTION_GROUPING = :all
+  TRANSACTION_GROUPING_OPTIONS = %i[all income expense].freeze
+
   before_action :set_transaction, only: %i[edit update destroy]
 
   # GET /transactions or /transactions.json
   def index
     authorize Transaction
 
-    @transactions = current_company.transactions.order(date: :desc)
-    @total_income = @transactions.income.sum(:amount_cents) / 100
-    @total_expense = @transactions.expense.sum(:amount_cents) / 100
+    set_session_transaction_grouping
+
+    @transactions_presenter = TransactionsPresenter.new(current_company, session_transaction_grouping)
   end
 
   # GET /transactions/new
@@ -39,15 +42,6 @@ class TransactionsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-    # respond_to do |format|
-    #   if @transaction.save
-    #     format.html { redirect_to @transaction, notice: "Transaction was successfully created." }
-    #     format.json { render :show, status: :created, location: @transaction }
-    #   else
-    #     format.html { render :new, status: :unprocessable_entity }
-    #     format.json { render json: @transaction.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
@@ -64,15 +58,6 @@ class TransactionsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
-    # respond_to do |format|
-    #   if @transaction.update(transaction_params)
-    #     format.html { redirect_to @transaction, notice: "Transaction was successfully updated." }
-    #     format.json { render :show, status: :ok, location: @transaction }
-    #   else
-    #     format.html { render :edit, status: :unprocessable_entity }
-    #     format.json { render json: @transaction.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # DELETE /transactions/1 or /transactions/1.json
@@ -82,13 +67,20 @@ class TransactionsController < ApplicationController
     @transaction.destroy
 
     redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
-    # respond_to do |format|
-    #   format.html { redirect_to transactions_path, status: :see_other, notice: "Transaction was successfully destroyed." } # rubocop:disable Layout/LineLength
-    #   format.json { head :no_content }
-    # end
   end
 
   private
+
+  def session_transaction_grouping
+    session[:transaction_grouping].to_sym || DEFAULT_TRANSACTION_GROUPING
+  end
+
+  def set_session_transaction_grouping
+    new_grouping = params[:transaction_grouping]&.to_sym
+    return unless TRANSACTION_GROUPING_OPTIONS.include?(new_grouping)
+
+    session[:transaction_grouping] = new_grouping
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_transaction

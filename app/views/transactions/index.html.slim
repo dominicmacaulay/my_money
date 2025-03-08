@@ -1,7 +1,12 @@
 .page-header
+  .btn-group
+    - grouping = @transactions_presenter.grouping
+    = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
+    = link_to 'All', transactions_path(transaction_grouping: :all), class: class_names('btn', 'btn--active': grouping == :all)
+    = link_to 'Expense', transactions_path(transaction_grouping: :expense), class: class_names('btn', 'btn--active': grouping == :expense)
   h1 Transactions
   - if policy(Transaction).new?
-    = link_to 'New Transaction', new_transaction_path, class: 'btn'
+    = link_to 'New Transaction', new_transaction_path(transaction_type: @transactions_presenter.transaction_type), class: 'btn'
 
 table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions
   thead
@@ -13,7 +18,7 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
       th Amount
       th.table--transactions__actions
   tbody
-    - @transactions.each do |transaction|
+    - @transactions_presenter.transactions.each do |transaction|
       tr
         td = transaction.date
         td = transaction.transaction_type.humanize
@@ -28,12 +33,12 @@ table.table.table--sticky-header.table--sticky-footer.table--primary.table--comf
       td
         | Total Income
         br
-        = number_to_currency(@total_income)
+        = number_to_currency(@transactions_presenter.total_income)
       td
         | Total Expense
         br
-        = number_to_currency(@total_expense)
+        = number_to_currency(@transactions_presenter.total_expense)
       td colspan="2"
         | Total Balance
         br
-        = number_to_currency(@total_income - @total_expense)
+        = number_to_currency(@transactions_presenter.balance)

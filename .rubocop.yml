@@ -1,7 +1,9 @@
-require:
+plugins:
   - rubocop-rails
-  - rubocop-capybara
   - rubocop-rspec
+
+require:
+  - rubocop-capybara
   - rubocop-factory_bot
   - rubocop-rspec_rails
   - ./lib/cops/form_error_response.rb

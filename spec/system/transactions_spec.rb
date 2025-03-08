@@ -51,7 +51,8 @@ RSpec.describe 'Transactions' do
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed([income_transaction, income_transaction2, expense_transaction, expense_transaction2])
+          expect_transactions_to_be_listed([income_transaction, income_transaction2, expense_transaction,
+expense_transaction2])
         end
       end
     end
@@ -180,7 +181,6 @@ RSpec.describe 'Transactions' do
         click_on 'All'
         click_on 'New Transaction'
         expect(page).to have_select('Transaction type', selected: 'Income')
-
       end
     end
 
@@ -226,7 +226,7 @@ RSpec.describe 'Transactions' do
     end
   end
 
-  def expect_transactions_to_be_listed(transactions)
+  def expect_transactions_to_be_listed(transactions) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
       expect(page).to have_content transaction.date
       expect(page).to have_content transaction.description
@@ -236,13 +236,13 @@ RSpec.describe 'Transactions' do
     end
   end
 
-  def expect_transactions_not_to_be_listed(transactions)
+  def expect_transactions_not_to_be_listed(transactions) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
-      expect(page).not_to have_content transaction.date
-      expect(page).not_to have_content transaction.description
-      expect(page).not_to have_content transaction.transaction_type.titleize
-      expect(page).not_to have_content transaction.categorizable&.name if transaction.categorizable.present?
-      expect(page).not_to have_content transaction.amount.format
+      expect(page).to have_no_content transaction.date
+      expect(page).to have_no_content transaction.description
+      expect(page).to have_no_content transaction.transaction_type.titleize
+      expect(page).to have_no_content transaction.categorizable&.name if transaction.categorizable.present?
+      expect(page).to have_no_content transaction.amount.format
     end
   end
 end

@@ -1,5 +1,24 @@
 .page-header {
   display: flex;
-  justify-content: space-between;
   padding-bottom: var(--op-space-medium);
+
+  >* {
+    flex: 1;
+    width: fit-content;
+
+    &:first-child {
+      display: flex;
+      justify-content: start;
+    }
+
+    &:not(:first-child):not(:last-child) {
+      display: flex;
+      justify-content: center;
+    }
+
+    &:last-child {
+      display: flex;
+      justify-content: end;
+    }
+  }
 }

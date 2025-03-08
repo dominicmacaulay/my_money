@@ -1,8 +1,10 @@
-require:
+plugins:
   - rubocop-rails
-  - rubocop-capybara
   - rubocop-rspec
   - rubocop-factory_bot
+
+require:
+  - rubocop-capybara
   - rubocop-rspec_rails
   - ./lib/cops/form_error_response.rb
 
@@ -82,7 +84,7 @@ RSpec/MultipleExpectations:
   Enabled: false
 
 RSpec/ExampleLength:
-  Max: 15
+  Max: 25
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false

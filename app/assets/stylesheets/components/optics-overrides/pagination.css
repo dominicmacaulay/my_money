@@ -1,0 +1,4 @@
+.pagination {
+  padding-inline: var(--op-space-medium);
+  gap: var(--op-space-2x-small);
+}

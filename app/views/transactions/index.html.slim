@@ -1,14 +1,23 @@
 .page-header
-  h1 Transactions
+  .page-header__item
+    .btn-group
+      - grouping = @transactions_presenter.grouping
+      = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
+      = link_to 'All', transactions_path(transaction_grouping: :all), class: class_names('btn', 'btn--active': grouping == :all)
+      = link_to 'Expense', transactions_path(transaction_grouping: :expense), class: class_names('btn', 'btn--active': grouping == :expense)
+  h1.page-header__item Transactions
   - if policy(Transaction).new?
-    = link_to 'New Transaction', new_transaction_path, class: 'btn'
+    .page-header__item
+      = link_to 'New Transaction', new_transaction_path(transaction_type: @transactions_presenter.transaction_type), class: 'btn'
 
-table.table.table--primary.table--comfortable-density.table--transactions
+table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions
   thead
     tr
       th.table--transactions__date Date
-      th.table--transactions__type Type
-      th Category
+      - if @transactions_presenter.show_transaction_type?
+        th.table--transactions__type Type
+      - if @transactions_presenter.show_category?
+        th Category
       th Description
       th Amount
       th.table--transactions__actions
@@ -16,24 +25,26 @@ table.table.table--primary.table--comfortable-density.table--transactions
     - @transactions.each do |transaction|
       tr
         td = transaction.date
-        td = transaction.transaction_type.humanize
-        td = transaction.categorizable_name
+        - if @transactions_presenter.show_transaction_type?
+          td = transaction.transaction_type.humanize
+        - if @transactions_presenter.show_category?
+          td = transaction.categorizable_name
         td = transaction.description
         td = number_to_currency(transaction.amount)
         - if policy(transaction).edit?
           td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
   tfoot
     tr
-      td colspan="2"
-      td
-        | Total Income
-        br
-        = number_to_currency(@total_income)
-      td
-        | Total Expense
-        br
-        = number_to_currency(@total_expense)
-      td colspan="2"
-        | Total Balance
-        br
-        = number_to_currency(@total_income - @total_expense)
+      td colspan="#{@transactions_presenter.pagination_colspan}"
+        = paginate @transactions
+      td colspan="3"
+        .table--transactions__totals
+          .table--transactions__totals-pair
+            span Total Income
+            span = number_to_currency(@transactions_presenter.total_income)
+          .table--transactions__totals-pair
+            span Total Expense
+            span = number_to_currency(@transactions_presenter.total_expense)
+          .table--transactions__totals-pair
+            span Total Balance
+            span = number_to_currency(@transactions_presenter.balance)

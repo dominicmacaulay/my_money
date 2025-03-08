@@ -54,6 +54,8 @@ gem 'rolemodel_sower'
 # Use Pundit for permissions
 gem 'pundit'
 
+gem 'kaminari'
+
 gem 'rubocop'
 
 group :development, :test do

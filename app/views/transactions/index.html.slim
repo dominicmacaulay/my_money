@@ -10,41 +10,42 @@
     .page-header__item
       = link_to 'New Transaction', new_transaction_path(transaction_type: @transactions_presenter.transaction_type), class: 'btn'
 
-table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions
-  thead
-    tr
-      th.table--transactions__date Date
-      - if @transactions_presenter.show_transaction_type?
-        th.table--transactions__type Type
-      - if @transactions_presenter.show_category?
-        th Category
-      th Description
-      th Amount
-      th.table--transactions__actions
-  tbody
-    - @transactions.each do |transaction|
+.table-container
+  table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions
+    thead
       tr
-        td = transaction.date
+        th.table--transactions__date Date
         - if @transactions_presenter.show_transaction_type?
-          td = transaction.transaction_type.humanize
+          th.table--transactions__type Type
         - if @transactions_presenter.show_category?
-          td = transaction.categorizable_name
-        td = transaction.description
-        td = number_to_currency(transaction.amount)
-        - if policy(transaction).edit?
-          td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
-  tfoot
-    tr
-      td colspan="#{@transactions_presenter.pagination_colspan}"
-        = paginate @transactions
-      td colspan="3"
-        .table--transactions__totals
-          .table--transactions__totals-pair
-            span Total Income
-            span = number_to_currency(@transactions_presenter.total_income)
-          .table--transactions__totals-pair
-            span Total Expense
-            span = number_to_currency(@transactions_presenter.total_expense)
-          .table--transactions__totals-pair
-            span Total Balance
-            span = number_to_currency(@transactions_presenter.balance)
+          th Category
+        th Description
+        th Amount
+        th.table--transactions__actions
+    tbody
+      - @transactions.each do |transaction|
+        tr
+          td = transaction.date
+          - if @transactions_presenter.show_transaction_type?
+            td = transaction.transaction_type.humanize
+          - if @transactions_presenter.show_category?
+            td = transaction.categorizable_name
+          td = transaction.description
+          td = number_to_currency(transaction.amount)
+          - if policy(transaction).edit?
+            td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
+    tfoot
+      tr
+        td colspan="#{@transactions_presenter.pagination_colspan}"
+          = paginate @transactions
+        td colspan="3"
+          .table--transactions__totals
+            .table--transactions__totals-pair
+              span Total Income
+              span = number_to_currency(@transactions_presenter.total_income)
+            .table--transactions__totals-pair
+              span Total Expense
+              span = number_to_currency(@transactions_presenter.total_expense)
+            .table--transactions__totals-pair
+              span Total Balance
+              span = number_to_currency(@transactions_presenter.balance)

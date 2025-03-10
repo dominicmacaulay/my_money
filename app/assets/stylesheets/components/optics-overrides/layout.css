@@ -1,4 +1,6 @@
 .app__content {
+  overflow: auto;
+  width: 100%;
   padding-block: var(--op-space-3x-large);
 }
 

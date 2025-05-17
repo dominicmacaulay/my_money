@@ -20,12 +20,18 @@
       gap: var(--op-space-medium);
       padding-inline: var(--op-space-medium);
 
-      .table--transactions__totals-pair {
-        display: flex;
-        flex-direction: column;
-        gap: var(--op-space-2x-small);
+    }
+    .table--transactions__totals-pair {
+      display: flex;
+      flex-direction: column;
+      gap: var(--op-space-2x-small);
 
-        text-align: center;
+      text-align: center;
+    }
+
+    @media (width <=768px) {
+      .table--transactions__desktop-only {
+        display: none;
       }
     }
   }

@@ -18,8 +18,8 @@
         - if @transactions_presenter.show_transaction_type?
           th.table--transactions__type Type
         - if @transactions_presenter.show_category?
-          th Category
-        th Description
+          th.table--transactions__desktop-only Category
+        th.table--transactions__desktop-only Description
         th Amount
         th.table--transactions__actions
     tbody
@@ -29,8 +29,8 @@
           - if @transactions_presenter.show_transaction_type?
             td = transaction.transaction_type.humanize
           - if @transactions_presenter.show_category?
-            td = transaction.categorizable_name
-          td = transaction.description
+            td.table--transactions__desktop-only = transaction.categorizable_name
+          td.table--transactions__desktop-only = transaction.description
           td = number_to_currency(transaction.amount)
           - if policy(transaction).edit?
             td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
@@ -38,7 +38,7 @@
       tr
         td colspan="#{@transactions_presenter.pagination_colspan}"
           = paginate @transactions
-        td colspan="3"
+        td.table--transactions__desktop-only
           .table--transactions__totals
             .table--transactions__totals-pair
               span Total Income
@@ -46,6 +46,8 @@
             .table--transactions__totals-pair
               span Total Expense
               span = number_to_currency(@transactions_presenter.total_expense)
-            .table--transactions__totals-pair
-              span Total Balance
-              span = number_to_currency(@transactions_presenter.balance)
+        td
+          .table--transactions__totals-pair
+            span Total Balance
+            span = number_to_currency(@transactions_presenter.balance)
+        td.table--transactions__desktop-only

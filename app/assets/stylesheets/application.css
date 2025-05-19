@@ -6,6 +6,7 @@
  @import "flatpickr/dist/themes/dark.css"; /* Import the Dark Flatpickr theme */
 
  /* components */
+ @import 'components/desktop-only.css';
  @import 'components/page-header.css';
  @import 'components/home-page.css';
 

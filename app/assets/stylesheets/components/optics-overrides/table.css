@@ -28,12 +28,6 @@
 
       text-align: center;
     }
-
-    @media (width <=768px) {
-      .table--transactions__desktop-only {
-        display: none;
-      }
-    }
   }
 
   .table__actions {

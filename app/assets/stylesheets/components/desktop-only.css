@@ -1,0 +1,11 @@
+@media (width <=768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .page-header {
+    .desktop-only.page-header__item {
+      display: none;
+    }
+  }
+}

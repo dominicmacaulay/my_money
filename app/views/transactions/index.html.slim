@@ -1,5 +1,5 @@
 .page-header
-  .page-header__item
+  .desktop-only.page-header__item
     .btn-group
       - grouping = @transactions_presenter.grouping
       = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
@@ -18,8 +18,8 @@
         - if @transactions_presenter.show_transaction_type?
           th.table--transactions__type Type
         - if @transactions_presenter.show_category?
-          th.table--transactions__desktop-only Category
-        th.table--transactions__desktop-only Description
+          th.desktop-only Category
+        th.desktop-only Description
         th Amount
         th.table--transactions__actions
     tbody
@@ -29,8 +29,8 @@
           - if @transactions_presenter.show_transaction_type?
             td = transaction.transaction_type.humanize
           - if @transactions_presenter.show_category?
-            td.table--transactions__desktop-only = transaction.categorizable_name
-          td.table--transactions__desktop-only = transaction.description
+            td.desktop-only = transaction.categorizable_name
+          td.desktop-only = transaction.description
           td = number_to_currency(transaction.amount)
           - if policy(transaction).edit?
             td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
@@ -38,7 +38,7 @@
       tr
         td colspan="#{@transactions_presenter.pagination_colspan}"
           = paginate @transactions
-        td.table--transactions__desktop-only
+        td.desktop-only
           .table--transactions__totals
             .table--transactions__totals-pair
               span Total Income
@@ -50,4 +50,4 @@
           .table--transactions__totals-pair
             span Total Balance
             span = number_to_currency(@transactions_presenter.balance)
-        td.table--transactions__desktop-only
+        td.desktop-only

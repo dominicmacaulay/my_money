@@ -1,11 +1,11 @@
 .page-header
-  .desktop-only.page-header__item
+  .page-header__item
     .btn-group
       - grouping = @transactions_presenter.grouping
       = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
       = link_to 'All', transactions_path(transaction_grouping: :all), class: class_names('btn', 'btn--active': grouping == :all)
       = link_to 'Expense', transactions_path(transaction_grouping: :expense), class: class_names('btn', 'btn--active': grouping == :expense)
-  h1.page-header__item Transactions
+  h1.page-header__item.desktop-only Transactions
   - if policy(Transaction).new?
     .page-header__item
       = link_to 'New Transaction', new_transaction_path(transaction_type: @transactions_presenter.transaction_type), class: 'btn'
@@ -16,7 +16,7 @@
       tr
         th.table--transactions__date Date
         - if @transactions_presenter.show_transaction_type?
-          th.table--transactions__type Type
+          th.table--transactions__type.desktop-only Type
         - if @transactions_presenter.show_category?
           th.desktop-only Category
         th.desktop-only Description
@@ -27,7 +27,7 @@
         tr
           td = transaction.date
           - if @transactions_presenter.show_transaction_type?
-            td = transaction.transaction_type.humanize
+            td.desktop-only = transaction.transaction_type.humanize
           - if @transactions_presenter.show_category?
             td.desktop-only = transaction.categorizable_name
           td.desktop-only = transaction.description
@@ -35,10 +35,10 @@
           - if policy(transaction).edit?
             td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
     tfoot
-      tr
+      tr.desktop-only
         td colspan="#{@transactions_presenter.pagination_colspan}"
           = paginate @transactions
-        td.desktop-only
+        td colspan='3'
           .table--transactions__totals
             .table--transactions__totals-pair
               span Total Income
@@ -46,8 +46,14 @@
             .table--transactions__totals-pair
               span Total Expense
               span = number_to_currency(@transactions_presenter.total_expense)
-        td
-          .table--transactions__totals-pair
-            span Total Balance
-            span = number_to_currency(@transactions_presenter.balance)
-        td.desktop-only
+            .table--transactions__totals-pair
+              span Total Balance
+              span = number_to_currency(@transactions_presenter.balance)
+      tr.mobile-only
+        td colspan='3'
+          .table--transactions__mobile-footer
+            .table--transactions__totals-pair
+              span Total Balance
+              span = number_to_currency(@transactions_presenter.balance)
+            = paginate @transactions
+

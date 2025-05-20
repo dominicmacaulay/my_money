@@ -20,7 +20,8 @@
   - if show_delete_button && policy(@transaction).destroy?
     = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 
-  .flex.gap-md
-    - submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Transaction' : 'Update Transaction'
-    = submit_button @transaction, submit_text, class: 'btn btn--primary'
-    = submit_button @transaction, submit_text + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'
+  .flex.flex-wrap.gap-xs.justify-end
+    - submit_action = action_name == 'new' ? 'Create' : 'Update'
+    = submit_button @transaction, submit_action + ' Transaction', class: 'btn btn--primary'
+    = submit_button @transaction, submit_action + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'
+

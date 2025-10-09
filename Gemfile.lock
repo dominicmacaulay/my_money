@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: b548d770fabf27b293b1049c1328cbcc3409f101
+  revision: 19d203e1fab58f221302c546b4c5362a1c2aeee7
   specs:
-    rolemodel_rails (0.20.0)
+    rolemodel_rails (0.20.1)
 
 GEM
   remote: https://rubygems.org/
@@ -84,7 +84,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
-    bigdecimal (3.3.0)
+    bigdecimal (3.3.1)
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
@@ -372,7 +372,7 @@ GEM
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
-    solid_cache (1.0.7)
+    solid_cache (1.0.8)
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)

@@ -7,6 +7,6 @@
     remote       : data-remote
 
 - unless current_page.last?
-  = link_to url, rel: 'next', remote: remote, class: 'btn btn--small btn--no-border' do
+  = link_to url, rel: 'next', remote: remote, class: 'btn btn--small btn--no-border desktop-only' do
     | Next
     = material_icon('chevron_right')

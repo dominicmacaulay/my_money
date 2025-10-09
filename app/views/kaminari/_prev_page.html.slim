@@ -7,6 +7,6 @@
     remote       : data-remote
 
 - unless current_page.first?
-  = link_to url, rel: 'prev', remote: remote, class: 'btn btn--small btn--no-border' do
+  = link_to url, rel: 'prev', remote: remote, class: 'btn btn--small btn--no-border desktop-only' do
     = material_icon('chevron_left')
     | Prev

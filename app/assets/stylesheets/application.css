@@ -1,5 +1,8 @@
  @import '@rolemodel/optics'; /* Import the Optics CSS framework */
 
+/* themes */
+@import 'core/theme/my-money-theme-core.css'; /* Import the custom theme overrides */
+
  @import '@shoelace-style/shoelace/dist/themes/light.css'; /* Import the Shoelace theme */
  @import '@shoelace-style/shoelace/dist/themes/dark.css'; /* Import the Dark Shoelace theme */
  @import "flatpickr/dist/flatpickr.css"; /* Import the Flatpickr theme */

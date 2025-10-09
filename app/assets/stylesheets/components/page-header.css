@@ -2,9 +2,14 @@
   display: flex;
   padding-bottom: var(--op-space-medium);
 
-  >* {
+  .page-header__item {
     flex: 1;
     width: fit-content;
+    align-items: center;
+
+    .btn {
+      max-height: var(--__op-btn-height);
+    }
 
     &:first-child {
       display: flex;

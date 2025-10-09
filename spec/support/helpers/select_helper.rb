@@ -4,7 +4,7 @@ module SelectHelper
   include Capybara::DSL
 
   def smart_select(value, from:)
-    label = find(:label, text: from, match: :first)
+    label = first(:label, text: from)
     input = find(id: label['for'], visible: :all)
 
     if input.tag_name == 'input' && input.native.attribute(:'aria-controls').include?('ts-dropdown')

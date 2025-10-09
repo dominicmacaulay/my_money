@@ -2,9 +2,9 @@
   .page-header
     .page-header__item = t(".title", resource: resource_name.to_s.humanize, default: "Edit %{resource}")
 
-.page-sections
-  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'card' }) do |f|
-    .card__body
+.card
+  .card__body
+    = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
       = f.input :first_name, autofocus: true, autocomplete: "first_name"
       = f.input :last_name, autocomplete: "last_name"
 
@@ -18,8 +18,8 @@
 
       = f.input :current_password, required: true, autocomplete: "current-password", hint: t(".we_need_your_current_password_to_confirm_your_changes", default: "we need your current password to confirm your changes")
 
-    .card__footer
-      .flex.items-center.justify-end
-        = f.submit t(".update", default: "Update"), class: 'btn-primary'
+  .card__footer
+    .flex.items-center.justify-between
+      = button_to t(".cancel_my_account", default: "Cancel my account"), registration_path(resource_name), data: { turbo_confirm: t(".are_you_sure", default: "Are you sure?") }, method: :delete, class: 'btn btn--destructive'
+      button.btn.btn--primary type='submit' form='edit_user' = t(".update", default: "Update")
 
-  = button_to t(".cancel_my_account", default: "Cancel my account"), registration_path(resource_name), data: { turbo_confirm: t(".are_you_sure", default: "Are you sure?") }, method: :delete, class: 'btn btn--destructive'

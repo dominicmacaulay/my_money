@@ -1,15 +1,14 @@
 .home-page {
   display: grid;
-  grid-template-areas:
+  /* grid-template-areas:
     "header header"
     "yearly-summary monthly-summary"
     "tax-breakdown tax-breakdown";
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; */
 
   gap: var(--op-space-small);
 
   .home-page__header {
-    grid-area: header;
     display: flex;
     flex-direction: column;
     gap: var(--op-space-small);
@@ -23,15 +22,17 @@
     }
   }
 
-  .yearly-summary {
-    grid-area: yearly-summary;
-  }
+  .home-page__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--op-space-small);
 
-  .monthly-summary {
-    grid-area: monthly-summary;
-  }
 
-  .tax-breakdown {
-    grid-area: tax-breakdown;
+    .yearly-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--op-space-medium);
+      justify-content: center;
+    }
   }
 }

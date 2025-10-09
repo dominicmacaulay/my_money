@@ -1,10 +1,10 @@
-.card.yearly-summary
+.card
   .card__header This Year (#{Date.current.year})
 
   .divider
 
   .card__body
-    .flex.gap-md
+    .yearly-summary
       .text-pair
         .text-title Total Income
         .text-value = number_to_currency(@year_income)

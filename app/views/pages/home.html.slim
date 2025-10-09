@@ -3,9 +3,11 @@
     .home-page__header
       h1 = current_company.name
       .divider
-    = render 'yearly_summary'
-    = render 'monthly_summary'
-    = render 'tax_breakdown'
+    .home-page__content
+      = render 'yearly_summary'
+      = render 'monthly_summary'
+    .home-page__footer
+      = render 'tax_breakdown'
 
   - else
     .home-page__header

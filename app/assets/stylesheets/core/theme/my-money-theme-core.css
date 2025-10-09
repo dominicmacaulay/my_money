@@ -1,0 +1,11 @@
+:root {
+  /* Font */
+  /* --op-font-family: 'Ubuntu', sans-serif;
+  --op-font-family-alt: 'Ubuntu Mono', monospace;
+  --op-font-family-blockquote: Consolas, 'Times New Roman', Verdana; */
+
+  /* Color */
+  --op-color-primary-h: 137;
+  --op-color-primary-s: 16%;
+  --op-color-primary-l: 51%;
+}

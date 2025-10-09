@@ -25,15 +25,5 @@
       display: flex;
       justify-content: end;
     }
-
-    &:first-child,
-    &:not(:first-child):not(:last-child),
-    &:last-child {
-      @media (width <=768px) {
-        &.desktop-only {
-          display: none;
-        }
-      }
-    }
   }
 }

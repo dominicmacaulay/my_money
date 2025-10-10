@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: 19d203e1fab58f221302c546b4c5362a1c2aeee7
+  revision: fdc35839b36dc63a4930d8f6034965b9522c956b
   specs:
-    rolemodel_rails (0.20.1)
+    rolemodel_rails (0.20.2)
 
 GEM
   remote: https://rubygems.org/
@@ -229,7 +229,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.5.1)
+    prism (1.5.2)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -244,7 +244,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.2)
+    rack (3.2.3)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)

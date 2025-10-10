@@ -1,12 +1,17 @@
-table.table.table--comfortable-density
+.page-header
+  h1.page-header__item Companies
+  .page-header__item
+    - if policy(Company).new?
+      = link_to 'New Company', new_company_path, class: 'btn'
+
+table.table.table--comfortable-density.table--even-striped.table--primary
   thead
     tr
       td
-        | Your Companies
+        | Name
       td
         .table__actions
-          - if policy(Company).new?
-            = link_to 'New Company', new_company_path, class: 'btn'
+          | Actions
   tbody
     - @companies.each do |company|
       tr

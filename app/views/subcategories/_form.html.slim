@@ -1,14 +1,15 @@
-= simple_form_for @subcategory, html: { autocomplete: 'off' } do |f|
-  = f.hidden_field :company_id, value: current_company.id
+.card.card--padded
+  = simple_form_for @subcategory, html: { autocomplete: 'off', class: 'card__body' } do |f|
+    = f.hidden_field :company_id, value: current_company.id
 
-  = f.input :name
-  = f.input :category_id, collection: Category.all, required: true
+    = f.input :name
+    = f.input :category_id, collection: Category.all, required: true
 
 
-.flex.justify-between
-  - show_delete_button = action_name === 'update' || action_name === 'edit'
-  - if show_delete_button && policy(@subcategory).destroy?
-    = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
+  .card__footer.flex.justify-between
+    - show_delete_button = action_name === 'update' || action_name === 'edit'
+    - if show_delete_button && policy(@subcategory).destroy?
+      = button_to 'Delete Subcategory', subcategory_path(@subcategory), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 
-  - submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Subcategory' : 'Update Subcategory'
-  = submit_button @subcategory, submit_text, class: 'btn btn--primary'
+    - submit_text = action_name === 'new'|| action_name === 'create' ? 'Create Subcategory' : 'Update Subcategory'
+    = submit_button @subcategory, submit_text, class: 'btn btn--primary'

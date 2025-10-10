@@ -30,12 +30,20 @@
       text-align: center;
     }
 
+    td:has(.table--transactions__mobile-footer) {
+      padding: 0;
+    }
+
     .table--transactions__mobile-footer {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: var(--op-space-small);
-      padding: var(--op-space-x-small);
+      padding-block: var(--op-space-x-small);
+
+      .pagination {
+        padding-inline: 0;
+      }
     }
   }
 

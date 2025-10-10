@@ -11,7 +11,7 @@
       = link_to 'New Transaction', new_transaction_path(transaction_type: @transactions_presenter.transaction_type), class: 'btn'
 
 .table-container
-  table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions
+  table.table.table--sticky-header.table--sticky-footer.table--primary.table--comfortable-density.table--transactions.table--even-striped
     thead
       tr
         th.table--transactions__date Date
@@ -34,8 +34,8 @@
           td = number_to_currency(transaction.amount)
           - if policy(transaction).edit?
             td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
-    tfoot
-      tr.desktop-only
+    tfoot.desktop-only
+      tr
         td colspan="#{@transactions_presenter.pagination_colspan}"
           = paginate @transactions
         td colspan='3'
@@ -49,11 +49,12 @@
             .table--transactions__totals-pair
               span Total Balance
               span = number_to_currency(@transactions_presenter.balance)
-      tr.mobile-only
+    tfoot.mobile-only
+      tr
         td colspan='3'
           .table--transactions__mobile-footer
             .table--transactions__totals-pair
               span Total Balance
               span = number_to_currency(@transactions_presenter.balance)
-            = paginate @transactions
+            = paginate @transactions, window: 2
 

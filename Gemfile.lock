@@ -455,7 +455,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   pundit
-  rails (~> 8.0.1)
+  rails (~> 8.0.3)
   rolemodel_rails!
   rolemodel_sower
   rspec-rails

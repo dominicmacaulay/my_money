@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: fdc35839b36dc63a4930d8f6034965b9522c956b
+  revision: 974468eccd9a23b3c33d4ff46289baff1e21f176
   specs:
-    rolemodel_rails (0.20.2)
+    rolemodel_rails (0.20.3)
 
 GEM
   remote: https://rubygems.org/
@@ -238,7 +238,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (7.0.4)
+    puma (7.1.0)
       nio4r (~> 2.0)
     pundit (2.5.2)
       activesupport (>= 3.0.0)

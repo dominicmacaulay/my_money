@@ -1,9 +1,2 @@
-.page-header
-  h1.page-header__item Create New Company
-  .page-header__item
-    = link_to companies_path, class: 'btn' do
-      = material_icon 'arrow_back'
-      | Back
-
-= render 'form'
-
+= turbo_frame_tag 'companies_form' do
+  = render 'form'

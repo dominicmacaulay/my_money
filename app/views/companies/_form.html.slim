@@ -1,4 +1,3 @@
-.card
-  = simple_form_for @company, html: { autocomplete: 'off' } do |f|
-    = f.input :name
-    = f.button :submit, class: 'btn btn--primary'
+= simple_form_for @company, html: { autocomplete: 'off', class: 'simple_form--table' } do |f|
+  = f.input :name, label: false, placeholder: 'Company Name'
+  = f.button :submit, class: 'btn--primary'

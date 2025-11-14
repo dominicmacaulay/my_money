@@ -3,27 +3,29 @@
   padding-bottom: var(--op-space-medium);
 
   .page-header__item {
-    flex: 1;
+    display: flex;
     width: fit-content;
     align-items: center;
+    flex: 1;
 
     .btn {
       max-height: var(--__op-btn-height);
     }
 
     &:first-child {
-      display: flex;
       justify-content: start;
     }
 
     &:not(:first-child):not(:last-child) {
-      display: flex;
       justify-content: center;
     }
 
     &:last-child {
-      display: flex;
       justify-content: end;
+    }
+
+    &:only-child {
+      justify-content: center;
     }
   }
 }

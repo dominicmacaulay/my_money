@@ -1,0 +1,22 @@
+= turbo_frame_tag 'companies-table' do
+  table.table.table--comfortable-density.table--even-striped.table--primary
+    thead
+      tr
+        td Name
+        td
+          .table__actions Actions
+    tbody
+      tr
+        td colspan="2" = turbo_frame_tag 'companies-form', src: new_company_path
+      - @companies.each do |company|
+        tr
+          td #{company.name} #{company == current_company ? '(current)' : ''}
+          td
+            .table__actions
+              - unless company == current_company
+                = button_to "Switch to #{company.name}", set_current_company_path(company), class: 'btn company__switch-button'
+
+              - if policy(company).edit?
+                = link_to 'Edit', edit_company_path(company), class: 'btn'
+              - if policy(company).destroy?
+                = button_to 'Delete', company, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'

@@ -18,6 +18,7 @@ class CompaniesController < ApplicationController
     if @company.save
       @company.users << current_user
       current_user.switch_current_company(@company)
+      @companies = current_user.companies
 
       # redirect_to companies_path, notice: "#{@company.name} was successfully created"
       respond_to do |format|

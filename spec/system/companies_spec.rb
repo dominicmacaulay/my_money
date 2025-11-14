@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Companies' do
+RSpec.describe 'Companies', :js do
   let(:user) { create(:user) }
   let(:company) { create(:company) }
 
@@ -17,8 +17,7 @@ RSpec.describe 'Companies' do
 
   it 'can be created' do
     name = 'New Company'
-    click_on 'New Company'
-    fill_in 'Name', with: name
+    fill_in 'company[name]', with: name
     click_on 'Create Company'
 
     expect(page).to have_content("#{name} was successfully created")
@@ -43,7 +42,7 @@ RSpec.describe 'Companies' do
     expect(company.name).to eq(name)
   end
 
-  it 'can be destroyed', :js do
+  it 'can be destroyed' do
     expect do
       click_on 'Delete'
       click_on "Yes, I'm Sure"

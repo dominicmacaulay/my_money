@@ -240,7 +240,7 @@ RSpec.describe 'Transactions' do
       expect(page).to have_content transaction.date
       expect(page).to have_content transaction.description
       expect(page).to have_content transaction.transaction_type.titleize if show_type
-      expect(page).to have_content transaction.categorizable&.name if show_category
+      expect(page).to have_content transaction.categorizable.name if show_category && transaction.expense?
       expect(page).to have_content transaction.amount.format
     end
   end

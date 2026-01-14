@@ -35,14 +35,14 @@ RSpec.describe 'Pages' do
 
   describe 'Home page' do
     context 'when user has a current company' do
-      let(:current_year) { 2025 }
+      let(:current_year) { Date.current.year }
 
       before do
         company.users << user
         user.switch_current_company(company)
 
-        create_list(:transaction, 10, :income, company:, amount: 100, date: Date.new(2025, 1, 1))
-        create_list(:transaction, 5, :expense, company:, amount: 50, date: Date.new(2025, 1, 1))
+        create_list(:transaction, 10, :income, company:, amount: 100, date: Date.new(current_year, 1, 1))
+        create_list(:transaction, 5, :expense, company:, amount: 50, date: Date.new(current_year, 1, 1))
       end
 
       describe 'Yearly summary' do # rubocop:disable RSpec/NestedGroups

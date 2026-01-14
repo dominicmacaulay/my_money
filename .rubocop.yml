@@ -18,6 +18,9 @@ AllCops:
     - tmp/**/*
   NewCops: enable
 
+Cops/FormErrorResponse:
+  Enabled: false
+
 Metrics:
   Severity: refactor
 

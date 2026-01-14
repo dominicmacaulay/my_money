@@ -28,7 +28,7 @@ class SubcategoriesController < ApplicationController
     if @subcategory.save
       redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
     # respond_to do |format|
     #   if @subcategory.save
@@ -48,7 +48,7 @@ class SubcategoriesController < ApplicationController
     if @subcategory.update(subcategory_params)
       redirect_to subcategories_path, notice: "#{@subcategory.name} was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
     # respond_to do |format|
     #   if @subcategory.update(subcategory_params)

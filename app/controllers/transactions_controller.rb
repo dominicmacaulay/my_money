@@ -41,7 +41,7 @@ class TransactionsController < ApplicationController
         redirect_to transactions_path, notice: 'Transaction was successfully created.'
       end
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -57,7 +57,7 @@ class TransactionsController < ApplicationController
         redirect_to transactions_path, notice: 'Transaction was successfully updated.'
       end
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

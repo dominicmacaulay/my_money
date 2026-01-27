@@ -1,0 +1,13 @@
+.accordion {
+  box-shadow: var(--op-border-all) var(--op-color-border);
+  border-radius: var(--op-radius-large);
+  contain: content;
+
+  >* {
+    padding: var(--op-space-small);
+  }
+
+  summary {
+    background-color: var(--op-color-primary-plus-seven);
+  }
+}

@@ -12,6 +12,6 @@ class YearOverviewPresenter
     transactions = company.transactions.order(:date)
     starting_year = transactions.first&.date&.year || current_year
 
-    (starting_year..current_year).to_a
+    (starting_year..current_year).to_a.reverse
   end
 end

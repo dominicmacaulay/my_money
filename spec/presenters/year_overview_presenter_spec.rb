@@ -14,7 +14,7 @@ RSpec.describe YearOverviewPresenter do
     end
 
     it 'returns a list of year objects from the first transaction year to the current year' do
-      expected_years = ((Time.current.year - 4)..Time.current.year).to_a
+      expected_years = ((Time.current.year - 4)..Time.current.year).to_a.reverse
 
       expect(presenter.years).to eq(expected_years)
     end

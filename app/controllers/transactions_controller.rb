@@ -12,7 +12,7 @@ class TransactionsController < ApplicationController
     authorize Transaction
 
     set_session_transaction_grouping
-    set_session_transaction_year
+    set_session_transaction_year_and_years
 
     @transactions_presenter = TransactionsPresenter.new(
       current_company,
@@ -20,7 +20,6 @@ class TransactionsController < ApplicationController
       session_transaction_year
     )
     @transactions = @transactions_presenter.transactions.page(params[:page])
-    @transaction_years = YearOverviewPresenter.new(current_company).years
   end
 
   # GET /transactions/new
@@ -94,9 +93,11 @@ class TransactionsController < ApplicationController
     session[:transaction_grouping] = new_grouping
   end
 
-  def set_session_transaction_year
+  def set_session_transaction_year_and_years
+    @transaction_years = YearOverviewPresenter.new(current_company).years
+
     new_year = params[:transaction_year]&.to_i
-    return unless new_year.present? && new_year.positive?
+    return unless @transaction_years.include?(new_year)
 
     session[:transaction_year] = new_year
   end

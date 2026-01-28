@@ -21,8 +21,12 @@ RSpec.describe 'Transactions' do
     let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00') }
     let!(:income_transaction) { create(:transaction, company:, amount: '200.00') }
     let!(:income_transaction2) { create(:transaction, company:, amount: '250.00') }
-    let!(:last_year_expense_transaction) { create(:transaction, :expense, company:, amount: '40.00', date: 1.year.ago) }
-    let!(:last_year_income_transaction) { create(:transaction, company:, amount: '300.00', date: 1.year.ago) }
+    let!(:last_year_expense_transaction) do
+      create(:transaction, :expense, company:, amount: '40.00', date: 1.year.ago.beginning_of_year)
+    end
+    let!(:last_year_income_transaction) do
+      create(:transaction, company:, amount: '300.00', date: 1.year.ago.beginning_of_year)
+    end
 
     before do
       click_on 'account_circle'
@@ -44,30 +48,6 @@ RSpec.describe 'Transactions' do
           )
         end
       end
-
-      context 'when changing the year' do
-        before do
-          click_on 'arrow_drop_down'
-          click_on 1.year.ago.year.to_s
-        end
-
-        it 'lists only income transactions from that year' do
-          expect(page).to have_content('Transactions')
-
-          within('tbody') do
-            expect_transactions_to_be_listed([last_year_income_transaction], show_type: false)
-            expect_transactions_not_to_be_listed(
-              [
-                income_transaction,
-                income_transaction2,
-                expense_transaction,
-                expense_transaction2,
-                last_year_expense_transaction
-              ]
-            )
-          end
-        end
-      end
     end
 
     context 'when on the All tab' do
@@ -83,31 +63,6 @@ RSpec.describe 'Transactions' do
             [income_transaction, income_transaction2, expense_transaction, expense_transaction2]
           )
           expect_transactions_not_to_be_listed([last_year_expense_transaction, last_year_income_transaction])
-        end
-      end
-
-      context 'when changing the year' do
-        before do
-          click_on 'arrow_drop_down'
-          click_on 1.year.ago.year.to_s
-        end
-
-        it 'lists all transactions from that year' do
-          expect(page).to have_content('Transactions')
-
-          within('tbody') do
-            expect_transactions_to_be_listed(
-              [last_year_income_transaction, last_year_expense_transaction]
-            )
-            expect_transactions_not_to_be_listed(
-              [
-                income_transaction,
-                income_transaction2,
-                expense_transaction,
-                expense_transaction2
-              ]
-            )
-          end
         end
       end
     end
@@ -127,28 +82,59 @@ RSpec.describe 'Transactions' do
           )
         end
       end
+    end
 
-      context 'when changing the year' do
-        before do
-          click_on 'arrow_drop_down'
-          click_on 1.year.ago.year.to_s
+    describe 'year switching' do
+      it 'can switch to last year' do # rubocop:disable RSpec/ExampleLength
+        click_on 'All'
+
+        within('tbody') do
+          expect_transactions_to_be_listed(
+            [income_transaction, income_transaction2, expense_transaction, expense_transaction2]
+          )
+          expect_transactions_not_to_be_listed([last_year_expense_transaction, last_year_income_transaction])
         end
 
-        it 'lists only expense transactions from that year' do
-          expect(page).to have_content('Transactions')
+        click_on 'arrow_drop_down'
+        click_on 1.year.ago.year.to_s
 
-          within('tbody') do
-            expect_transactions_to_be_listed([last_year_expense_transaction], show_type: false)
-            expect_transactions_not_to_be_listed(
-              [
-                income_transaction,
-                income_transaction2,
-                expense_transaction,
-                expense_transaction2,
-                last_year_income_transaction
-              ]
-            )
-          end
+        within('tbody') do
+          expect_transactions_to_be_listed(
+            [last_year_income_transaction, last_year_expense_transaction]
+          )
+          expect_transactions_not_to_be_listed(
+            [income_transaction, income_transaction2, expense_transaction, expense_transaction2]
+          )
+        end
+
+        # Persist the year when switching tabs
+        click_on 'Income'
+        within('tbody') do
+          expect_transactions_to_be_listed([last_year_income_transaction], show_type: false)
+          expect_transactions_not_to_be_listed(
+            [income_transaction, income_transaction2, expense_transaction, expense_transaction2,
+             last_year_expense_transaction]
+          )
+        end
+
+        click_on 'Expense'
+        within('tbody') do
+          expect_transactions_to_be_listed([last_year_expense_transaction], show_type: false)
+          expect_transactions_not_to_be_listed(
+            [income_transaction, income_transaction2, expense_transaction, expense_transaction2,
+             last_year_income_transaction]
+          )
+        end
+
+        click_on 'arrow_drop_down'
+        click_on Date.current.year.to_s
+        within('tbody') do
+          expect_transactions_to_be_listed(
+            [expense_transaction, expense_transaction2], show_type: false
+          )
+          expect_transactions_not_to_be_listed(
+            [income_transaction, income_transaction2, last_year_expense_transaction, last_year_income_transaction]
+          )
         end
       end
     end

@@ -6,7 +6,7 @@ RSpec.describe TransactionsPresenter do
   let(:presenter) { described_class.new(company, grouping, year) }
   let(:company) { create(:company) }
   let(:grouping) { :all }
-  let(:last_year) { 1.year.ago }
+  let(:last_year) { 1.year.ago.beginning_of_year }
   let(:year) { nil }
 
   before do

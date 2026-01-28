@@ -1,16 +1,21 @@
+-# locals: (year: Date.current.year)
+
 .card
-  .card__header This Year (#{Date.current.year})
+  .card__header #{year} Summary
 
   .divider
 
   .card__body
     .yearly-summary
+      - year_income = current_company.income_for_year(year)
+      - year_expense = current_company.expense_for_year(year)
+
       .text-pair
         .text-title Total Income
-        .text-value = number_to_currency(@year_income)
+        .text-value = number_to_currency(year_income)
       .text-pair
         .text-title Total Expense
-        .text-value = number_to_currency(@year_expense)
+        .text-value = number_to_currency(year_expense)
       .text-pair
         .text-title Total Balance
-        .text-value = number_to_currency(@year_income - @year_expense)
+        .text-value = number_to_currency(year_income - year_expense)

@@ -1,0 +1,18 @@
+.page-header
+  h1 View your financial data by year
+
+.divider
+
+.year-overviews
+  - @year_presenter.years.each do |year|
+    details.accordion open=(year == Date.current.year) data-test-id=year
+      summary
+        span = material_icon('arrow_right', classes: 'accordion__marker')
+        span = year
+
+      .home-page
+        .home-page__content
+          = render 'pages/yearly_summary', year:
+          = render 'pages/monthly_summary', year:
+        .home-page__footer
+          = render 'pages/tax_breakdown', year:

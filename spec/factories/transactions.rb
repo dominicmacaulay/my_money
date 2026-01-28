@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :transaction do
     date { Time.zone.today }
     sequence(:description) { |n| "Transaction ##{n}" }
-    amount { 100.00 }
+    amount { rand(1.00..100.00) }
     company
     transaction_type { 'income' }
 

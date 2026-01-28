@@ -12,8 +12,10 @@
  @import 'components/desktop-mobile.css';
  @import 'components/page-header.css';
  @import 'components/home-page.css';
+ @import 'components/year-overviews.css';
 
  /* optics overrides */
+ @import 'components/optics-overrides/accordion.css';
  @import 'components/optics-overrides/card.css';
  @import 'components/optics-overrides/form.css';
  @import 'components/optics-overrides/layout.css';

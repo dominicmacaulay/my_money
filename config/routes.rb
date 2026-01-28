@@ -22,4 +22,5 @@ Rails.application.routes.draw do
     end
   end
   resources :subcategories, except: :show
+  resources :year_overviews, only: :index
 end

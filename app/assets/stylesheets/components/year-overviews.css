@@ -1,0 +1,5 @@
+.year-overviews {
+  display: grid;
+  gap: var(--op-space-medium);
+  padding-block-start: var(--op-space-large);
+}

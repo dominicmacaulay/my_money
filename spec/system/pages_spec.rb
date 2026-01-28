@@ -45,7 +45,7 @@ RSpec.describe 'Pages' do
         create_list(:transaction, 5, :expense, company:, amount: 50, date: Date.new(current_year, 1, 1))
       end
 
-      describe 'Yearly summary' do # rubocop:disable RSpec/NestedGroups
+      describe 'Yearly summary' do
         before do
           visit root_path
         end

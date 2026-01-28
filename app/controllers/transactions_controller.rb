@@ -2,6 +2,7 @@
 
 class TransactionsController < ApplicationController
   DEFAULT_TRANSACTION_GROUPING = :all
+  DEFAULT_TRANSACTION_YEAR = Time.current.year
   TRANSACTION_GROUPING_OPTIONS = %i[all income expense].freeze
 
   before_action :set_transaction, only: %i[edit update destroy]
@@ -11,9 +12,15 @@ class TransactionsController < ApplicationController
     authorize Transaction
 
     set_session_transaction_grouping
+    set_session_transaction_year
 
-    @transactions_presenter = TransactionsPresenter.new(current_company, session_transaction_grouping)
+    @transactions_presenter = TransactionsPresenter.new(
+      current_company,
+      session_transaction_grouping,
+      session_transaction_year
+    )
     @transactions = @transactions_presenter.transactions.page(params[:page])
+    @transaction_years = YearOverviewPresenter.new(current_company).years
   end
 
   # GET /transactions/new
@@ -76,11 +83,22 @@ class TransactionsController < ApplicationController
     session[:transaction_grouping]&.to_sym || DEFAULT_TRANSACTION_GROUPING
   end
 
+  def session_transaction_year
+    session[:transaction_year] || DEFAULT_TRANSACTION_YEAR
+  end
+
   def set_session_transaction_grouping
     new_grouping = params[:transaction_grouping]&.to_sym
     return unless TRANSACTION_GROUPING_OPTIONS.include?(new_grouping)
 
     session[:transaction_grouping] = new_grouping
+  end
+
+  def set_session_transaction_year
+    new_year = params[:transaction_year]&.to_i
+    return unless new_year.present? && new_year.positive?
+
+    session[:transaction_year] = new_year
   end
 
   # Use callbacks to share common setup or constraints between actions.

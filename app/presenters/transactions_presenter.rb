@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class TransactionsPresenter
-  attr_reader :company, :grouping
+  attr_reader :company, :grouping, :year
 
-  def initialize(company, grouping)
+  def initialize(company, grouping, year)
     @company = company
     @grouping = grouping
+    @year = Date.new(year || Time.current.year).all_year
   end
 
   def transactions
@@ -49,6 +50,6 @@ class TransactionsPresenter
   private
 
   def authorized_transactions
-    @authorized_transactions ||= company.transactions
+    @authorized_transactions ||= company.transactions.where(date: year)
   end
 end

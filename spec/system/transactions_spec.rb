@@ -17,10 +17,12 @@ RSpec.describe 'Transactions' do
   end
 
   context 'when being listed' do
-    let!(:expense_transaction) { create(:transaction, :expense, company:, amount: '100.00', date: '2021-01-01') }
-    let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00', date: '2021-01-02') }
-    let!(:income_transaction) { create(:transaction, company:, amount: '200.00', date: '2021-01-03') }
-    let!(:income_transaction2) { create(:transaction, company:, amount: '250.00', date: '2021-01-04') }
+    let!(:expense_transaction) { create(:transaction, :expense, company:, amount: '100.00') }
+    let!(:expense_transaction2) { create(:transaction, :expense, company:, amount: '150.00') }
+    let!(:income_transaction) { create(:transaction, company:, amount: '200.00') }
+    let!(:income_transaction2) { create(:transaction, company:, amount: '250.00') }
+    let!(:last_year_expense_transaction) { create(:transaction, :expense, company:, amount: '40.00', date: 1.year.ago) }
+    let!(:last_year_income_transaction) { create(:transaction, company:, amount: '300.00', date: 1.year.ago) }
 
     before do
       click_on 'account_circle'
@@ -36,12 +38,34 @@ RSpec.describe 'Transactions' do
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed(
-            [income_transaction, income_transaction2],
-            show_type: false,
-            show_category: true
+          expect_transactions_to_be_listed([income_transaction, income_transaction2], show_type: false)
+          expect_transactions_not_to_be_listed(
+            [expense_transaction, expense_transaction2, last_year_expense_transaction, last_year_income_transaction]
           )
-          expect_transactions_not_to_be_listed([expense_transaction, expense_transaction2])
+        end
+      end
+
+      context 'when changing the year' do
+        before do
+          click_on 'arrow_drop_down'
+          click_on 1.year.ago.year.to_s
+        end
+
+        it 'lists only income transactions from that year' do
+          expect(page).to have_content('Transactions')
+
+          within('tbody') do
+            expect_transactions_to_be_listed([last_year_income_transaction], show_type: false)
+            expect_transactions_not_to_be_listed(
+              [
+                income_transaction,
+                income_transaction2,
+                expense_transaction,
+                expense_transaction2,
+                last_year_expense_transaction
+              ]
+            )
+          end
         end
       end
     end
@@ -58,6 +82,32 @@ RSpec.describe 'Transactions' do
           expect_transactions_to_be_listed(
             [income_transaction, income_transaction2, expense_transaction, expense_transaction2]
           )
+          expect_transactions_not_to_be_listed([last_year_expense_transaction, last_year_income_transaction])
+        end
+      end
+
+      context 'when changing the year' do
+        before do
+          click_on 'arrow_drop_down'
+          click_on 1.year.ago.year.to_s
+        end
+
+        it 'lists all transactions from that year' do
+          expect(page).to have_content('Transactions')
+
+          within('tbody') do
+            expect_transactions_to_be_listed(
+              [last_year_income_transaction, last_year_expense_transaction]
+            )
+            expect_transactions_not_to_be_listed(
+              [
+                income_transaction,
+                income_transaction2,
+                expense_transaction,
+                expense_transaction2
+              ]
+            )
+          end
         end
       end
     end
@@ -71,12 +121,34 @@ RSpec.describe 'Transactions' do
         expect(page).to have_content('Transactions')
 
         within('tbody') do
-          expect_transactions_to_be_listed(
-            [expense_transaction, expense_transaction2],
-            show_type: false,
-            show_category: true
+          expect_transactions_to_be_listed([expense_transaction, expense_transaction2], show_type: false)
+          expect_transactions_not_to_be_listed(
+            [income_transaction, income_transaction2, last_year_expense_transaction, last_year_income_transaction]
           )
-          expect_transactions_not_to_be_listed([income_transaction, income_transaction2])
+        end
+      end
+
+      context 'when changing the year' do
+        before do
+          click_on 'arrow_drop_down'
+          click_on 1.year.ago.year.to_s
+        end
+
+        it 'lists only expense transactions from that year' do
+          expect(page).to have_content('Transactions')
+
+          within('tbody') do
+            expect_transactions_to_be_listed([last_year_expense_transaction], show_type: false)
+            expect_transactions_not_to_be_listed(
+              [
+                income_transaction,
+                income_transaction2,
+                expense_transaction,
+                expense_transaction2,
+                last_year_income_transaction
+              ]
+            )
+          end
         end
       end
     end
@@ -110,7 +182,7 @@ RSpec.describe 'Transactions' do
     it 'can be created as an income without a category', :js do
       click_on 'New Transaction'
 
-      fill_in 'Date', with: '2021-01-01'
+      fill_in 'Date', with: Date.current
       fill_in 'Description', with: 'My New Transaction'
       select 'Income', from: 'Transaction type'
       fill_in 'Amount', with: '10000'
@@ -123,14 +195,14 @@ RSpec.describe 'Transactions' do
       expect(transaction).to be_income
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to be_nil
-      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.date).to eq Date.current
       expect(transaction.description).to eq 'My New Transaction'
     end
 
     it 'can be created as an expense with a standard category', :js do
       click_on 'New Transaction'
 
-      fill_in 'Date', with: '2021-01-01'
+      fill_in 'Date', with: Date.current
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
       fill_in 'Amount', with: '10000'
@@ -144,7 +216,7 @@ RSpec.describe 'Transactions' do
       expect(transaction).to be_expense
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to eq category
-      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.date).to eq Date.current
       expect(transaction.description).to eq 'My New Transaction'
     end
 
@@ -152,7 +224,7 @@ RSpec.describe 'Transactions' do
       click_on 'New Transaction'
 
       subcategory_name = "#{subcategory.name} (Subcategory of #{category.name})"
-      fill_in 'Date', with: '2021-01-01'
+      fill_in 'Date', with: Date.current
       fill_in 'Description', with: 'My New Transaction'
       select 'Expense', from: 'Transaction type'
       fill_in 'Amount', with: '10000'
@@ -166,7 +238,7 @@ RSpec.describe 'Transactions' do
       expect(transaction).to be_expense
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to eq subcategory
-      expect(transaction.date).to eq Date.new(2021, 1, 1)
+      expect(transaction.date).to eq Date.current
       expect(transaction.description).to eq 'My New Transaction'
     end
 
@@ -235,12 +307,12 @@ RSpec.describe 'Transactions' do
     end
   end
 
-  def expect_transactions_to_be_listed(transactions, show_type: true, show_category: true) # rubocop:disable Metrics/AbcSize
+  def expect_transactions_to_be_listed(transactions, show_type: true) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
       expect(page).to have_content transaction.date
       expect(page).to have_content transaction.description
       expect(page).to have_content transaction.transaction_type.titleize if show_type
-      expect(page).to have_content transaction.categorizable.name if show_category && transaction.expense?
+      expect(page).to have_content transaction.categorizable.name if transaction.expense?
       expect(page).to have_content transaction.amount.format
     end
   end

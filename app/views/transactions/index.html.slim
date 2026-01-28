@@ -1,10 +1,20 @@
 .page-header
-  .page-header__item
+  .page-header__item.gap-sm
     .btn-group
       - grouping = @transactions_presenter.grouping
       = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
       = link_to 'All', transactions_path(transaction_grouping: :all), class: class_names('btn', 'btn--active': grouping == :all)
       = link_to 'Expense', transactions_path(transaction_grouping: :expense), class: class_names('btn', 'btn--active': grouping == :expense)
+
+    sl-dropdown placement='bottom-end'
+      button.btn type='button' slot="trigger"
+        = @transactions_presenter.year
+        = material_icon 'arrow_drop_down'
+      sl-menu
+        - @transaction_years.each do |transaction_year|
+          = link_to transactions_path(transaction_year: transaction_year) do
+            sl-menu-item = transaction_year
+
   h1.page-header__item.desktop-only Transactions
   - if policy(Transaction).new?
     .page-header__item

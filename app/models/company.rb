@@ -15,17 +15,21 @@ class Company < ApplicationRecord
   end
 
   def income_for_year(year)
-    cents = transactions.income.where(date: Date.new(year).all_year).sum(:amount_cents)
-    return 0 unless cents
+    total_in_cents = transactions
+                     .income
+                     .where(date: Date.new(year).all_year)
+                     .sum(:amount_cents)
 
-    cents / 100
+    total_in_cents / 100
   end
 
   def expense_for_year(year)
-    cents = transactions.expense.where(date: Date.new(year).all_year).sum(:amount_cents)
-    return 0 unless cents
+    total_in_cents = transactions
+                     .expense
+                     .where(date: Date.new(year).all_year)
+                     .sum(:amount_cents)
 
-    cents / 100
+    total_in_cents / 100
   end
 
   private

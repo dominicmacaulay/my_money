@@ -3,26 +3,25 @@
   padding-bottom: var(--op-space-medium);
 
   .page-header__item {
+    display: flex;
+    flex-wrap: wrap;
     flex: 1;
     width: fit-content;
-    align-items: center;
+    align-items: start;
 
     .btn {
       max-height: var(--__op-btn-height);
     }
 
     &:first-child {
-      display: flex;
       justify-content: start;
     }
 
     &:not(:first-child):not(:last-child) {
-      display: flex;
       justify-content: center;
     }
 
     &:last-child {
-      display: flex;
       justify-content: end;
     }
   }

@@ -54,3 +54,10 @@
     gap: var(--op-space-medium);
   }
 }
+
+/* --op-breakpoint-medium */
+@media (max-width: 1024px) {
+  .table-container {
+    max-height: 80%;
+  }
+}

@@ -1,10 +1,11 @@
 .page-header
   .page-header__item.gap-sm
+    - transaction_grouping = @transactions_presenter.grouping
+    - transaction_year = @transactions_presenter.year
     .btn-group
-      - grouping = @transactions_presenter.grouping
-      = link_to 'Income', transactions_path(transaction_grouping: :income), class: class_names('btn', 'btn--active': grouping == :income)
-      = link_to 'All', transactions_path(transaction_grouping: :all), class: class_names('btn', 'btn--active': grouping == :all)
-      = link_to 'Expense', transactions_path(transaction_grouping: :expense), class: class_names('btn', 'btn--active': grouping == :expense)
+      = link_to 'Income', transactions_path(transaction_grouping: :income, transaction_year:), class: class_names('btn', 'btn--active': transaction_grouping == :income)
+      = link_to 'All', transactions_path(transaction_grouping: :all, transaction_year:), class: class_names('btn', 'btn--active': transaction_grouping == :all)
+      = link_to 'Expense', transactions_path(transaction_grouping: :expense, transaction_year:), class: class_names('btn', 'btn--active': transaction_grouping == :expense)
 
     sl-dropdown placement='bottom-end'
       button.btn type='button' slot="trigger"
@@ -12,7 +13,7 @@
         = material_icon 'arrow_drop_down'
       sl-menu
         - @transaction_years.each do |transaction_year|
-          = link_to transactions_path(transaction_year: transaction_year) do
+          = link_to transactions_path(transaction_year:, transaction_grouping:) do
             sl-menu-item = transaction_year
 
   h1.page-header__item.desktop-only Transactions

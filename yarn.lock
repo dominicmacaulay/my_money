@@ -1146,9 +1146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolemodel/optics@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rolemodel/optics@npm:2.0.0"
+"@rolemodel/optics@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@rolemodel/optics@npm:2.3.0"
   dependencies:
     modern-css-reset: "npm:^1.4.0"
   peerDependencies:
@@ -1156,7 +1156,7 @@ __metadata:
   peerDependenciesMeta:
     tom-select:
       optional: true
-  checksum: 10c0/3fdfda4604266b5d3fc1ae89760c2ab2a3a58d3c72e36c6a4cfe916171a7e698a8e1e605badb0ec28135fa1e0d982ca4009684206fa768827fb00b1ef6b58c42
+  checksum: 10c0/11b61a0cc9e623814a4072493bf86bb12497e45d46be022d5fb0ab63110ff15c29c1a9c1984e8ff7d0659363b6d44bb9a84d67c74e16e857f3ca1e5d7a2ab697
   languageName: node
   linkType: hard
 
@@ -4156,7 +4156,7 @@ __metadata:
   dependencies:
     "@hotwired/stimulus": "npm:^3.2.2"
     "@hotwired/turbo-rails": "npm:^8.0.12"
-    "@rolemodel/optics": "npm:^2.0.0"
+    "@rolemodel/optics": "npm:^2.3.0"
     "@rolemodel/turbo-confirm": "npm:^2.1.1"
     "@shoelace-style/shoelace": "npm:^2.20.0"
     autonumeric: "npm:^4.10.7"

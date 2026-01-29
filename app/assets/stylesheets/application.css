@@ -1,34 +1,34 @@
- @import '@rolemodel/optics'; /* Import the Optics CSS framework */
+@import '@rolemodel/optics'; /* Import the Optics CSS framework */
 
 /* themes */
 @import 'core/theme/my-money-theme-core.css'; /* Import the custom theme overrides */
 
- @import '@shoelace-style/shoelace/dist/themes/light.css'; /* Import the Shoelace theme */
- @import '@shoelace-style/shoelace/dist/themes/dark.css'; /* Import the Dark Shoelace theme */
- @import "flatpickr/dist/flatpickr.css"; /* Import the Flatpickr theme */
- @import "flatpickr/dist/themes/dark.css"; /* Import the Dark Flatpickr theme */
+@import '@shoelace-style/shoelace/dist/themes/light.css'; /* Import the Shoelace theme */
+@import '@shoelace-style/shoelace/dist/themes/dark.css'; /* Import the Dark Shoelace theme */
+@import "flatpickr/dist/flatpickr.css"; /* Import the Flatpickr theme */
+@import "flatpickr/dist/themes/dark.css"; /* Import the Dark Flatpickr theme */
 
- /* components */
- @import 'components/desktop-mobile.css';
- @import 'components/page-header.css';
- @import 'components/home-page.css';
- @import 'components/year-overviews.css';
+/* components */
+@import 'components/page-header.css';
+@import 'components/home-page.css';
+@import 'components/year-overviews.css';
 
- /* optics overrides */
- @import 'components/optics-overrides/accordion.css';
- @import 'components/optics-overrides/card.css';
- @import 'components/optics-overrides/form.css';
- @import 'components/optics-overrides/layout.css';
- @import 'components/optics-overrides/navbar.css';
- @import 'components/optics-overrides/pagination.css';
- @import 'components/optics-overrides/table.css';
+/* optics overrides */
+@import 'components/optics-overrides/accordion.css';
+@import 'components/optics-overrides/card.css';
+@import 'components/optics-overrides/form.css';
+@import 'components/optics-overrides/layout.css';
+@import 'components/optics-overrides/navbar.css';
+@import 'components/optics-overrides/pagination.css';
+@import 'components/optics-overrides/table.css';
 
- /* devise */
- @import 'components/devise/form.css';
+/* devise */
+@import 'components/devise/form.css';
 
- /* Vendors */
- @import 'vendors/shoelace/sl-menu-item.css';
- @import 'vendors/shoelace/tokens.css';
+/* Vendors */
+@import 'vendors/shoelace/sl-menu-item.css';
+@import 'vendors/shoelace/tokens.css';
 
- /* Utilities */
- @import 'utilities/hidden.css';
+/* Utilities */
+@import 'utilities/desktop-mobile.css';
+@import 'utilities/hidden.css';

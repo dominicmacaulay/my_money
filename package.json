@@ -32,7 +32,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.12",
-    "@rolemodel/optics": "^2.0.0",
+    "@rolemodel/optics": "^2.3.0",
     "@rolemodel/turbo-confirm": "^2.1.1",
     "@shoelace-style/shoelace": "^2.20.0",
     "autonumeric": "^4.10.7",

@@ -1,7 +1,12 @@
-.app__content {
-  overflow: auto;
-  width: 100%;
-  padding-block: var(--op-space-3x-large);
+.op-page {
+  .op-page__main {
+    .op-page__main-content {
+      overflow: auto;
+      block-size: 90vh;
+      inline-size: 100%;
+      padding-block: var(--op-space-3x-large);
+    }
+  }
 }
 
 .navbar__content--centered {

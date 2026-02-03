@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: ddf2eeb8ea55e51efced59365bb4c0b17f6d3277
+  revision: e8845657bdac6ab3ac004d55a04161967417dbe5
   specs:
-    rolemodel_rails (0.23.0)
+    rolemodel_rails (0.23.1)
 
 GEM
   remote: https://rubygems.org/
@@ -88,9 +88,9 @@ GEM
     bcrypt (3.1.21)
     bigdecimal (4.0.1)
     bindex (0.8.1)
-    bootsnap (1.21.1)
+    bootsnap (1.22.0)
       msgpack (~> 1.2)
-    brakeman (7.1.2)
+    brakeman (8.0.1)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)
@@ -234,7 +234,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.8.0)
+    prism (1.9.0)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -320,7 +320,7 @@ GEM
     rspec-support (3.13.6)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.84.0)
+    rubocop (1.84.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -397,7 +397,7 @@ GEM
     tilt (2.7.0)
     timeout (0.6.0)
     tsort (0.2.0)
-    turbo-rails (2.0.21)
+    turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)

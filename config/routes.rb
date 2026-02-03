@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     member do
       post :set_current
     end
+    resources :reports, only: :show
   end
   resources :subcategories, except: :show
   resources :year_overviews, only: :index

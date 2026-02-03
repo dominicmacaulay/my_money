@@ -28,7 +28,7 @@ RSpec.describe 'Reports' do
 
   before do
     user.update!(current_company: company)
-    sign_in user
+    login_as user
     visit company_reports_path(company)
   end
 

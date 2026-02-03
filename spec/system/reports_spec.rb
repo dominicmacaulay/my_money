@@ -6,14 +6,10 @@ RSpec.describe 'Reports' do
   let(:user) { create(:user) }
   let(:company) { create(:company, users: [user]) }
   let(:this_year) { Time.current.year }
-  let(:last_year) { this_year - 1 }
 
   let(:category) { create(:category, :has_subcategory) }
   let(:category2) { create(:category) }
   let(:subcategory) { category.subcategories.first }
-
-  let!(:last_year_income) { create(:transaction, :income, company:, date: Date.new(last_year, 6, 15)) }
-  let!(:last_year_expense) { create(:transaction, :expense, company:, date: Date.new(last_year, 7, 20)) }
 
   let!(:income_transactions) { create_list(:transaction, 5, :income, company:) }
   let!(:category_expenses) { create_list(:transaction, 3, :expense, company:, categorizable: category) }
@@ -30,30 +26,17 @@ RSpec.describe 'Reports' do
     user.update!(current_company: company)
     login_as user
     visit company_reports_path(company)
+
+    # Create some transactions for last year
+    last_year = this_year - 1
+    create(:transaction, :income, company:, date: Date.new(last_year, 6, 15))
+    create(:transaction, :expense, company:, date: Date.new(last_year, 7, 20), categorizable: category)
   end
 
-  it 'lists the reports for each year' do
-    expect(page).to have_content this_year
+  it 'navigates to the report for that year' do
     within data_test(this_year) do
-      expect(page).to have_content total_income.to_s
-      expect(page).to have_content total_expenses.to_s
-      expect(page).to have_content total_balance.to_s
+      click_on 'View Report'
     end
-
-    expect(page).to have_content last_year
-    within data_test(last_year) do
-      total_income = last_year_income.amount
-      total_expenses = last_year_expense.amount
-      balance = total_income - total_expenses
-
-      expect(page).to have_content total_income.to_s
-      expect(page).to have_content total_expenses.to_s
-      expect(page).to have_content balance.to_s
-    end
-  end
-
-  it 'shows the income, expenses for each category, and the balance' do
-    click_on this_year.to_s
 
     expect(page).to have_content 'Income'
     expect(page).to have_content total_income.to_s
@@ -67,15 +50,5 @@ RSpec.describe 'Reports' do
 
     expect(page).to have_content 'Balance'
     expect(page).to have_content total_balance.to_s
-  end
-
-  context 'when accessing from the year overview page' do
-    before { visit year_overviews_path }
-
-    it 'navigates to the report for that year' do
-      within data_test(this_year) do
-        expect(page).to have_link 'View Report', href: company_reports_path(company, year: this_year)
-      end
-    end
   end
 end

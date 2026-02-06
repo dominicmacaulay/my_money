@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: 680a68cf8526129b7e9eb1dd6dbc83751d716f9d
+  revision: a8cd1e1f42e61b931c3da8660bbd814fc99529f1
   specs:
-    rolemodel_rails (0.24.0)
+    rolemodel_rails (0.24.2)
       rails (> 7.1)
 
 GEM
@@ -91,7 +91,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.22.0)
       msgpack (~> 1.2)
-    brakeman (8.0.1)
+    brakeman (8.0.2)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)

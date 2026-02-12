@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/RoleModel/rolemodel_rails.git
-  revision: 680a68cf8526129b7e9eb1dd6dbc83751d716f9d
+  revision: 318ca1d23be25f32925652a365395aee1f458868
   specs:
-    rolemodel_rails (0.24.0)
+    rolemodel_rails (0.24.5)
       rails (> 7.1)
 
 GEM
@@ -89,9 +89,9 @@ GEM
     bcrypt (3.1.21)
     bigdecimal (4.0.1)
     bindex (0.8.1)
-    bootsnap (1.22.0)
+    bootsnap (1.23.0)
       msgpack (~> 1.2)
-    brakeman (8.0.1)
+    brakeman (8.0.2)
       racc
     builder (3.3.0)
     bundler-audit (0.9.3)
@@ -140,8 +140,9 @@ GEM
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
-    irb (1.16.0)
+    irb (1.17.0)
       pp (>= 0.6.0)
+      prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jbuilder (2.14.1)
@@ -290,7 +291,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
-    rdoc (7.1.0)
+    rdoc (7.2.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -321,7 +322,7 @@ GEM
     rspec-support (3.13.6)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.84.1)
+    rubocop (1.84.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)

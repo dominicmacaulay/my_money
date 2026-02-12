@@ -10,9 +10,11 @@
         span = material_icon('arrow_right', classes: 'accordion__marker')
         span = year
 
-      .home-page
-        .home-page__content
-          = render 'pages/yearly_summary', year:
-          = render 'pages/monthly_summary', year:
-        .home-page__footer
-          = render 'pages/tax_breakdown', year:
+      .op-stack
+        .home-page
+          .home-page__content
+            = render 'pages/yearly_summary', year:
+            = render 'pages/monthly_summary', year:
+          .home-page__footer
+            = render 'pages/tax_breakdown', year:
+          = link_to 'View Report', company_report_path(@year_presenter.company, year), class: 'btn btn--no-border btn--min-width margin-auto'

@@ -11,6 +11,7 @@
 /* components */
 @import 'components/page-header.css';
 @import 'components/home-page.css';
+@import 'components/report.css';
 @import 'components/year-overviews.css';
 
 /* optics overrides */

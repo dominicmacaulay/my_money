@@ -6,6 +6,8 @@ class Report
   class CategoryExpenseBreakdown
     attr_reader :category, :company, :year
 
+    delegate :name, to: :category
+
     def initialize(category, company, year)
       @category = category
       @company = company
@@ -15,10 +17,10 @@ class Report
     def total
       return category_total(category) if subcategories.none?
 
-      breakdown.sum { it[:amount] }
+      details.sum { it[:amount] }
     end
 
-    def breakdown
+    def details
       return [] if subcategories.none?
 
       [category, *subcategories].map do |cat|

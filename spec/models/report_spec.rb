@@ -82,16 +82,16 @@ RSpec.describe Report do
 
       # Show a detailed breakdown for categories that have subcategories
       expect(category1_breakdown.total).to eq cat1_total + subcat_total
-      expect(category1_breakdown.breakdown.size).to eq 2
+      expect(category1_breakdown.details.size).to eq 2
 
-      expect(category1_breakdown.breakdown.first[:name]).to eq category1.name
-      expect(category1_breakdown.breakdown.first[:amount]).to eq cat1_total
-      expect(category1_breakdown.breakdown.second[:name]).to eq subcategory.name
-      expect(category1_breakdown.breakdown.second[:amount]).to eq subcat_total
+      expect(category1_breakdown.details.first[:name]).to eq category1.name
+      expect(category1_breakdown.details.first[:amount]).to eq cat1_total
+      expect(category1_breakdown.details.second[:name]).to eq subcategory.name
+      expect(category1_breakdown.details.second[:amount]).to eq subcat_total
 
       # Exclude the breakdown for categories that don't have subcategories
       expect(category2_breakdown.total).to eq cat2_total
-      expect(category2_breakdown.breakdown).to be_empty
+      expect(category2_breakdown.details).to be_empty
     end
   end
 
@@ -205,20 +205,20 @@ RSpec.describe Report do
       context 'when category has no subcategories' do
         it 'returns an empty array' do
           breakdown = described_class.new(category2, company, year)
-          expect(breakdown.breakdown).to be_empty
+          expect(breakdown.details).to be_empty
         end
       end
 
       context 'when category has subcategories' do
         it 'returns breakdown for parent and all subcategories' do
-          expect(category_breakdown.breakdown.size).to eq 2
-          expect(category_breakdown.breakdown.first[:name]).to eq category1.name
-          expect(category_breakdown.breakdown.second[:name]).to eq subcategory.name
+          expect(category_breakdown.details.size).to eq 2
+          expect(category_breakdown.details.first[:name]).to eq category1.name
+          expect(category_breakdown.details.second[:name]).to eq subcategory.name
         end
 
         it 'includes correct amounts for each item' do
-          parent_item = category_breakdown.breakdown.find { it[:name] == category1.name }
-          sub_item = category_breakdown.breakdown.find { it[:name] == subcategory.name }
+          parent_item = category_breakdown.details.find { it[:name] == category1.name }
+          sub_item = category_breakdown.details.find { it[:name] == subcategory.name }
 
           expect(parent_item[:amount]).to eq category1_expenses.sum(&:amount_cents) / 100
           expect(sub_item[:amount]).to eq subcategory_expenses.sum(&:amount_cents) / 100
@@ -233,8 +233,8 @@ RSpec.describe Report do
         end
 
         it 'includes all subcategories in breakdown' do
-          expect(category_breakdown.breakdown.size).to eq 3
-          names = category_breakdown.breakdown.map { it[:name] }
+          expect(category_breakdown.details.size).to eq 3
+          names = category_breakdown.details.map { it[:name] }
           expect(names).to include(category1.name, subcategory.name, subcategory2.name)
         end
       end
@@ -249,7 +249,7 @@ RSpec.describe Report do
         end
 
         it 'excludes subcategories from other companies' do
-          names = category_breakdown.breakdown.map { it[:name] }
+          names = category_breakdown.details.map { it[:name] }
           expect(names).not_to include(other_subcategory.name)
         end
       end
@@ -265,10 +265,10 @@ RSpec.describe Report do
           parent_breakdown = described_class.new(parent_category, company, year)
           expected_child_total = child_transactions.sum(&:amount_cents) / 100
 
-          expect(parent_breakdown.breakdown.size).to eq 2
+          expect(parent_breakdown.details.size).to eq 2
 
-          parent_amount = parent_breakdown.breakdown.find { it[:name] == parent_category.name }
-          child_amount = parent_breakdown.breakdown.find { it[:name] == child_subcategory.name }
+          parent_amount = parent_breakdown.details.find { it[:name] == parent_category.name }
+          child_amount = parent_breakdown.details.find { it[:name] == child_subcategory.name }
 
           expect(parent_amount[:amount]).to eq 0
           expect(child_amount[:amount]).to eq expected_child_total

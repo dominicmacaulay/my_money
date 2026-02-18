@@ -2,6 +2,10 @@
   display: flex;
   padding-bottom: var(--op-space-medium);
 
+  &.page-header--centered {
+    justify-content: center;
+  }
+
   .page-header__item {
     display: flex;
     flex-wrap: wrap;

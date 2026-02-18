@@ -7,9 +7,9 @@ RSpec.describe 'Reports' do
   let(:company) { create(:company, users: [user]) }
   let(:this_year) { Time.current.year }
 
-  let(:category) { create(:category, :has_subcategory) }
+  let(:category) { create(:category) }
   let(:category2) { create(:category) }
-  let(:subcategory) { category.subcategories.first }
+  let(:subcategory) { create(:subcategory, category:, company:) }
 
   let!(:income_transactions) { create_list(:transaction, 5, :income, company:) }
   let!(:category_expenses) { create_list(:transaction, 3, :expense, company:, categorizable: category) }
@@ -17,10 +17,11 @@ RSpec.describe 'Reports' do
   let!(:subcategory_expenses) { create_list(:transaction, 2, :expense, company:, categorizable: subcategory) }
 
   let(:total_income) { income_transactions.sum(&:amount) }
-  let(:total_category_expenses) { category_expenses.sum(&:amount) + subcategory_expenses.sum(&:amount) }
+  let(:category_expenses_total) { category_expenses.sum(&:amount) }
+  let(:subcategory_expenses_total) { subcategory_expenses.sum(&:amount) }
+  let(:total_category_expenses) { category_expenses_total + subcategory_expenses_total }
   let(:total_category2_expenses) { category2_expenses.sum(&:amount) }
   let(:total_expenses) { total_category_expenses + total_category2_expenses }
-  let(:total_balance) { total_income - total_expenses }
 
   before do
     user.update!(current_company: company)
@@ -44,11 +45,11 @@ RSpec.describe 'Reports' do
     expect(page).to have_content 'Expenses'
     expect(page).to have_content category.name
     expect(page).to have_content total_category_expenses.to_s
+    expect(page).to have_content category_expenses_total.to_s
+    expect(page).to have_content subcategory.name
+    expect(page).to have_content subcategory_expenses_total.to_s
 
     expect(page).to have_content category2.name
     expect(page).to have_content total_category2_expenses.to_s
-
-    expect(page).to have_content 'Balance'
-    expect(page).to have_content total_balance.to_s
   end
 end

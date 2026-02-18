@@ -17,4 +17,4 @@
             = render 'pages/monthly_summary', year:
           .home-page__footer
             = render 'pages/tax_breakdown', year:
-          = link_to 'View Report', company_report_path(@year_presenter.company, year), class: 'btn btn--no-border btn--min-width margin-auto'
+          = link_to 'View Report', reports_path(year:), class: 'btn btn--no-border btn--min-width margin-auto'

@@ -1,30 +1,29 @@
 .page-header.page-header--centered
   h1 #{@report.year} Report
 
-.divider
-
 .report
-  .report__income
-      .report__income-title Total Income
+  .report__header
+      .report__header-title Total Income
       .divider
-      .report__income-total = number_to_currency(@report.total_income)
+      .report__header-total = number_to_currency(@report.total_income)
 
-  .report__expenses
+  .report__header
+    .report__header-title Total Expenses
+    .divider
+    .report__header-total = number_to_currency(@report.total_expense)
+
+  .report__body
     - @report.expense_breakdown.each do |breakdown|
-      .report__expense-category
-        .report__category
-          .report__category-name = breakdown.name
+      .report-column
+        .report-row
+          .report-row__name = breakdown.name
           .divider
-          .report__category-total = number_to_currency(breakdown.total)
-        .report__category-details
+          .report-row__total = number_to_currency(breakdown.total)
+        .report-column
           - breakdown.details.each do |detail|
-            .report__category-detail
-              .report__category-detail-name = detail[:name]
+            .report-row.report-row--small
+              .report-row__name = detail[:name]
               .divider
-              .report__category-detail-amount = number_to_currency(detail[:amount])
+              .report-row__total = number_to_currency(detail[:amount])
 
 
-    .report__expenses-total
-      .report__expenses-total-title Total Expenses
-      .divider
-      .report__expenses-total-amount = number_to_currency(@report.total_expense)

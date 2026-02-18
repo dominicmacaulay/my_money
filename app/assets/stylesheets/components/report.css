@@ -12,83 +12,60 @@
     inline-size: 100%;
   }
 
-  .report__income {
+  .report__header {
     display: flex;
     align-items: center;
     gap: var(--op-space-medium);
 
-    .report__income-title {
+    .report__header-title {
       font-size: var(--op-font-large);
       font-weight: var(--op-font-weight-medium);
     }
 
-    .report__income-total {
+    .report__header-total {
       font-size: var(--op-font-medium);
       font-weight: var(--op-font-weight-bold);
     }
   }
 
-  .report__expenses {
+  .report__body {
     display: grid;
     gap: var(--op-space-small);
 
-    .report__expense-category {
-      display: grid;
-      gap: var(--op-space-2x-small);
-      padding-inline: var(--op-space-large);
-    }
+    padding-block-end: var(--op-space-large);
+    box-shadow: 0 var(--op-border-width) var(--op-border-width) var(--op-border-width) var(--op-color-border);
   }
+}
 
-  .report__category {
+.report-column {
+  display: grid;
+  gap: var(--op-space-2x-small);
+  padding-inline: var(--op-space-large);
+
+  .report-row {
     display: flex;
     align-items: center;
     gap: var(--op-space-medium);
 
-    .report__category-name {
+    .report-row__name {
       font-size: var(--op-font-medium);
       font-weight: var(--op-font-weight-medium);
     }
 
-    .report__category-amount {
+    .report-row__total {
       font-size: var(--op-font-medium);
       font-weight: var(--op-font-weight-bold);
     }
-  }
 
-  .report__category-details {
-    display: grid;
-    gap: var(--op-space-2x-small);
-    padding-inline: var(--op-space-large);
-
-    .report__category-detail {
-      display: flex;
-      align-items: center;
-      gap: var(--op-space-medium);
-
-      .report__category-detail-name {
+    &.report-row--small {
+      .report-row__name {
         font-size: var(--op-font-small);
         font-weight: var(--op-font-weight-regular);
       }
 
-      .report__category-detail-amount {
+      .report-row__total {
         font-size: var(--op-font-small);
       }
-    }
-  }
-
-  .report__expenses-total {
-    display: flex;
-    align-items: center;
-    gap: var(--op-space-medium);
-
-    .report__expenses-total-title {
-      font-size: var(--op-font-medium);
-      font-weight: var(--op-font-weight-medium);
-    }
-
-    .report__expenses-total-amount {
-      font-size: var(--op-font-medium);
-      font-weight: var(--op-font-weight-bold);
     }
   }
 }

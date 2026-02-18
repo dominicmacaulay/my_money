@@ -17,7 +17,7 @@ class Report
     def total
       return category_total(category) if subcategories.none?
 
-      details.sum { it[:amount] }
+      details.sum { |detail| detail[:amount] }
     end
 
     def details
@@ -59,7 +59,7 @@ class Report
   end
 
   def expense_breakdown
-    Category.all.map { CategoryExpenseBreakdown.new(it, company, year) }
+    Category.all.map { |category| CategoryExpenseBreakdown.new(category, company, year) }
   end
 
   def total_balance

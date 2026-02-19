@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Report
-  CENTS_TO_DOLLARS = 100.0
-
   class CategoryExpenseBreakdown
     attr_reader :category, :company, :year
 
@@ -39,7 +37,7 @@ class Report
     end
 
     def category_total(category)
-      category.transactions.where(company:, date: year_range).sum(:amount_cents) / CENTS_TO_DOLLARS
+      category.transactions.where(company:, date: year_range).sum(&:amount)
     end
 
     def year_range

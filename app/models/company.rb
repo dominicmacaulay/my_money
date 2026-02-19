@@ -15,24 +15,18 @@ class Company < ApplicationRecord
   end
 
   def income_for_year(year)
-    total_in_cents = transactions
-                     .income
-                     .where(date: Date.new(year).all_year)
-                     .sum(:amount_cents)
-
-    total_in_cents / 100
+    transactions_for_year(year, :income)
   end
 
   def expense_for_year(year)
-    total_in_cents = transactions
-                     .expense
-                     .where(date: Date.new(year).all_year)
-                     .sum(:amount_cents)
-
-    total_in_cents / 100
+    transactions_for_year(year, :expense)
   end
 
   private
+
+  def transactions_for_year(year, type)
+    transactions.where(transaction_type: type, date: Date.new(year).all_year).sum(&:amount)
+  end
 
   def handle_destruction
     users.each do |user|

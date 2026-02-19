@@ -177,7 +177,7 @@ RSpec.describe 'Transactions' do
       expect(page).to have_content('Transaction was successfully created')
       expect(page).to have_content('My New Transaction')
 
-      transaction = Transaction.all.max_by(&:id)
+      transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_income
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to be_nil
@@ -198,7 +198,7 @@ RSpec.describe 'Transactions' do
       expect(page).to have_content('Transaction was successfully created')
       expect(page).to have_content('My New Transaction')
 
-      transaction = Transaction.all.max_by(&:id)
+      transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_expense
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to eq category
@@ -220,7 +220,7 @@ RSpec.describe 'Transactions' do
       expect(page).to have_content('Transaction was successfully created')
       expect(page).to have_content('My New Transaction')
 
-      transaction = Transaction.all.max_by(&:id)
+      transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_expense
       expect(transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
       expect(transaction.categorizable).to eq subcategory

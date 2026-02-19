@@ -26,7 +26,7 @@ RSpec.describe 'Reports' do
   before do
     user.update!(current_company: company)
     login_as user
-    visit year_overviews_path(company)
+    visit year_overviews_path
 
     # Create some transactions for last year
     last_year = this_year - 1

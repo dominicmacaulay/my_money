@@ -234,7 +234,7 @@ RSpec.describe Report do
 
         it 'includes all subcategories in breakdown' do
           expect(category_breakdown.details.size).to eq 3
-          names = category_breakdown.details.map { it[:name] }
+          names = category_breakdown.details.pluck(:name)
           expect(names).to include(category1.name, subcategory.name, subcategory2.name)
         end
       end
@@ -249,7 +249,7 @@ RSpec.describe Report do
         end
 
         it 'excludes subcategories from other companies' do
-          names = category_breakdown.details.map { it[:name] }
+          names = category_breakdown.details.pluck(:name)
           expect(names).not_to include(other_subcategory.name)
         end
       end

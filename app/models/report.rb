@@ -21,14 +21,18 @@ class Report
     end
 
     def details
+      @details ||= determine_details
+    end
+
+    private
+
+    def determine_details
       return [] if subcategories.none?
 
       [category, *subcategories].map do |cat|
         { name: cat.name, amount: category_total(cat) }
       end
     end
-
-    private
 
     def subcategories
       @subcategories ||= category.subcategories.where(company:)

@@ -139,21 +139,20 @@ RSpec.describe 'Transactions' do
       end
     end
 
-    it 'displays the total income' do
-      expect(page).to have_content('Total Income')
-      expect(page).to have_content((income_transaction.amount + income_transaction2.amount).format)
-    end
-
-    it 'displays the total expenses' do
-      expect(page).to have_content('Total Expense')
-      expect(page).to have_content((expense_transaction.amount + expense_transaction2.amount).format)
-    end
-
-    it 'displays the total balance' do
+    it 'displays the total income, expense, and balance' do
       total_income = income_transaction.amount + income_transaction2.amount
       total_expense = expense_transaction.amount + expense_transaction2.amount
-      expect(page).to have_content('Total Balance')
-      expect(page).to have_content((total_income - total_expense).format)
+      total_balance = total_income - total_expense
+
+      within 'tfoot.desktop-only' do
+        expect(page).to have_content('Total Income')
+        expect(page).to have_content('Total Expense')
+        expect(page).to have_content('Total Balance')
+
+        expect(page).to have_content(total_income.format)
+        expect(page).to have_content(total_expense.format)
+        expect(page).to have_content(total_balance.format)
+      end
     end
   end
 

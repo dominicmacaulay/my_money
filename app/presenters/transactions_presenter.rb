@@ -14,11 +14,11 @@ class TransactionsPresenter
   end
 
   def total_income
-    authorized_transactions.income.sum(:amount_cents)
+    Money.new(authorized_transactions.income.sum(:amount_cents))
   end
 
   def total_expense
-    authorized_transactions.expense.sum(:amount_cents)
+    Money.new(authorized_transactions.expense.sum(:amount_cents))
   end
 
   def balance

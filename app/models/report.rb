@@ -37,7 +37,7 @@ class Report
     end
 
     def category_total(category)
-      category.transactions.where(company:, date: year_range).sum(:amount_cents)
+      Money.new(category.transactions.where(company:, date: year_range).sum(:amount_cents))
     end
 
     def year_range

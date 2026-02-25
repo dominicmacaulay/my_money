@@ -16,11 +16,11 @@ RSpec.describe 'Reports' do
   let!(:category2_expenses) { create_list(:transaction, 4, :expense, company:, categorizable: category2) }
   let!(:subcategory_expenses) { create_list(:transaction, 2, :expense, company:, categorizable: subcategory) }
 
-  let(:total_income) { income_transactions.sum(:amount_cents) }
-  let(:category_expenses_total) { category_expenses.sum(:amount_cents) }
-  let(:subcategory_expenses_total) { subcategory_expenses.sum(:amount_cents) }
+  let(:total_income) { income_transactions.sum(&:amount) }
+  let(:category_expenses_total) { category_expenses.sum(&:amount) }
+  let(:subcategory_expenses_total) { subcategory_expenses.sum(&:amount) }
   let(:total_category_expenses) { category_expenses_total + subcategory_expenses_total }
-  let(:total_category2_expenses) { category2_expenses.sum(:amount_cents) }
+  let(:total_category2_expenses) { category2_expenses.sum(&:amount) }
   let(:total_expenses) { total_category_expenses + total_category2_expenses }
 
   before do
@@ -40,16 +40,16 @@ RSpec.describe 'Reports' do
     end
 
     expect(page).to have_content 'Income'
-    expect(page).to have_content total_income.to_s
+    expect(page).to have_content total_income.format
 
     expect(page).to have_content 'Expenses'
     expect(page).to have_content category.name
-    expect(page).to have_content total_category_expenses.to_s
-    expect(page).to have_content category_expenses_total.to_s
+    expect(page).to have_content total_category_expenses.format
+    expect(page).to have_content category_expenses_total.format
     expect(page).to have_content subcategory.name
-    expect(page).to have_content subcategory_expenses_total.to_s
+    expect(page).to have_content subcategory_expenses_total.format
 
     expect(page).to have_content category2.name
-    expect(page).to have_content total_category2_expenses.to_s
+    expect(page).to have_content total_category2_expenses.format
   end
 end

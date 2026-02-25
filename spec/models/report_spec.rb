@@ -42,11 +42,11 @@ RSpec.describe Report do
   end
 
   describe 'totals' do
-    let(:total_income) { income.sum(&:amount) }
+    let(:total_income) { income.sum(&:amount_cents) }
     let(:total_expense) do
-      (category1_expenses.sum(&:amount) +
-      category2_expenses.sum(&:amount) +
-      subcategory_expenses.sum(&:amount))
+      (category1_expenses.sum(&:amount_cents) +
+      category2_expenses.sum(&:amount_cents) +
+      subcategory_expenses.sum(&:amount_cents))
     end
 
     describe '#total_income' do
@@ -69,9 +69,9 @@ RSpec.describe Report do
   end
 
   describe '#expense_breakdown' do
-    let(:cat1_total) { category1_expenses.sum(&:amount) }
-    let(:cat2_total) { category2_expenses.sum(&:amount) }
-    let(:subcat_total) { subcategory_expenses.sum(&:amount) }
+    let(:cat1_total) { category1_expenses.sum(&:amount_cents) }
+    let(:cat2_total) { category2_expenses.sum(&:amount_cents) }
+    let(:subcat_total) { subcategory_expenses.sum(&:amount_cents) }
 
     it 'returns an array of category expense breakdown objects with the broken down information' do
       breakdown = report.expense_breakdown
@@ -115,7 +115,7 @@ RSpec.describe Report do
       end
 
       it 'returns correct income, zero expense, and positive balance' do
-        expected_income = income_only_transactions.sum(&:amount)
+        expected_income = income_only_transactions.sum(&:amount_cents)
 
         expect(income_only_report.total_income).to eq expected_income
         expect(income_only_report.total_expense).to eq 0
@@ -132,7 +132,7 @@ RSpec.describe Report do
       end
 
       it 'returns zero income, correct expense, and negative balance' do
-        expected_expense = expense_only_transactions.sum(&:amount)
+        expected_expense = expense_only_transactions.sum(&:amount_cents)
 
         expect(expense_only_report.total_income).to eq 0
         expect(expense_only_report.total_expense).to eq expected_expense
@@ -164,14 +164,14 @@ RSpec.describe Report do
       context 'when category has no subcategories' do
         it 'returns the category total' do
           breakdown = described_class.new(category2, company, year)
-          expect(breakdown.total).to eq category2_expenses.sum(&:amount)
+          expect(breakdown.total).to eq category2_expenses.sum(&:amount_cents)
         end
       end
 
       context 'when category has subcategories' do
         it 'returns the sum of category and all subcategories' do
-          expected_total = (category1_expenses.sum(&:amount) +
-                           subcategory_expenses.sum(&:amount))
+          expected_total = (category1_expenses.sum(&:amount_cents) +
+                           subcategory_expenses.sum(&:amount_cents))
           expect(category_breakdown.total).to eq expected_total
         end
       end
@@ -194,7 +194,7 @@ RSpec.describe Report do
 
         it 'returns the sum of only subcategories' do
           parent_breakdown = described_class.new(parent_category, company, year)
-          expected_child_total = child_transactions.sum(&:amount)
+          expected_child_total = child_transactions.sum(&:amount_cents)
 
           expect(parent_breakdown.total).to eq expected_child_total
         end
@@ -220,8 +220,8 @@ RSpec.describe Report do
           parent_item = category_breakdown.details.find { it[:name] == category1.name }
           sub_item = category_breakdown.details.find { it[:name] == subcategory.name }
 
-          expect(parent_item[:amount]).to eq category1_expenses.sum(&:amount)
-          expect(sub_item[:amount]).to eq subcategory_expenses.sum(&:amount)
+          expect(parent_item[:amount]).to eq category1_expenses.sum(&:amount_cents)
+          expect(sub_item[:amount]).to eq subcategory_expenses.sum(&:amount_cents)
         end
       end
 
@@ -263,7 +263,7 @@ RSpec.describe Report do
 
         it 'shows zero for parent category and amounts for subcategories' do
           parent_breakdown = described_class.new(parent_category, company, year)
-          expected_child_total = child_transactions.sum(&:amount)
+          expected_child_total = child_transactions.sum(&:amount_cents)
 
           expect(parent_breakdown.details.size).to eq 2
 

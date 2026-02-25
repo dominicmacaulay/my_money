@@ -25,7 +25,7 @@ class Company < ApplicationRecord
   private
 
   def transactions_for_year(year, type)
-    transactions.where(transaction_type: type, date: Date.new(year).all_year).sum(&:amount)
+    transactions.where(transaction_type: type, date: Date.new(year).all_year).sum(:amount_cents)
   end
 
   def handle_destruction

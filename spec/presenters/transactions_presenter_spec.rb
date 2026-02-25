@@ -67,7 +67,7 @@ RSpec.describe TransactionsPresenter do
 
   describe '#total_income' do
     it 'returns the total income' do
-      expected_total_income = company.transactions.income.where(date: Date.current.all_year).sum(&:amount)
+      expected_total_income = company.transactions.income.where(date: Date.current.all_year).sum(:amount_cents)
       received_total_income = presenter.total_income
 
       expect(received_total_income).to eq(expected_total_income)
@@ -77,7 +77,7 @@ RSpec.describe TransactionsPresenter do
       let(:year) { last_year.year }
 
       it 'returns the total income for the specified year' do
-        expected_total_income = company.transactions.income.where(date: last_year.all_year).sum(&:amount)
+        expected_total_income = company.transactions.income.where(date: last_year.all_year).sum(:amount_cents)
         received_total_income = presenter.total_income
 
         expect(received_total_income).to eq(expected_total_income)
@@ -87,7 +87,7 @@ RSpec.describe TransactionsPresenter do
 
   describe '#total_expense' do
     it 'returns the total expense' do
-      expected_total_expense = company.transactions.expense.where(date: Date.current.all_year).sum(&:amount)
+      expected_total_expense = company.transactions.expense.where(date: Date.current.all_year).sum(:amount_cents)
       received_total_expense = presenter.total_expense
 
       expect(received_total_expense).to eq(expected_total_expense)
@@ -97,7 +97,7 @@ RSpec.describe TransactionsPresenter do
       let(:year) { last_year.year }
 
       it 'returns the total expense for the specified year' do
-        expected_total_expense = company.transactions.expense.where(date: last_year.all_year).sum(&:amount)
+        expected_total_expense = company.transactions.expense.where(date: last_year.all_year).sum(:amount_cents)
         received_total_expense = presenter.total_expense
 
         expect(received_total_expense).to eq(expected_total_expense)
@@ -107,8 +107,8 @@ RSpec.describe TransactionsPresenter do
 
   describe '#balance' do
     it 'returns the balance' do
-      income = company.transactions.income.where(date: Date.current.all_year).sum(&:amount)
-      expense = company.transactions.expense.where(date: Date.current.all_year).sum(&:amount)
+      income = company.transactions.income.where(date: Date.current.all_year).sum(:amount_cents)
+      expense = company.transactions.expense.where(date: Date.current.all_year).sum(:amount_cents)
       expected_balance = income - expense
       received_balance = presenter.balance
 
@@ -119,8 +119,8 @@ RSpec.describe TransactionsPresenter do
       let(:year) { last_year.year }
 
       it 'returns the balance for the specified year' do
-        income = company.transactions.income.where(date: last_year.all_year).sum(&:amount)
-        expense = company.transactions.expense.where(date: last_year.all_year).sum(&:amount)
+        income = company.transactions.income.where(date: last_year.all_year).sum(:amount_cents)
+        expense = company.transactions.expense.where(date: last_year.all_year).sum(:amount_cents)
         expected_balance = income - expense
         received_balance = presenter.balance
 

@@ -32,7 +32,7 @@ RSpec.describe Company do
 
     describe '#income_for_year' do
       it 'calculates total income for the given year' do
-        total_income = income_transactions.sum(&:amount)
+        total_income = income_transactions.sum(&:amount_cents)
         expect(company.income_for_year(Date.current.year)).to eq(total_income)
       end
 
@@ -43,7 +43,7 @@ RSpec.describe Company do
 
     describe '#expense_for_year' do
       it 'calculates total expense for the given year' do
-        total_expense = expense_transactions.sum(&:amount)
+        total_expense = expense_transactions.sum(&:amount_cents)
         expect(company.expense_for_year(Date.current.year)).to eq(total_expense)
       end
 

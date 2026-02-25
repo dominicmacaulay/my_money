@@ -97,3 +97,6 @@ RSpec/MessageSpies:
 
 RSpec/NestedGroups:
   Max: 5
+
+RSpec/IndexedLet:
+  Enabled: false

@@ -29,20 +29,24 @@ RSpec.describe 'Year Overviews' do
 
     find(data_test(last_year)).click
     within data_test(last_year) do
-      income = last_year_incomes.sum(&:amount_cents) / 100
-      expenses = last_year_expenses.sum(&:amount_cents) / 100
-      expect(page).to have_content "Total Income\n$#{income}"
-      expect(page).to have_content "Total Expense\n$#{expenses}"
-      expect(page).to have_content "Total Balance\n$#{income - expenses}"
+      income = last_year_incomes.sum(&:amount).format
+      expenses = last_year_expenses.sum(&:amount).format
+      total = (last_year_incomes.sum(&:amount) - last_year_expenses.sum(&:amount)).format
+
+      expect(page).to have_content "Total Income\n#{income}"
+      expect(page).to have_content "Total Expense\n#{expenses}"
+      expect(page).to have_content "Total Balance\n#{total}"
     end
 
     find(data_test(this_year)).click
     within data_test(this_year) do
-      income = this_year_incomes.sum(&:amount_cents) / 100
-      expenses = this_year_expenses.sum(&:amount_cents) / 100
-      expect(page).to have_content "Total Income\n$#{income}"
-      expect(page).to have_content "Total Expense\n$#{expenses}"
-      expect(page).to have_content "Total Balance\n$#{income - expenses}"
+      income = this_year_incomes.sum(&:amount).format
+      expenses = this_year_expenses.sum(&:amount).format
+      total = (this_year_incomes.sum(&:amount) - this_year_expenses.sum(&:amount)).format
+
+      expect(page).to have_content "Total Income\n#{income}"
+      expect(page).to have_content "Total Expense\n#{expenses}"
+      expect(page).to have_content "Total Balance\n#{total}"
     end
   end
 end

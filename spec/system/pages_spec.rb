@@ -55,13 +55,13 @@ RSpec.describe 'Pages' do
         end
 
         it 'displays the total income for the current year' do
-          total_income = Money.new(company.income_for_year(current_year) * 100).format
+          total_income = Money.new(company.income_for_year(current_year)).format
 
           expect(page).to have_content("Total Income\n#{total_income}")
         end
 
         it 'displays the total expenses for the current year' do
-          total_expenses = Money.new(company.expense_for_year(current_year) * 100).format
+          total_expenses = Money.new(company.expense_for_year(current_year)).format
 
           expect(page).to have_content("Total Expense\n#{total_expenses}")
         end
@@ -69,7 +69,7 @@ RSpec.describe 'Pages' do
         it 'displays the total balance for the current year' do
           total_income = company.income_for_year(current_year)
           total_expenses = company.expense_for_year(current_year)
-          total_balance = Money.new((total_income - total_expenses) * 100).format
+          total_balance = Money.new(total_income - total_expenses).format
 
           expect(page).to have_content("Total Balance\n#{total_balance}")
         end

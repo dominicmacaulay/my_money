@@ -1,0 +1,29 @@
+.page-header.page-header--centered
+  h1 #{@report.year} Report
+
+.report
+  .report__header
+    .report__header-title Total Income
+    .report__header-total = humanized_money_with_symbol(@report.total_income)
+
+    .full-width
+
+    .report__header-title Total Expenses
+    .report__header-total = humanized_money_with_symbol(@report.total_expense)
+
+  .report__body
+    - @report.expense_breakdown.each do |breakdown|
+      .report-column
+        .report-row
+          .report-row__name = breakdown.name
+          .full-width
+          .report-row__total = humanized_money_with_symbol(breakdown.total)
+        - if breakdown.details.any?
+          .report-column
+            - breakdown.details.each do |detail|
+              .report-row.report-row--small
+                .report-row__name = detail[:name]
+                .divider
+                .report-row__total = humanized_money_with_symbol(detail[:amount])
+
+

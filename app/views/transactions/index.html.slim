@@ -42,7 +42,7 @@
           - if @transactions_presenter.show_category?
             td.desktop-only = transaction.categorizable_name
           td.desktop-only = transaction.description
-          td = number_to_currency(transaction.amount)
+          td = humanized_money_with_symbol(transaction.amount)
           - if policy(transaction).edit?
             td = link_to 'View', edit_transaction_path(transaction), class: 'btn btn--small'
     tfoot.desktop-only
@@ -53,19 +53,19 @@
           .table--transactions__totals
             .table--transactions__totals-pair
               span Total Income
-              span = number_to_currency(@transactions_presenter.total_income)
+              span = humanized_money_with_symbol(@transactions_presenter.total_income)
             .table--transactions__totals-pair
               span Total Expense
-              span = number_to_currency(@transactions_presenter.total_expense)
+              span = humanized_money_with_symbol(@transactions_presenter.total_expense)
             .table--transactions__totals-pair
               span Total Balance
-              span = number_to_currency(@transactions_presenter.balance)
+              span = humanized_money_with_symbol(@transactions_presenter.balance)
     tfoot.mobile-only
       tr
         td colspan='3'
           .table--transactions__mobile-footer
             .table--transactions__totals-pair
               span Total Balance
-              span = number_to_currency(@transactions_presenter.balance)
+              span = humanized_money_with_symbol(@transactions_presenter.balance)
             = paginate @transactions, window: 2
 

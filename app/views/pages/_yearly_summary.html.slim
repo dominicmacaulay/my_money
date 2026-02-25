@@ -12,10 +12,10 @@
 
       .text-pair
         .text-title Total Income
-        .text-value = number_to_currency(year_income)
+        .text-value = humanized_money_with_symbol(year_income)
       .text-pair
         .text-title Total Expense
-        .text-value = number_to_currency(year_expense)
+        .text-value = humanized_money_with_symbol(year_expense)
       .text-pair
         .text-title Total Balance
-        .text-value = number_to_currency(year_income - year_expense)
+        .text-value = humanized_money_with_symbol(year_income - year_expense)

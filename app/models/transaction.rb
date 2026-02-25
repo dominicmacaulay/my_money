@@ -13,6 +13,8 @@ class Transaction < ApplicationRecord
   validates :categorizable, absence: { message: 'cannot be present for income transactions' }, if: -> { income? }
   validates :categorizable, presence: { message: 'must be present for expense transactions' }, if: -> { expense? }
 
+  delegate :name, to: :categorizable, prefix: true, allow_nil: true
+
   paginates_per 25
 
   def categorizable=(categorizable)
@@ -21,9 +23,5 @@ class Transaction < ApplicationRecord
     else
       super
     end
-  end
-
-  def categorizable_name
-    categorizable&.name
   end
 end

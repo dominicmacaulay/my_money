@@ -21,12 +21,8 @@ RSpec.describe Company do
   end
 
   describe 'transaction methods' do
-    let(:income_transactions) do
-      create_list(:transaction, 3, :income, company:, date: DateTime.current)
-    end
-    let(:expense_transactions) do
-      create_list(:transaction, 2, :expense, company:, date: DateTime.current)
-    end
+    let(:income_transactions) { create_list(:transaction, 3, :income, company:, date: DateTime.current) }
+    let(:expense_transactions) { create_list(:transaction, 2, :expense, company:, date: DateTime.current) }
 
     before do
       # Create transactions for last year to ensure they are not counted
@@ -36,7 +32,7 @@ RSpec.describe Company do
 
     describe '#income_for_year' do
       it 'calculates total income for the given year' do
-        total_income = income_transactions.sum(&:amount_cents) / 100
+        total_income = income_transactions.sum(&:amount)
         expect(company.income_for_year(Date.current.year)).to eq(total_income)
       end
 
@@ -47,7 +43,7 @@ RSpec.describe Company do
 
     describe '#expense_for_year' do
       it 'calculates total expense for the given year' do
-        total_expense = expense_transactions.sum(&:amount_cents) / 100
+        total_expense = expense_transactions.sum(&:amount)
         expect(company.expense_for_year(Date.current.year)).to eq(total_expense)
       end
 

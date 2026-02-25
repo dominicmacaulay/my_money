@@ -1,0 +1,87 @@
+.report {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--op-color-neutral-plus-max);
+  color: var(--op-color-neutral-on-plus-max);
+  border-radius: var(--op-radius-medium);
+
+  contain: paint;
+
+  text-wrap: nowrap;
+
+  .divider {
+    inline-size: 100%;
+  }
+
+  .report__header {
+    display: flex;
+    align-items: center;
+    gap: var(--op-space-medium);
+    padding: var(--op-space-large);
+
+    background-color: var(--op-color-primary-plus-seven);
+    color: var(--op-color-primary-on-plus-seven);
+    box-shadow: inset var(--op-border-top) var(--op-color-neutral-plus-max);
+
+    .report__header-title {
+      font-size: var(--op-font-large);
+      font-weight: var(--op-font-weight-medium);
+    }
+
+    .report__header-total {
+      font-size: var(--op-font-medium);
+      font-weight: var(--op-font-weight-bold);
+    }
+  }
+
+  .report__body {
+    display: grid;
+
+    background-color: var(--op-color-neutral-plus-max);
+    color: var(--op-color-neutral-on-plus-max);
+
+    > :nth-child(even) {
+      background-color: var(--op-color-neutral-plus-seven);
+      color: var(--op-color-neutral-on-plus-seven);
+    }
+
+    /* padding-block-end: var(--op-space-large); */
+    /* box-shadow: 0 var(--op-border-width) var(--op-border-width) var(--op-border-width) var(--op-color-border); */
+  }
+}
+
+.report-column {
+  display: grid;
+  gap: var(--op-space-2x-small);
+  padding-block: var(--op-space-2x-small);
+  padding-inline: var(--op-space-large);
+
+  .report-row {
+    display: flex;
+    align-items: center;
+    gap: var(--op-space-medium);
+
+
+    .report-row__name {
+      font-size: var(--op-font-medium);
+      font-weight: var(--op-font-weight-medium);
+    }
+
+    .report-row__total {
+      font-size: var(--op-font-medium);
+      font-weight: var(--op-font-weight-bold);
+    }
+
+    &.report-row--small {
+      .report-row__name {
+        font-size: var(--op-font-small);
+        font-weight: var(--op-font-weight-regular);
+      }
+
+      .report-row__total {
+        font-size: var(--op-font-small);
+      }
+    }
+  }
+}

@@ -17,10 +17,9 @@ Rails.application.routes.draw do
 
   resources :transactions, except: :show
   resources :companies do
-    member do
-      post :set_current
-    end
+    post :set_current, on: :member
   end
   resources :subcategories, except: :show
   resources :year_overviews, only: :index
+  resources :reports, only: :index
 end

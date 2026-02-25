@@ -10,10 +10,9 @@ RSpec.describe TransactionPolicy do
   let(:transaction) { create(:transaction, company: company) }
 
   permissions :index?, :new? do
-    context 'when user has a current company' do
+    context 'when user has a company' do
       before do
         create(:user_company, user:, company:)
-        user.switch_current_company(company)
       end
 
       it 'grants access to index and new' do
@@ -21,7 +20,7 @@ RSpec.describe TransactionPolicy do
       end
     end
 
-    context 'when user does not have a current company' do
+    context 'when user does not have a company' do
       it 'denies access to index and new' do
         expect(transaction_policy).not_to permit(user, Transaction)
       end
@@ -29,10 +28,9 @@ RSpec.describe TransactionPolicy do
   end
 
   permissions :edit?, :create?, :update? do
-    context "when the transaction is in the user's current company" do
+    context "when the transaction is in the user's company" do
       before do
         create(:user_company, user:, company:)
-        user.switch_current_company(company)
       end
 
       it 'grants access to edit, create, and update' do
@@ -40,7 +38,7 @@ RSpec.describe TransactionPolicy do
       end
     end
 
-    context "when the transaction is not in the user's current company" do
+    context "when the transaction is not in the user's company" do
       let(:random_transaction) { create(:transaction) }
 
       it 'denies access to edit, create, and update' do
@@ -50,11 +48,10 @@ RSpec.describe TransactionPolicy do
   end
 
   permissions :destroy? do
-    context "when the transaction is in the user's current company" do
+    context "when the transaction is in the user's company" do
       context 'when user is an admin for the company' do
         before do
           create(:user_company, user:, company:, role: 'admin')
-          user.switch_current_company(company)
         end
 
         it 'grants access to destroy' do
@@ -69,7 +66,7 @@ RSpec.describe TransactionPolicy do
       end
     end
 
-    context "when the transaction is not in the user's current company" do
+    context "when the transaction is not in the user's company" do
       let(:random_transaction) { create(:transaction) }
 
       it 'denies access to destroy' do

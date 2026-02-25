@@ -15,7 +15,6 @@ RSpec.describe 'Pages' do
     context 'when user has a current company' do
       before do
         company.users << user
-        user.switch_current_company(company)
       end
 
       it 'displays the company name' do
@@ -39,7 +38,6 @@ RSpec.describe 'Pages' do
 
       before do
         company.users << user
-        user.switch_current_company(company)
 
         create_list(:transaction, 10, :income, company:, amount: 100, date: Date.new(current_year, 1, 1))
         create_list(:transaction, 5, :expense, company:, amount: 50, date: Date.new(current_year, 1, 1))

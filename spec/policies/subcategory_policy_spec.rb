@@ -10,10 +10,9 @@ RSpec.describe SubcategoryPolicy do
   let(:subcategory) { create(:subcategory, company: company) }
 
   permissions :index?, :new? do
-    context 'when user has a current company' do
+    context 'when user has a company' do
       before do
         create(:user_company, user:, company:)
-        user.switch_current_company(company)
       end
 
       it 'grants access to index and new' do
@@ -21,7 +20,7 @@ RSpec.describe SubcategoryPolicy do
       end
     end
 
-    context 'when user does not have a current company' do
+    context 'when user does not have a company' do
       it 'denies access to index and new' do
         expect(subcategory_policy).not_to permit(user, Subcategory)
       end
@@ -29,10 +28,9 @@ RSpec.describe SubcategoryPolicy do
   end
 
   permissions :edit?, :create?, :update? do
-    context "when the subcategory is in the user's current company" do
+    context "when the subcategory is in the user's company" do
       before do
         create(:user_company, user:, company:)
-        user.switch_current_company(company)
       end
 
       it 'grants access to edit, create, and update' do
@@ -40,7 +38,7 @@ RSpec.describe SubcategoryPolicy do
       end
     end
 
-    context "when the subcategory is not in the user's current company" do
+    context "when the subcategory is not in the user's company" do
       let(:random_subcategory) { create(:subcategory) }
 
       it 'denies access to edit, create, and update' do
@@ -50,11 +48,10 @@ RSpec.describe SubcategoryPolicy do
   end
 
   permissions :destroy? do
-    context "when the subcategory is in the user's current company" do
+    context "when the subcategory is in the user's company" do
       context 'when user is an admin for the company' do
         before do
           create(:user_company, user:, company:, role: 'admin')
-          user.switch_current_company(company)
         end
 
         it 'grants access to destroy' do
@@ -65,7 +62,6 @@ RSpec.describe SubcategoryPolicy do
       context 'when user is not an admin for the company' do
         before do
           create(:user_company, user:, company:, role: 'member')
-          user.switch_current_company(company)
         end
 
         it 'denies access to destroy' do
@@ -74,7 +70,7 @@ RSpec.describe SubcategoryPolicy do
       end
     end
 
-    context "when the subcategory is not in the user's current company" do
+    context "when the subcategory is not in the user's company" do
       let(:random_subcategory) { create(:subcategory) }
 
       it 'denies access to destroy' do

@@ -50,4 +50,22 @@ class ApplicationPolicy
 
     attr_reader :user, :scope
   end
+
+  private
+
+  def allow_action?
+    user_has_company? && record_in_company?
+  end
+
+  def user_has_company?
+    user.companies.any?.present?
+  end
+
+  def record_in_company?
+    user.companies.include?(record.company)
+  end
+
+  def user_admin?
+    user.admin_for_company?(record.company)
+  end
 end

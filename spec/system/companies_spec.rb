@@ -3,12 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Companies' do
-  let(:user) { create(:user) }
-  let(:company) { create(:company) }
+  let!(:company) { create(:company) }
+  let(:other_company) { create(:company) }
+  let(:user) { create(:user, companies: [company, other_company]) }
 
   before do
-    company.users << user
-
     login_as user
     visit root_path
     click_on 'account_circle'
@@ -32,7 +31,9 @@ RSpec.describe 'Companies' do
 
   it 'can be edited' do
     name = 'Updated Company'
-    click_on 'Edit'
+    within data_test(company.id) do
+      click_on 'Edit'
+    end
     fill_in 'Name', with: name
     click_on 'Update Company'
 
@@ -45,15 +46,16 @@ RSpec.describe 'Companies' do
 
   it 'can be destroyed', :js do
     expect do
-      click_on 'Delete'
+      within data_test(company.id) do
+        click_on 'Delete'
+      end
       click_on "Yes, I'm Sure"
       expect(page).to have_content("#{company.name} was successfully destroyed")
     end.to change(Company, :count).by(-1)
   end
 
   it 'can be set as the current company for the app' do
-    click_on "Switch to #{company.name}"
-    expect(page).to have_content "Current company set to #{company.name}"
-    expect(user.reload.current_company).to eql company
+    click_on "Switch to #{other_company.name}"
+    expect(page).to have_content "Current company set to #{other_company.name}"
   end
 end

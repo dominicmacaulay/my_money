@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Reports' do
-  let(:user) { create(:user) }
-  let(:company) { create(:company, users: [user]) }
+  let(:company) { create(:company) }
+  let(:user) { create(:user, companies: [company]) }
   let(:this_year) { Time.current.year }
 
   let(:category) { create(:category) }
@@ -24,7 +24,6 @@ RSpec.describe 'Reports' do
   let(:total_expenses) { total_category_expenses + total_category2_expenses }
 
   before do
-    user.update!(current_company: company)
     login_as user
     visit year_overviews_path
 

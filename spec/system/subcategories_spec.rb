@@ -3,13 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Subcategories' do
-  let(:user) { create(:user) }
-  let(:company) { create(:company, users: [user]) }
+  let(:company) { create(:company) }
+  let(:user) { create(:user, companies: [company]) }
   let!(:category) { create(:category) }
 
   before do
-    user.switch_current_company(company)
-
     login_as user
     visit root_path
   end

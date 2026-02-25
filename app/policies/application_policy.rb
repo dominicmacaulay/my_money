@@ -58,11 +58,11 @@ class ApplicationPolicy
   end
 
   def user_has_company?
-    user.companies.any?.present?
+    user.companies.exists?
   end
 
   def record_in_company?
-    user.companies.include?(record.company)
+    user.companies.exists?(id: record.company_id)
   end
 
   def user_admin?

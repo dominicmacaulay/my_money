@@ -5,7 +5,7 @@ html
   body
     = turbo_frame_tag 'panel' do
       .panel.flex.items-center.justify-center(
-        data-test-id='panel'
+        data-testid='panel'
         class=class_names('panel--active' => response.message.starts_with?('Unprocessable'))
         data-controller="toggle"
         data-toggle-perform-on-connect-value=(response.message == 'OK')

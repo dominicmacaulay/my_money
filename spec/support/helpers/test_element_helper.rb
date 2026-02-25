@@ -5,9 +5,9 @@ module TestElementHelper
 
   def data_test(name)
     if name.respond_to?(:id)
-      "[data-test-id='#{dom_id(name)}']"
+      "[data-testid='#{dom_id(name)}']"
     else
-      "[data-test-id='#{name}']"
+      "[data-testid='#{name}']"
     end
   end
 end

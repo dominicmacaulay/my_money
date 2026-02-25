@@ -14,7 +14,7 @@ table.table.table--comfortable-density.table--even-striped.table--primary
           | Actions
   tbody
     - @companies.each do |company|
-      tr data-test-id=company.id
+      tr data-testid=company.id
         td #{company.name} #{company == current_company ? '(current)' : ''}
         td
           .table__actions

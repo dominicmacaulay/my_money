@@ -9,5 +9,6 @@
         = f.input :remember_me, as: :boolean
 
     .card__footer
-      = render "devise/shared/links"
-      = f.submit t(".sign_in", default: "Log in"), class: "btn btn--primary"
+      .op-split
+        = render "devise/shared/links"
+        = f.submit t(".sign_in", default: "Log in"), class: "btn btn--primary"

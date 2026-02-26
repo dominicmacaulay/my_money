@@ -2,12 +2,15 @@ doctype html
 html.sl-theme-light
   head
     = render 'shared/head'
-  body.app-body
+  body.op-page
     = turbo_frame_tag 'modal'
     = turbo_frame_tag 'panel'
-    = render 'shared/header' if current_user.present?
 
-    .app__content
+    .op-page__main
       = render "application/flash"
       = render 'application/confirm'
-      = yield
+      header.op-page__main-header
+        = render 'shared/header' if current_user.present?
+      main.op-page__main-content
+        = content_for?(:header) ? content_for(:header) : nil
+        = yield

@@ -17,6 +17,7 @@
 /* optics overrides */
 @import 'components/optics-overrides/accordion.css';
 @import 'components/optics-overrides/card.css';
+@import 'components/optics-overrides/button.css';
 @import 'components/optics-overrides/form.css';
 @import 'components/optics-overrides/layout.css';
 @import 'components/optics-overrides/navbar.css';

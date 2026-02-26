@@ -3,12 +3,14 @@
     .card__body
       h1 = t(".sign_up", default: "Sign up")
 
-      = f.input :first_name, required: true, autofocus: true
-      = f.input :last_name, required: true
+      .form-row
+        = f.input :first_name, required: true, autofocus: true
+        = f.input :last_name, required: true
       = f.input :email, required: true, autocomplete: "email"
       = f.input :password, required: true, autocomplete: "new-password"
       = f.input :password_confirmation, required: true, autocomplete: "new-password"
 
     .card__footer
-      = render "devise/shared/links"
-      = f.submit t(".sign_up", default: "Sign up"), class: 'btn btn--primary'
+      .op-split
+        = render "devise/shared/links"
+        = f.submit t(".sign_up", default: "Sign up"), class: 'btn btn--primary'

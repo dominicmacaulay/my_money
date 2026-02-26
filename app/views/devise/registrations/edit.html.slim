@@ -2,7 +2,7 @@
   .page-header
     h1.page-header__item = t(".title", resource: resource_name.to_s.humanize, default: "Edit %{resource}")
     .page-header__item
-      = link_to t(".back", default: "Back"), :back, class: 'btn'
+      = link_to t(".back", default: "Back"), (request.referer || registration_path(resource_name)), class: 'btn'
 
 .card
   .card__body

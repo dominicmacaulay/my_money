@@ -12,5 +12,5 @@ html.sl-theme-light
       header.op-page__main-header
         = render 'shared/header' if current_user.present?
       main.op-page__main-content
-        = content_for?(:header) ? content_for(:header) : nil
+        = content_for(:header) if content_for?(:header)
         = yield

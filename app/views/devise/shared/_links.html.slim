@@ -5,6 +5,7 @@
   - if devise_mapping.registerable? && controller_name != "registrations"
     = link_to t(".sign_up", default: "Sign up"), new_registration_path(resource_name), class: 'btn btn--no-border'
 
+  / TODO: Reimplement this when we have a path for the forgot password workflow
   / - if devise_mapping.recoverable? && controller_name != "passwords" && controller_name != "registrations"
   /   = link_to t(".forgot_your_password", default: "Forgot your password?"), new_password_path(resource_name), class: 'btn btn--no-border'
 

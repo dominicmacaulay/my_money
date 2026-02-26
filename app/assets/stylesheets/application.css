@@ -8,21 +8,21 @@
 @import "flatpickr/dist/flatpickr.css"; /* Import the Flatpickr theme */
 @import "flatpickr/dist/themes/dark.css"; /* Import the Dark Flatpickr theme */
 
-/* components */
-@import 'components/page-header.css';
-@import 'components/home-page.css';
-@import 'components/report.css';
-@import 'components/year-overviews.css';
-
 /* optics overrides */
 @import 'components/optics-overrides/accordion.css';
 @import 'components/optics-overrides/card.css';
-@import 'components/optics-overrides/button.css';
 @import 'components/optics-overrides/form.css';
 @import 'components/optics-overrides/layout.css';
 @import 'components/optics-overrides/navbar.css';
 @import 'components/optics-overrides/pagination.css';
 @import 'components/optics-overrides/table.css';
+
+/* components */
+@import 'components/button.css';
+@import 'components/page-header.css';
+@import 'components/home-page.css';
+@import 'components/report.css';
+@import 'components/year-overviews.css';
 
 /* devise */
 @import 'components/devise/form.css';

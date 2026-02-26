@@ -22,13 +22,9 @@ class CompaniesController < ApplicationController
 
     if @company.save
       @company.users << current_user
-      current_user.switch_current_company(@company)
+      set_current_company_id(@company.id)
 
       redirect_to companies_path, notice: "#{@company.name} was successfully created"
-      # respond_to do |format|
-      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully created" }
-      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully created" }
-      # end
     else
       render :new, status: :unprocessable_content, layout: 'modal'
     end
@@ -39,10 +35,6 @@ class CompaniesController < ApplicationController
 
     if @company.update(company_params)
       redirect_to companies_path, notice: "#{@company.name} was successfully updated"
-      # respond_to do |format|
-      #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully updated" }
-      #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully updated" }
-      # end
     else
       render :edit, status: :unprocessable_content, layout: 'modal'
     end
@@ -54,20 +46,13 @@ class CompaniesController < ApplicationController
     @company.destroy
 
     redirect_to companies_path, notice: "#{@company.name} was successfully destroyed"
-    # respond_to do |format|
-    #   format.html { redirect_to companies_path, notice: "#{@company.name} was successfully destroyed" }
-    #   format.turbo_stream { flash.now[:notice] = "#{@company.name} was successfully destroyed" }
-    # end
   end
 
   def set_current
     authorize @company
 
-    if current_user.switch_current_company(@company)
-      redirect_to root_path, notice: "Current company set to #{@company.name}"
-    else
-      redirect_to companies_path, alert: 'Could not set current company'
-    end
+    set_current_company_id(@company.id)
+    redirect_to root_path, notice: "Current company set to #{@company.name}"
   end
 
   private

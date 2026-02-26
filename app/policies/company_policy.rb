@@ -6,11 +6,11 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def set_current?
-    true
+    user_belongs_to_company?
   end
 
   def show?
-    true
+    user_belongs_to_company?
   end
 
   def new?
@@ -34,6 +34,10 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   private
+
+  def user_belongs_to_company?
+    user.companies.exists?(id: record.id)
+  end
 
   def user_admin?
     user.admin_for_company?(record)

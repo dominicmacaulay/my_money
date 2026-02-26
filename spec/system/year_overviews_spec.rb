@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Year Overviews' do
-  let(:user) { create(:user) }
   let(:company) { create(:company) }
+  let(:user) { create(:user, companies: [company]) }
   let(:last_year) { 1.year.ago.year }
   let(:this_year) { Time.current.year }
 
@@ -14,9 +14,6 @@ RSpec.describe 'Year Overviews' do
   let!(:this_year_expenses) { create_list(:transaction, 5, :expense, company:, date: Date.new(this_year), amount: 100) }
 
   before do
-    user.companies << company
-    user.switch_current_company(company)
-
     login_as user
     visit root_path
   end

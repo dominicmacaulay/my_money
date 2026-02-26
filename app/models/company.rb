@@ -8,8 +8,6 @@ class Company < ApplicationRecord
 
   validates :name, presence: true
 
-  before_destroy :handle_destruction, prepend: true
-
   def add_user_with_role(user, role = :guest)
     user_companies.create(user:, role:)
   end
@@ -26,11 +24,5 @@ class Company < ApplicationRecord
 
   def transaction_amounts_for_year(year, type)
     Money.new(transactions.where(transaction_type: type, date: Date.new(year).all_year).sum(:amount_cents))
-  end
-
-  def handle_destruction
-    users.each do |user|
-      user.handle_company_destruction(self)
-    end
   end
 end

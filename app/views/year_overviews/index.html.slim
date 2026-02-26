@@ -5,7 +5,7 @@
 
 .year-overviews
   - @year_presenter.years.each do |year|
-    details.accordion open=(year == Date.current.year) data-test-id=year
+    details.accordion open=(year == Date.current.year) data-testid=year
       summary
         span = material_icon('arrow_right', classes: 'accordion__marker')
         span = year

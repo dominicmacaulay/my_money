@@ -1,12 +1,15 @@
 - content_for :header do
   .page-header
-    .page-header__item = t(".title", resource: resource_name.to_s.humanize, default: "Edit %{resource}")
+    h1.page-header__item = t(".title", resource: resource_name.to_s.humanize, default: "Edit %{resource}")
+    .page-header__item
+      = link_to t(".back", default: "Back"), :back, class: 'btn'
 
 .card
   .card__body
     = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-      = f.input :first_name, autofocus: true, autocomplete: "first_name"
-      = f.input :last_name, autocomplete: "last_name"
+      .form-row
+        = f.input :first_name, autofocus: true, autocomplete: "first_name"
+        = f.input :last_name, autocomplete: "last_name"
 
       = f.input :email, required: true, autocomplete: "email"
       - if devise_mapping.confirmable? && resource.pending_reconfirmation?

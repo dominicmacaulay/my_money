@@ -1,36 +1,6 @@
-@import 'https://cdn.jsdelivr.net/npm/@rolemodel/optics@2.3.0/dist/index.min.css'; /* Import the Optics CSS framework */
-
-/* themes */
-@import 'core/theme/my-money-theme-core.css'; /* Import the custom theme overrides */
-
+/* CDN imports for external packages */
+@import 'https://cdn.jsdelivr.net/npm/@rolemodel/optics@2.3.0/dist/css/optics.min.css';
 @import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css'; /* Import the Shoelace theme */
 @import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/dark.css'; /* Import the Dark Shoelace theme */
 @import 'https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css'; /* Import the Flatpickr theme */
 @import 'https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/dark.css'; /* Import the Dark Flatpickr theme */
-
-/* optics overrides */
-@import 'components/optics-overrides/accordion.css';
-@import 'components/optics-overrides/card.css';
-@import 'components/optics-overrides/form.css';
-@import 'components/optics-overrides/layout.css';
-@import 'components/optics-overrides/navbar.css';
-@import 'components/optics-overrides/pagination.css';
-@import 'components/optics-overrides/table.css';
-
-/* components */
-@import 'components/button.css';
-@import 'components/page-header.css';
-@import 'components/home-page.css';
-@import 'components/report.css';
-@import 'components/year-overviews.css';
-
-/* devise */
-@import 'components/devise/form.css';
-
-/* Vendors */
-@import 'vendors/shoelace/sl-menu-item.css';
-@import 'vendors/shoelace/tokens.css';
-
-/* Utilities */
-@import 'utilities/desktop-mobile.css';
-@import 'utilities/hidden.css';

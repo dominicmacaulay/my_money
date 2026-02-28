@@ -15,3 +15,7 @@ pin "@shoelace-style/shoelace/dist/components/dropdown/dropdown", to: "https://c
 pin "@shoelace-style/shoelace/dist/components/menu/menu", to: "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/components/menu/menu.js"
 pin "@shoelace-style/shoelace/dist/components/menu-item/menu-item", to: "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/components/menu-item/menu-item.js"
 pin "@shoelace-style/shoelace/dist/components/divider/divider", to: "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/components/divider/divider.js"
+
+# Local application files
+pin_all_from "app/javascript/controllers", under: "controllers"
+pin_all_from "app/javascript/initializers", under: "initializers"

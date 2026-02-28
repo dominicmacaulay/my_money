@@ -61,7 +61,7 @@ module ActionView
   end
 end
 
-class TailoredSelectInput < SimpleForm::Inputs::CollectionSelectInput
+class TailoredSelectInput < SimpleForm::Inputs::CollectionSelectInput # rubocop:disable Style/OneClassPerFile
   def input(wrapper_options = nil)
     @builder.tailored_select(
       attribute_name, collection, *detect_collection_methods.reverse, input_options,

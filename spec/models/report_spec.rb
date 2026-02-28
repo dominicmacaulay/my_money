@@ -44,9 +44,9 @@ RSpec.describe Report do
   describe 'totals' do
     let(:total_income) { income.sum(&:amount) }
     let(:total_expense) do
-      (category1_expenses.sum(&:amount) +
-      category2_expenses.sum(&:amount) +
-      subcategory_expenses.sum(&:amount))
+      category1_expenses.sum(&:amount) +
+        category2_expenses.sum(&:amount) +
+        subcategory_expenses.sum(&:amount)
     end
 
     describe '#total_income' do

@@ -1,9 +1,9 @@
-// Entry point for the build script in your package.json
+// Entry point for importmap-rails
 import "@hotwired/turbo-rails"
-import "./controllers"
-import './initializers/turbo_confirm.js'
-import './initializers/frame_missing_handler.js'
-import './initializers/before_morph_handler.js'
+import "controllers"
+import "initializers/turbo_confirm"
+import "initializers/frame_missing_handler"
+import "initializers/before_morph_handler"
 
 // Shoelace
 import { registerIconLibrary } from "@shoelace-style/shoelace/dist/utilities/icon-library"

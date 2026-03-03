@@ -130,25 +130,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Enable corepack
-        run: corepack enable
-
-      - name: Set up node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .node-version
-
-      - name: Yarn Install
-        run: yarn install --frozen-lockfile
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
-      - name: Build assets
-        run: yarn build
 
       - name: Setup Database
         run: bundle exec rake db:test:prepare

@@ -18,7 +18,17 @@ RSpec.describe 'Year Overviews' do
     visit root_path
   end
 
-  it 'can be listed' do
+  it 'defers each year until its accordion is opened' do
+    click_on 'account_circle'
+    click_on 'Year Overviews'
+
+    # No JS here, so the lazy frames never load; nothing year-specific should be inline.
+    expect(page).to have_css 'turbo-frame[loading="lazy"]', count: 2, visible: :all
+    expect(page).to have_no_text 'Total Income'
+    expect(page).to have_no_css '[data-controller="chart"]', visible: :all
+  end
+
+  it 'can be listed', :js do
     click_on 'account_circle'
     click_on 'Year Overviews'
 
@@ -47,7 +57,7 @@ RSpec.describe 'Year Overviews' do
     end
   end
 
-  it 'shows a monthly breakdown for each year' do
+  it 'shows a monthly breakdown for each year', :js do
     click_on 'account_circle'
     click_on 'Year Overviews'
 

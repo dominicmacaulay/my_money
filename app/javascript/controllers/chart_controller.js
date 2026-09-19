@@ -52,9 +52,6 @@ export default class extends Controller {
     this.retheme = this._retheme.bind(this)
     this.darkMode.addEventListener("change", this.retheme)
 
-    await this._shown()
-    if (this.connection !== connection) return
-
     const Chart = await loadChart()
     if (this.connection !== connection) return
 
@@ -103,14 +100,6 @@ export default class extends Controller {
     this.darkMode.removeEventListener("change", this.retheme)
     this.chart?.destroy()
     this.chart = null
-  }
-
-  // A closed <details> still reports a layout box, so only its toggle is reliable.
-  _shown() {
-    const details = this.element.closest("details")
-    if (!details || details.open) return Promise.resolve()
-
-    return new Promise((resolve) => details.addEventListener("toggle", resolve, { once: true }))
   }
 
   _retheme() {

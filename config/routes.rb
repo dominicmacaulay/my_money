@@ -20,6 +20,6 @@ Rails.application.routes.draw do
     post :set_current, on: :member
   end
   resources :subcategories, except: :show
-  resources :year_overviews, only: :index
+  resources :year_overviews, only: %i[index show]
   resources :reports, only: :index
 end

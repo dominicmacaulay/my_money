@@ -26,4 +26,10 @@
                 .divider
                 .report-row__total = humanized_money_with_symbol(detail[:amount])
 
+.report
+  .report__header
+    .report__header-title Monthly Breakdown
 
+  .report__body
+    .report-column
+      = render 'shared/monthly_breakdown_chart', report: @report

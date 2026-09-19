@@ -1,0 +1,28 @@
+.monthly-chart {
+  /* Optics alerts-info / alerts-danger, held as literal hex because the canvas reads
+     these through getPropertyValue, which does not resolve light-dark(). */
+  --monthly-chart-income: #336cc1;
+  --monthly-chart-expense: #cb0101;
+
+  display: grid;
+  gap: var(--op-space-medium);
+
+  .monthly-chart__plot {
+    position: relative;
+    block-size: clamp(200px, 30vw, 320px);
+  }
+
+  .monthly-chart__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--op-space-medium);
+    justify-content: center;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-mode="light"]) .monthly-chart {
+    --monthly-chart-income: #4e82d0;
+    --monthly-chart-expense: #fe2020;
+  }
+}

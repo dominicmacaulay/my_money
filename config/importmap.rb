@@ -9,6 +9,7 @@ pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.1.200
 pin "@rolemodel/turbo-confirm", to: "@rolemodel--turbo-confirm.js" # @2.2.3
 pin "autonumeric" # @4.10.9
 pin "flatpickr" # @4.6.13
+pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/+esm"
 
 # Shoelace components from CDN
 pin "@shoelace-style/shoelace/dist/utilities/icon-library", to: "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/utilities/icon-library.js"

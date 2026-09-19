@@ -85,3 +85,7 @@
     }
   }
 }
+
+.report + .report {
+  margin-block-start: var(--op-space-medium);
+}

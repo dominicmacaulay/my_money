@@ -2,9 +2,6 @@
 
 .card
   .card__header #{year} Monthly Summary
-
   .divider
-
   .card__body
-    .text-center.margin-md
-      i monthly summary coming soon...
+    = render 'shared/monthly_breakdown_chart', report: Report.new(current_company, year)

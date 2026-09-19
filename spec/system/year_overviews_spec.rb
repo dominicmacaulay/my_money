@@ -46,4 +46,17 @@ RSpec.describe 'Year Overviews' do
       expect(page).to have_content "Total Balance\n#{total}"
     end
   end
+
+  it 'shows a monthly breakdown for each year' do
+    click_on 'account_circle'
+    click_on 'Year Overviews'
+
+    within data_test(this_year) do
+      expect(page).to have_no_content 'monthly summary coming soon'
+      expect(page).to have_css '[data-controller="monthly-chart"]'
+      expect(page).to have_css '.text-pair', text: /Highest Income\s+Jan · \$750\.00/
+      expect(page).to have_css '.text-pair', text: /Highest Expense\s+Jan · \$500\.00/
+      expect(page).to have_css '.text-pair', text: /Highest Profit\s+Jan · \$250\.00/
+    end
+  end
 end

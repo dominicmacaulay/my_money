@@ -51,4 +51,53 @@ RSpec.describe 'Reports' do
     expect(page).to have_content category2.name
     expect(page).to have_content total_category2_expenses.format
   end
+
+  describe 'monthly breakdown' do
+    let(:chart_year) { this_year - 5 }
+
+    before do
+      create(:transaction, :income, company:, date: Date.new(chart_year, 2, 10), amount: 500)
+      create(:transaction, :income, company:, date: Date.new(chart_year, 7, 3), amount: 900)
+      create(:transaction, :expense, company:, categorizable: category, date: Date.new(chart_year, 3, 5), amount: 800)
+
+      visit reports_path(year: chart_year)
+    end
+
+    it 'tabulates every month and names the standout months' do
+      expect(page).to have_content 'Monthly Breakdown'
+      expect(page).to have_css '[data-controller="monthly-chart"]'
+
+      expect(page).to have_css 'tr', text: /Feb\s*\$500\.00\s*\$0\.00/
+      expect(page).to have_css 'tr', text: /Mar\s*\$0\.00\s*\$800\.00/
+
+      within '.monthly-chart__highlights' do
+        expect(page).to have_css '.text-pair', text: /Highest Income\s+Jul · \$900\.00/
+        expect(page).to have_css '.text-pair', text: /Highest Expense\s+Mar · \$800\.00/
+        expect(page).to have_css '.text-pair', text: /Highest Profit\s+Jul · \$900\.00/
+      end
+    end
+
+    it 'paints the chart', :js do
+      expect(page).to have_css '.monthly-chart__plot canvas[style*="display: block"]'
+
+      painted = page.evaluate_script(<<~JS)
+        (() => {
+          const canvas = document.querySelector('.monthly-chart__plot canvas')
+          const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data
+          return pixels.some((channel) => channel !== 0)
+        })()
+      JS
+
+      expect(painted).to be true
+    end
+
+    context 'when the year has no transactions' do
+      it 'shows an empty state instead of the chart' do
+        visit reports_path(year: this_year - 6)
+
+        expect(page).to have_content 'No transactions for this year yet.'
+        expect(page).to have_no_css '[data-controller="monthly-chart"]'
+      end
+    end
+  end
 end

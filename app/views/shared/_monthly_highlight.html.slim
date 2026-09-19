@@ -1,5 +1,4 @@
 -# locals: (title:, month:, amount:)
 
-.text-pair
-  .text-title = title
-  .text-value = month ? "#{month.name} · #{humanized_money_with_symbol(amount)}" : '—'
+.report__header-title = title
+.report__header-total = month ? "#{month.name} · #{humanized_money_with_symbol(amount)}" : '—'

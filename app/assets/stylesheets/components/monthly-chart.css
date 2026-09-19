@@ -4,19 +4,9 @@
   --monthly-chart-income: #336cc1;
   --monthly-chart-expense: #cb0101;
 
-  display: grid;
-  gap: var(--op-space-medium);
-
   .monthly-chart__plot {
     position: relative;
     block-size: clamp(200px, 30vw, 320px);
-  }
-
-  .monthly-chart__highlights {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--op-space-medium);
-    justify-content: center;
   }
 }
 

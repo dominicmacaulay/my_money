@@ -4,9 +4,6 @@
   - months = report.monthly_breakdown
   - income = months.map { |month| month.income.to_f }
   - expense = months.map { |month| month.expense.to_f }
-  - highest_income = report.highest_income_month
-  - highest_expense = report.highest_expense_month
-  - highest_profit = report.highest_profit_month
 
   .monthly-chart[data-controller="monthly-chart"
                  data-monthly-chart-labels-value=months.map(&:name).to_json
@@ -29,11 +26,6 @@
             th = month.name
             td = humanized_money_with_symbol(month.income)
             td = humanized_money_with_symbol(month.expense)
-
-    .monthly-chart__highlights
-      = render 'shared/monthly_highlight', title: 'Highest Income', month: highest_income, amount: highest_income&.income
-      = render 'shared/monthly_highlight', title: 'Highest Expense', month: highest_expense, amount: highest_expense&.expense
-      = render 'shared/monthly_highlight', title: 'Highest Profit', month: highest_profit, amount: highest_profit&.profit
 
 - else
   .text-center.margin-md

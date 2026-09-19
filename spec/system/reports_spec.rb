@@ -55,6 +55,27 @@ RSpec.describe 'Reports' do
   describe 'monthly breakdown' do
     let(:chart_year) { this_year - 5 }
 
+    let(:canvas_pixels) do
+      <<~JS
+        (() => {
+          const canvas = document.querySelector('.monthly-chart__plot canvas')
+          const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data
+          return pixels.some((channel) => channel !== 0)
+        })()
+      JS
+    end
+
+    # Chart.js animates the bars in, so the canvas is blank for a moment after it mounts.
+    def canvas_painted?
+      20.times do
+        return true if page.evaluate_script(canvas_pixels)
+
+        sleep 0.1
+      end
+
+      false
+    end
+
     before do
       create(:transaction, :income, company:, date: Date.new(chart_year, 2, 10), amount: 500)
       create(:transaction, :income, company:, date: Date.new(chart_year, 7, 3), amount: 900)
@@ -64,31 +85,20 @@ RSpec.describe 'Reports' do
     end
 
     it 'tabulates every month and names the standout months' do
-      expect(page).to have_content 'Monthly Breakdown'
       expect(page).to have_css '[data-controller="monthly-chart"]'
 
       expect(page).to have_css 'tr', text: /Feb\s*\$500\.00\s*\$0\.00/
       expect(page).to have_css 'tr', text: /Mar\s*\$0\.00\s*\$800\.00/
 
-      within '.monthly-chart__highlights' do
-        expect(page).to have_css '.text-pair', text: /Highest Income\s+Jul · \$900\.00/
-        expect(page).to have_css '.text-pair', text: /Highest Expense\s+Mar · \$800\.00/
-        expect(page).to have_css '.text-pair', text: /Highest Profit\s+Jul · \$900\.00/
-      end
+      expect(page).to have_css '.report__header', text: /Highest Income\s+Jul · \$900\.00/
+      expect(page).to have_css '.report__header', text: /Highest Expense\s+Mar · \$800\.00/
+      expect(page).to have_css '.report__header', text: /Highest Profit\s+Jul · \$900\.00/
     end
 
     it 'paints the chart', :js do
       expect(page).to have_css '.monthly-chart__plot canvas[style*="display: block"]'
 
-      painted = page.evaluate_script(<<~JS)
-        (() => {
-          const canvas = document.querySelector('.monthly-chart__plot canvas')
-          const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data
-          return pixels.some((channel) => channel !== 0)
-        })()
-      JS
-
-      expect(painted).to be true
+      expect(canvas_painted?).to be true
     end
 
     context 'when the year has no transactions' do

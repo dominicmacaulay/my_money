@@ -58,7 +58,7 @@ RSpec.describe 'Reports' do
     let(:canvas_pixels) do
       <<~JS
         (() => {
-          const canvas = document.querySelector('.monthly-chart__plot canvas')
+          const canvas = document.querySelector('.chart__plot canvas')
           const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data
           return pixels.some((channel) => channel !== 0)
         })()
@@ -85,7 +85,7 @@ RSpec.describe 'Reports' do
     end
 
     it 'tabulates every month and names the standout months' do
-      expect(page).to have_css '[data-controller="monthly-chart"]'
+      expect(page).to have_css '[data-controller="chart"]'
 
       expect(page).to have_css 'tr', text: /Feb\s*\$500\.00\s*\$0\.00/
       expect(page).to have_css 'tr', text: /Mar\s*\$0\.00\s*\$800\.00/
@@ -96,7 +96,7 @@ RSpec.describe 'Reports' do
     end
 
     it 'paints the chart', :js do
-      expect(page).to have_css '.monthly-chart__plot canvas[style*="display: block"]'
+      expect(page).to have_css '.chart__plot canvas[style*="display: block"]'
 
       expect(canvas_painted?).to be true
     end
@@ -106,7 +106,7 @@ RSpec.describe 'Reports' do
         visit reports_path(year: this_year - 6)
 
         expect(page).to have_content 'No transactions for this year yet.'
-        expect(page).to have_no_css '[data-controller="monthly-chart"]'
+        expect(page).to have_no_css '[data-controller="chart"]'
       end
     end
   end

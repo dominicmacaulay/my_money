@@ -1,0 +1,19 @@
+-# locals: (report:)
+
+- if report.any_transactions?
+  - weeks = report.weekly_breakdown
+  - series = [{ label: 'Net Profit', data: weeks.map { |week| week.profit.to_f }, color: '--chart-profit' }]
+
+  = render 'shared/chart', type: 'line', labels: weeks.map(&:name), series:
+
+  table.sr-only
+    caption = "#{report.year} net profit by week"
+    thead
+      tr
+        th Week of
+        th Net Profit
+    tbody
+      - weeks.each do |week|
+        tr
+          th = week.name
+          td = humanized_money_with_symbol(week.profit)

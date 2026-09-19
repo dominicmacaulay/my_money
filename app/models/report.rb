@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 class Report
-  MonthTotal = Data.define(:month, :income, :expense) do
+  PeriodTotal = Data.define(:name, :income, :expense) do
     def profit
       income - expense
-    end
-
-    def name
-      Date::ABBR_MONTHNAMES[month]
     end
   end
 
@@ -84,7 +80,17 @@ class Report
 
   def monthly_breakdown
     @monthly_breakdown ||= (1..12).map do |month|
-      MonthTotal.new(month:, income: month_total('income', month), expense: month_total('expense', month))
+      PeriodTotal.new(name: Date::ABBR_MONTHNAMES[month],
+                      income: month_total('income', month),
+                      expense: month_total('expense', month))
+    end
+  end
+
+  def weekly_breakdown
+    @weekly_breakdown ||= week_starts.map do |starts_on|
+      PeriodTotal.new(name: starts_on.strftime('%b %-d'),
+                      income: week_total('income', starts_on),
+                      expense: week_total('expense', starts_on))
     end
   end
 
@@ -102,14 +108,34 @@ class Report
 
   private
 
+  # Buckets run Monday to Sunday, so the first and last of the year reach a few days
+  # outside it. Every transaction dated within the year still lands in exactly one.
+  def week_starts
+    (Date.new(year, 1, 1).beginning_of_week..Date.new(year, 12, 31).beginning_of_week).step(7)
+  end
+
+  def totals_grouped_by(expression)
+    company.transactions
+           .where(date: Date.new(year).all_year)
+           .group(:transaction_type, Arel.sql(expression))
+           .sum(:amount_cents)
+  end
+
+  # Without ::int the month keys come back as BigDecimal and every fetch below misses.
   def monthly_totals
-    @monthly_totals ||= company.transactions
-                               .where(date: Date.new(year).all_year)
-                               .group(:transaction_type, Arel.sql('EXTRACT(MONTH FROM date)::int'))
-                               .sum(:amount_cents)
+    @monthly_totals ||= totals_grouped_by('EXTRACT(MONTH FROM date)::int')
+  end
+
+  def weekly_totals
+    @weekly_totals ||= totals_grouped_by("DATE_TRUNC('week', date)::date")
+                       .transform_keys { |type, week| [type, week.to_date] }
   end
 
   def month_total(type, month)
     Money.new(monthly_totals.fetch([type, month], 0))
+  end
+
+  def week_total(type, starts_on)
+    Money.new(weekly_totals.fetch([type, starts_on], 0))
   end
 end

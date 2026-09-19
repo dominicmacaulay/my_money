@@ -100,8 +100,7 @@ RSpec.describe Report do
       breakdown = report.monthly_breakdown
 
       expect(breakdown.size).to eq 12
-      expect(breakdown.map(&:month)).to eq (1..12).to_a
-      expect(breakdown.map(&:name).first(3)).to eq %w[Jan Feb Mar]
+      expect(breakdown.map(&:name)).to eq Date::ABBR_MONTHNAMES.compact
       expect(breakdown.second.income).to eq 0
       expect(breakdown.second.expense).to eq 0
     end
@@ -115,6 +114,48 @@ RSpec.describe Report do
       expect(january.income).to eq income.sum(&:amount)
       expect(january.expense).to eq expected_expense
       expect(january.profit).to eq income.sum(&:amount) - expected_expense
+    end
+  end
+
+  describe '#weekly_breakdown' do
+    let(:week_year) { year + 8 }
+    let(:week_report) { described_class.new(company, week_year) }
+    let(:week_start) { Date.new(week_year, 3, 15).beginning_of_week }
+
+    before do
+      create(:transaction, :income, company:, date: week_start, amount: 900)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: week_start + 2, amount: 400)
+    end
+
+    it 'covers the whole year in Monday-to-Sunday buckets' do
+      weeks = week_report.weekly_breakdown
+
+      expect(weeks.first.name).to eq Date.new(week_year, 1, 1).beginning_of_week.strftime('%b %-d')
+      expect(weeks.last.name).to eq Date.new(week_year, 12, 31).beginning_of_week.strftime('%b %-d')
+      expect(weeks.sum(&:income)).to eq week_report.total_income
+      expect(weeks.sum(&:expense)).to eq week_report.total_expense
+    end
+
+    it 'nets income against expenses within the same week' do
+      week = week_report.weekly_breakdown.find { |candidate| candidate.name == week_start.strftime('%b %-d') }
+
+      expect(week.profit).to eq Money.from_amount(500)
+    end
+
+    it 'splits a week boundary rather than lumping nearby days together' do
+      create(:transaction, :income, company:, date: week_start - 1, amount: 100)
+      previous = week_report.weekly_breakdown.find { |week| week.name == (week_start - 7).strftime('%b %-d') }
+
+      expect(previous.income).to eq Money.from_amount(100)
+    end
+
+    it 'reports a negative week when it spent more than it earned' do
+      loss_week = Date.new(week_year, 6, 15).beginning_of_week
+      create(:transaction, :expense, company:, categorizable: category1, date: loss_week + 1, amount: 250)
+      week = week_report.weekly_breakdown.find { |candidate| candidate.name == loss_week.strftime('%b %-d') }
+
+      expect(week.profit).to eq(-Money.from_amount(250))
     end
   end
 

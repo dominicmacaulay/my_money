@@ -1,0 +1,26 @@
+.chart {
+  /* Optics alerts-info / alerts-danger plus a validated aqua, held as literal hex
+     because the canvas reads these through getPropertyValue, which does not
+     resolve light-dark(). */
+  --chart-income: #336cc1;
+  --chart-expense: #cb0101;
+  --chart-profit: #17996a;
+
+  .chart__plot {
+    position: relative;
+    block-size: clamp(200px, 30vw, 320px);
+  }
+}
+
+/* Sits under the totals row in the summary card; alone in the monthly card. */
+.chart:not(:first-child) {
+  margin-block-start: var(--op-space-medium);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-mode="light"]) .chart {
+    --chart-income: #4e82d0;
+    --chart-expense: #fe2020;
+    --chart-profit: #199e70;
+  }
+}

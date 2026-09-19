@@ -64,6 +64,13 @@ RSpec.describe 'Pages' do
           expect(page).to have_content("Total Expense\n#{total_expenses}")
         end
 
+        it 'charts net profit by week' do
+          week_start = Date.new(current_year, 1, 1).beginning_of_week
+
+          expect(page).to have_css '[data-chart-type-value="line"]'
+          expect(page).to have_css 'tr', text: /#{week_start.strftime('%b %-d')}\s*\$750\.00/
+        end
+
         it 'displays the total balance for the current year' do
           total_income = company.income_for_year(current_year)
           total_expenses = company.expense_for_year(current_year)

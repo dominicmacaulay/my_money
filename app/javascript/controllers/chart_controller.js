@@ -1,6 +1,24 @@
 import { Controller } from "@hotwired/stimulus"
 
 const GRID_COLOR = "rgba(128, 128, 128, 0.2)"
+const ZERO_LINE_COLOR = "rgba(128, 128, 128, 0.5)"
+
+const MARKS = {
+  bar: {
+    maxBarThickness: 24,
+    borderRadius: 4,
+    borderSkipped: "bottom",
+    categoryPercentage: 0.7,
+    barPercentage: 0.9
+  },
+  line: {
+    borderWidth: 2,
+    tension: 0,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    pointHitRadius: 12
+  }
+}
 
 let chartLibrary = null
 
@@ -16,13 +34,13 @@ async function loadChart() {
   return chartLibrary
 }
 
-// Connects to data-controller="monthly-chart"
+// Connects to data-controller="chart"
 export default class extends Controller {
   static targets = ["canvas"]
   static values = {
+    type: String,
     labels: Array,
-    income: Array,
-    expense: Array,
+    series: Array,
     currency: String
   }
 
@@ -34,44 +52,35 @@ export default class extends Controller {
     const Chart = await loadChart()
     if (!this.element.isConnected) return
 
-    const colors = this._colors()
+    const ink = this._ink()
 
     this.chart = new Chart(this.canvasTarget, {
-      type: "bar",
+      type: this.typeValue,
       data: {
         labels: this.labelsValue,
-        datasets: [
-          { label: "Income", data: this.incomeValue, backgroundColor: colors.income },
-          { label: "Expenses", data: this.expenseValue, backgroundColor: colors.expense }
-        ]
+        datasets: this.seriesValue.map((series) => this._dataset(series))
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        datasets: {
-          bar: {
-            maxBarThickness: 24,
-            borderRadius: 4,
-            borderSkipped: "bottom",
-            categoryPercentage: 0.7,
-            barPercentage: 0.9
-          }
-        },
+        interaction: { mode: "index", intersect: false },
+        datasets: { [this.typeValue]: MARKS[this.typeValue] },
         scales: {
           x: {
             grid: { display: false },
-            ticks: { autoSkip: true, maxRotation: 0, color: colors.ink }
+            ticks: { autoSkip: true, maxRotation: 0, color: ink }
           },
           y: {
             border: { display: false },
-            grid: { color: GRID_COLOR },
-            ticks: { callback: (value) => this._format(value, 0), color: colors.ink }
+            grid: { color: (context) => (context.tick.value === 0 ? ZERO_LINE_COLOR : GRID_COLOR) },
+            ticks: { callback: (value) => this._format(value, 0), color: ink }
           }
         },
         plugins: {
           legend: {
+            display: this.seriesValue.length > 1,
             position: "bottom",
-            labels: { boxWidth: 12, boxHeight: 12, color: colors.ink }
+            labels: { boxWidth: 12, boxHeight: 12, color: ink }
           },
           tooltip: {
             callbacks: {
@@ -92,24 +101,29 @@ export default class extends Controller {
   _retheme() {
     if (!this.chart) return
 
-    const colors = this._colors()
+    const ink = this._ink()
 
-    this.chart.data.datasets[0].backgroundColor = colors.income
-    this.chart.data.datasets[1].backgroundColor = colors.expense
-    this.chart.options.scales.x.ticks.color = colors.ink
-    this.chart.options.scales.y.ticks.color = colors.ink
-    this.chart.options.plugins.legend.labels.color = colors.ink
+    this.chart.data.datasets.forEach((dataset, index) => {
+      Object.assign(dataset, this._dataset(this.seriesValue[index]))
+    })
+    this.chart.options.scales.x.ticks.color = ink
+    this.chart.options.scales.y.ticks.color = ink
+    this.chart.options.plugins.legend.labels.color = ink
     this.chart.update()
   }
 
-  _colors() {
-    const styles = getComputedStyle(this.element)
+  _dataset({ label, data, color }) {
+    const resolved = this._color(color)
 
-    return {
-      income: styles.getPropertyValue("--monthly-chart-income").trim(),
-      expense: styles.getPropertyValue("--monthly-chart-expense").trim(),
-      ink: styles.color
-    }
+    return { label, data, backgroundColor: resolved, borderColor: resolved }
+  }
+
+  _color(property) {
+    return getComputedStyle(this.element).getPropertyValue(property).trim()
+  }
+
+  _ink() {
+    return getComputedStyle(this.element).color
   }
 
   _format(value, fractionDigits) {

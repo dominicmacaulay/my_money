@@ -1,0 +1,9 @@
+-# locals: (type:, labels:, series:)
+
+.chart[data-controller="chart"
+       data-chart-type-value=type
+       data-chart-labels-value=labels.to_json
+       data-chart-series-value=series.to_json
+       data-chart-currency-value=Money.default_currency.iso_code]
+  .chart__plot
+    canvas data-chart-target="canvas"

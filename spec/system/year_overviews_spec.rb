@@ -53,7 +53,7 @@ RSpec.describe 'Year Overviews' do
 
     within data_test(this_year) do
       expect(page).to have_no_content 'monthly summary coming soon'
-      expect(page).to have_css '[data-controller="monthly-chart"]'
+      expect(page).to have_css '[data-controller="chart"]'
       expect(page).to have_no_content 'Highest Income'
     end
   end

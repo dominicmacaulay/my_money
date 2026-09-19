@@ -1,10 +1,7 @@
 .chart {
-  /* Optics alerts-info / alerts-danger plus a validated aqua, held as literal hex
-     because the canvas reads these through getPropertyValue, which does not
-     resolve light-dark(). */
-  --chart-income: #336cc1;
-  --chart-expense: #cb0101;
-  --chart-profit: #17996a;
+  --chart-income: rgb(63, 107, 171);
+  --chart-expense: rgb(163, 65, 62);
+  --chart-profit: rgb(18, 125, 93);
 
   .chart__plot {
     position: relative;
@@ -14,8 +11,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-mode="light"]) .chart {
-    --chart-income: #4e82d0;
-    --chart-expense: #fe2020;
-    --chart-profit: #199e70;
+    --chart-income: rgb(19, 85, 185);
+    --chart-expense: rgb(174, 29, 24);
+    --chart-profit: rgb(110, 150, 121);
   }
 }

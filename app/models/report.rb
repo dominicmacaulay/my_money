@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class Report
+  MonthTotal = Data.define(:month, :income, :expense) do
+    def profit
+      income - expense
+    end
+
+    def name
+      Date::ABBR_MONTHNAMES[month]
+    end
+  end
+
   class CategoryExpenseBreakdown
     attr_reader :category, :company, :year
 
@@ -66,5 +76,40 @@ class Report
 
   def total_balance
     total_income - total_expense
+  end
+
+  def any_transactions?
+    !(total_income.zero? && total_expense.zero?)
+  end
+
+  def monthly_breakdown
+    @monthly_breakdown ||= (1..12).map do |month|
+      MonthTotal.new(month:, income: month_total('income', month), expense: month_total('expense', month))
+    end
+  end
+
+  def highest_income_month
+    monthly_breakdown.reject { |month| month.income.zero? }.max_by(&:income)
+  end
+
+  def highest_expense_month
+    monthly_breakdown.reject { |month| month.expense.zero? }.max_by(&:expense)
+  end
+
+  def highest_profit_month
+    monthly_breakdown.reject { |month| month.income.zero? && month.expense.zero? }.max_by(&:profit)
+  end
+
+  private
+
+  def monthly_totals
+    @monthly_totals ||= company.transactions
+                               .where(date: Date.new(year).all_year)
+                               .group(:transaction_type, Arel.sql('EXTRACT(MONTH FROM date)::int'))
+                               .sum(:amount_cents)
+  end
+
+  def month_total(type, month)
+    Money.new(monthly_totals.fetch([type, month], 0))
   end
 end

@@ -95,6 +95,84 @@ RSpec.describe Report do
     end
   end
 
+  describe '#monthly_breakdown' do
+    it 'returns twelve zero-filled months in calendar order' do
+      breakdown = report.monthly_breakdown
+
+      expect(breakdown.size).to eq 12
+      expect(breakdown.map(&:month)).to eq (1..12).to_a
+      expect(breakdown.map(&:name).first(3)).to eq %w[Jan Feb Mar]
+      expect(breakdown.second.income).to eq 0
+      expect(breakdown.second.expense).to eq 0
+    end
+
+    it 'sums income and expenses into the month they occurred' do
+      january = report.monthly_breakdown.first
+      expected_expense = category1_expenses.sum(&:amount) +
+                         category2_expenses.sum(&:amount) +
+                         subcategory_expenses.sum(&:amount)
+
+      expect(january.income).to eq income.sum(&:amount)
+      expect(january.expense).to eq expected_expense
+      expect(january.profit).to eq income.sum(&:amount) - expected_expense
+    end
+  end
+
+  describe 'highest months' do
+    let(:highlight_year) { year + 5 }
+    let(:highlight_report) { described_class.new(company, highlight_year) }
+
+    before do
+      create(:transaction, :income, company:, date: Date.new(highlight_year, 2, 10), amount: 500)
+      create(:transaction, :income, company:, date: Date.new(highlight_year, 7, 3), amount: 900)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: Date.new(highlight_year, 3, 5), amount: 800)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: Date.new(highlight_year, 7, 9), amount: 100)
+    end
+
+    it 'names the highest income, expense and profit months' do
+      expect(highlight_report.highest_income_month.name).to eq 'Jul'
+      expect(highlight_report.highest_income_month.income).to eq Money.from_amount(900)
+      expect(highlight_report.highest_expense_month.name).to eq 'Mar'
+      expect(highlight_report.highest_expense_month.expense).to eq Money.from_amount(800)
+      expect(highlight_report.highest_profit_month.name).to eq 'Jul'
+      expect(highlight_report.highest_profit_month.profit).to eq Money.from_amount(800)
+    end
+
+    context 'when every active month lost money' do
+      let(:loss_year) { year + 6 }
+      let(:loss_report) { described_class.new(company, loss_year) }
+
+      before do
+        create(:transaction, :expense, company:, categorizable: category1,
+                                       date: Date.new(loss_year, 1, 4), amount: 300)
+        create(:transaction, :expense, company:, categorizable: category1,
+                                       date: Date.new(loss_year, 2, 4), amount: 50)
+      end
+
+      it 'picks the least negative month rather than an empty one' do
+        expect(loss_report.highest_profit_month.name).to eq 'Feb'
+        expect(loss_report.highest_profit_month.profit).to eq(-Money.from_amount(50))
+      end
+
+      it 'has no highest income month' do
+        expect(loss_report.highest_income_month).to be_nil
+      end
+    end
+
+    context 'when the year has no transactions' do
+      let(:blank_report) { described_class.new(company, year + 7) }
+
+      it 'has no highest months at all' do
+        expect(blank_report.any_transactions?).to be false
+        expect(blank_report.highest_income_month).to be_nil
+        expect(blank_report.highest_expense_month).to be_nil
+        expect(blank_report.highest_profit_month).to be_nil
+      end
+    end
+  end
+
   describe 'edge cases' do
     context 'when there are no transactions for the year' do
       let(:empty_year) { year + 1 }

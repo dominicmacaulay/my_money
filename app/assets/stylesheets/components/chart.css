@@ -12,11 +12,6 @@
   }
 }
 
-/* Sits under the totals row in the summary card; alone in the monthly card. */
-.chart:not(:first-child) {
-  margin-block-start: var(--op-space-medium);
-}
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-mode="light"]) .chart {
     --chart-income: #4e82d0;

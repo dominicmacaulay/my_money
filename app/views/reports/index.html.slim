@@ -26,21 +26,17 @@
                 .divider
                 .report-row__total = humanized_money_with_symbol(detail[:amount])
 
-- highest_income = @report.highest_income_month
-- highest_expense = @report.highest_expense_month
-- highest_profit = @report.highest_profit_month
-
 .report
   .report__header
-    = render 'shared/monthly_highlight', title: 'Highest Income', month: highest_income, amount: highest_income&.income
+    = render 'shared/monthly_highlight', title: 'Highest Income', month: @report.highest_income_month, metric: :income
 
     .full-width
 
-    = render 'shared/monthly_highlight', title: 'Highest Expense', month: highest_expense, amount: highest_expense&.expense
+    = render 'shared/monthly_highlight', title: 'Highest Expense', month: @report.highest_expense_month, metric: :expense
 
     .full-width
 
-    = render 'shared/monthly_highlight', title: 'Highest Profit', month: highest_profit, amount: highest_profit&.profit
+    = render 'shared/monthly_highlight', title: 'Highest Profit', month: @report.highest_profit_month, metric: :profit
 
   .report__body
     .report-column

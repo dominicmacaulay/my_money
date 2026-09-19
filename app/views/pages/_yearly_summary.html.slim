@@ -8,7 +8,9 @@
   .divider
 
   .card__body
-    .yearly-summary
+    = render 'shared/weekly_profit_chart', report:
+
+    .summary-stats
       .text-pair
         .text-title Total Income
         .text-value = humanized_money_with_symbol(report.total_income)
@@ -18,5 +20,3 @@
       .text-pair
         .text-title Total Balance
         .text-value = humanized_money_with_symbol(report.total_balance)
-
-    = render 'shared/weekly_profit_chart', report:

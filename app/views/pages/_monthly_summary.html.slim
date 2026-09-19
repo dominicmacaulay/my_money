@@ -1,7 +1,22 @@
 -# locals: (year: Date.current.year)
 
+- report = Report.new(current_company, year)
+
 .card
   .card__header #{year} Monthly Summary
+
   .divider
+
   .card__body
-    = render 'shared/monthly_breakdown_chart', report: Report.new(current_company, year)
+    = render 'shared/monthly_breakdown_chart', report:
+
+    .summary-stats
+      .text-pair
+        .text-title Highest Income
+        .text-value = highest_month_summary(report.highest_income_month, :income)
+      .text-pair
+        .text-title Highest Expense
+        .text-value = highest_month_summary(report.highest_expense_month, :expense)
+      .text-pair
+        .text-title Highest Profit
+        .text-value = highest_month_summary(report.highest_profit_month, :profit)

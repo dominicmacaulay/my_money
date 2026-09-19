@@ -1,4 +1,4 @@
--# locals: (title:, month:, amount:)
+-# locals: (title:, month:, metric:)
 
 .report__header-title = title
-.report__header-total = month ? "#{month.name} · #{humanized_money_with_symbol(amount)}" : '—'
+.report__header-total = highest_month_summary(month, metric)

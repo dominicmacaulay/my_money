@@ -36,7 +36,7 @@ RSpec.describe 'Transactions' do
       end
 
       it 'only lists income transactions' do
-        expect(page).to have_content('Transactions')
+        expect(page).to have_text('Transactions')
 
         within('tbody') do
           expect_transactions_to_be_listed([income_transaction, income_transaction2], show_type: false)
@@ -53,7 +53,7 @@ RSpec.describe 'Transactions' do
       end
 
       it 'lists all transactions' do
-        expect(page).to have_content('Transactions')
+        expect(page).to have_text('Transactions')
 
         within('tbody') do
           expect_transactions_to_be_listed(
@@ -70,7 +70,7 @@ RSpec.describe 'Transactions' do
       end
 
       it 'only lists expense transactions' do
-        expect(page).to have_content('Transactions')
+        expect(page).to have_text('Transactions')
 
         within('tbody') do
           expect_transactions_to_be_listed([expense_transaction, expense_transaction2], show_type: false)
@@ -142,13 +142,13 @@ RSpec.describe 'Transactions' do
       total_balance = total_income - total_expense
 
       within 'tfoot.desktop-only' do
-        expect(page).to have_content('Total Income')
-        expect(page).to have_content('Total Expense')
-        expect(page).to have_content('Total Balance')
+        expect(page).to have_text('Total Income')
+        expect(page).to have_text('Total Expense')
+        expect(page).to have_text('Total Balance')
 
-        expect(page).to have_content(total_income.format)
-        expect(page).to have_content(total_expense.format)
-        expect(page).to have_content(total_balance.format)
+        expect(page).to have_text(total_income.format)
+        expect(page).to have_text(total_expense.format)
+        expect(page).to have_text(total_balance.format)
       end
     end
   end
@@ -170,8 +170,8 @@ RSpec.describe 'Transactions' do
       fill_in 'Amount', with: '10000'
       click_on 'Create Transaction'
 
-      expect(page).to have_content('Transaction was successfully created')
-      expect(page).to have_content('My New Transaction')
+      expect(page).to have_text('Transaction was successfully created')
+      expect(page).to have_text('My New Transaction')
 
       transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_income
@@ -191,8 +191,8 @@ RSpec.describe 'Transactions' do
       select category.name, from: 'Category'
       click_on 'Create Transaction'
 
-      expect(page).to have_content('Transaction was successfully created')
-      expect(page).to have_content('My New Transaction')
+      expect(page).to have_text('Transaction was successfully created')
+      expect(page).to have_text('My New Transaction')
 
       transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_expense
@@ -213,8 +213,8 @@ RSpec.describe 'Transactions' do
       select subcategory_name, from: 'Category'
       click_on 'Create Transaction'
 
-      expect(page).to have_content('Transaction was successfully created')
-      expect(page).to have_content('My New Transaction')
+      expect(page).to have_text('Transaction was successfully created')
+      expect(page).to have_text('My New Transaction')
 
       transaction = company.transactions.order(:created_at).last
       expect(transaction).to be_expense
@@ -227,8 +227,8 @@ RSpec.describe 'Transactions' do
     it 'does not show a delete button' do
       click_on 'New Transaction'
 
-      expect(page).to have_content('Create Transaction')
-      expect(page).to have_no_content('Delete')
+      expect(page).to have_text('Create Transaction')
+      expect(page).to have_no_text('Delete')
     end
 
     context 'when navigating from the Income index page' do
@@ -272,8 +272,8 @@ RSpec.describe 'Transactions' do
       fill_in 'Amount', with: '50.00'
       click_on 'Update Transaction'
 
-      expect(page).to have_content('Transaction was successfully updated')
-      expect(page).to have_content('My Updated Transaction')
+      expect(page).to have_text('Transaction was successfully updated')
+      expect(page).to have_text('My Updated Transaction')
 
       transaction.reload
       expect(transaction.amount).to eq Money.new(5000, 'USD') # 50.00 USD
@@ -284,25 +284,25 @@ RSpec.describe 'Transactions' do
       expect do
         click_on 'Delete'
         click_on "Yes, I'm Sure"
-        expect(page).to have_content('Transaction was successfully destroyed')
+        expect(page).to have_text('Transaction was successfully destroyed')
       end.to change(Transaction, :count).by(-1)
     end
   end
 
   def expect_transactions_to_be_listed(transactions, show_type: true) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
-      expect(page).to have_content transaction.date
-      expect(page).to have_content transaction.description
-      expect(page).to have_content transaction.transaction_type.titleize if show_type
-      expect(page).to have_content transaction.categorizable.name if transaction.expense?
-      expect(page).to have_content transaction.amount.format
+      expect(page).to have_text transaction.date
+      expect(page).to have_text transaction.description
+      expect(page).to have_text transaction.transaction_type.titleize if show_type
+      expect(page).to have_text transaction.categorizable.name if transaction.expense?
+      expect(page).to have_text transaction.amount.format
     end
   end
 
   def expect_transactions_not_to_be_listed(transactions)
     transactions.each do |transaction|
-      expect(page).to have_no_content transaction.description
-      expect(page).to have_no_content transaction.amount.format
+      expect(page).to have_no_text transaction.description
+      expect(page).to have_no_text transaction.amount.format
     end
   end
 end

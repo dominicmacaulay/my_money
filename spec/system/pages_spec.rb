@@ -20,14 +20,14 @@ RSpec.describe 'Pages' do
       it 'displays the company name' do
         page.refresh
 
-        expect(page).to have_content(company.name)
+        expect(page).to have_text(company.name)
       end
     end
 
     context 'when user does not have a current company' do
       it 'displays a link to set the current company' do
         expect(page).to have_link('Create Your Company')
-        expect(page).to have_no_content(company.name)
+        expect(page).to have_no_text(company.name)
       end
     end
   end
@@ -49,19 +49,19 @@ RSpec.describe 'Pages' do
         end
 
         it 'displays the current year' do
-          expect(page).to have_content(current_year)
+          expect(page).to have_text(current_year)
         end
 
         it 'displays the total income for the current year' do
           total_income = Money.new(company.income_for_year(current_year)).format
 
-          expect(page).to have_content("Total Income\n#{total_income}")
+          expect(page).to have_text("Total Income\n#{total_income}")
         end
 
         it 'displays the total expenses for the current year' do
           total_expenses = Money.new(company.expense_for_year(current_year)).format
 
-          expect(page).to have_content("Total Expense\n#{total_expenses}")
+          expect(page).to have_text("Total Expense\n#{total_expenses}")
         end
 
         it 'charts net profit by week' do
@@ -76,14 +76,14 @@ RSpec.describe 'Pages' do
           total_expenses = company.expense_for_year(current_year)
           total_balance = Money.new(total_income - total_expenses).format
 
-          expect(page).to have_content("Total Balance\n#{total_balance}")
+          expect(page).to have_text("Total Balance\n#{total_balance}")
         end
       end
     end
 
     context 'when user does not have a current company' do
       it 'displays a welcome message' do
-        expect(page).to have_content('Welcome to My Money!')
+        expect(page).to have_text('Welcome to My Money!')
       end
     end
   end

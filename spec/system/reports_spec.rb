@@ -38,18 +38,18 @@ RSpec.describe 'Reports' do
       click_on 'View Report'
     end
 
-    expect(page).to have_content 'Income'
-    expect(page).to have_content total_income.format
+    expect(page).to have_text 'Income'
+    expect(page).to have_text total_income.format
 
-    expect(page).to have_content 'Expenses'
-    expect(page).to have_content category.name
-    expect(page).to have_content total_category_expenses.format
-    expect(page).to have_content category_expenses_total.format
-    expect(page).to have_content subcategory.name
-    expect(page).to have_content subcategory_expenses_total.format
+    expect(page).to have_text 'Expenses'
+    expect(page).to have_text category.name
+    expect(page).to have_text total_category_expenses.format
+    expect(page).to have_text category_expenses_total.format
+    expect(page).to have_text subcategory.name
+    expect(page).to have_text subcategory_expenses_total.format
 
-    expect(page).to have_content category2.name
-    expect(page).to have_content total_category2_expenses.format
+    expect(page).to have_text category2.name
+    expect(page).to have_text total_category2_expenses.format
   end
 
   describe 'monthly breakdown' do
@@ -105,7 +105,7 @@ RSpec.describe 'Reports' do
       it 'shows an empty state instead of the chart' do
         visit reports_path(year: this_year - 6)
 
-        expect(page).to have_content 'No transactions for this year yet.'
+        expect(page).to have_text 'No transactions for this year yet.'
         expect(page).to have_no_css '[data-controller="chart"]'
       end
     end

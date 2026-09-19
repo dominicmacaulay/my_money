@@ -25,8 +25,8 @@ RSpec.describe 'Subcategories' do
       select category.name, from: 'Category'
       click_on 'Create Subcategory'
 
-      expect(page).to have_content("#{name} was successfully created")
-      expect(page).to have_content(name.to_s)
+      expect(page).to have_text("#{name} was successfully created")
+      expect(page).to have_text(name.to_s)
 
       subcategory = Subcategory.all.max_by(&:id)
       expect(subcategory.name).to eq(name)
@@ -35,8 +35,8 @@ RSpec.describe 'Subcategories' do
     end
 
     it 'does not show a delete button' do
-      expect(page).to have_content('Create Subcategory')
-      expect(page).to have_no_content('Delete')
+      expect(page).to have_text('Create Subcategory')
+      expect(page).to have_no_text('Delete')
     end
   end
 
@@ -58,8 +58,8 @@ RSpec.describe 'Subcategories' do
       fill_in 'Name', with: name
       click_on 'Update Subcategory'
 
-      expect(page).to have_content("#{name} was successfully updated")
-      expect(page).to have_content(name.to_s)
+      expect(page).to have_text("#{name} was successfully updated")
+      expect(page).to have_text(name.to_s)
 
       subcategory.reload
       expect(subcategory.name).to eq(name)
@@ -70,7 +70,7 @@ RSpec.describe 'Subcategories' do
       expect do
         click_on 'Delete'
         click_on "Yes, I'm Sure"
-        expect(page).to have_content('Subcategory was successfully destroyed')
+        expect(page).to have_text('Subcategory was successfully destroyed')
       end.to change(Subcategory, :count).by(-1)
     end
   end

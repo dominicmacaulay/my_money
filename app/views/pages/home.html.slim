@@ -1,11 +1,12 @@
 .home-page
   - if current_company
+    - report = Report.new(current_company, Date.current.year)
     .home-page__header
       h1 = current_company.name
       .divider
     .home-page__content
-      = render 'yearly_summary'
-      = render 'monthly_summary'
+      = render 'yearly_summary', report:
+      = render 'monthly_summary', report:
     .home-page__footer
       = render 'tax_breakdown'
 

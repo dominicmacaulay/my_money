@@ -3,13 +3,13 @@
 
 .report
   .report__header
-    .report__header-title Total Income
-    .report__header-total = humanized_money_with_symbol(@report.total_income)
+    .report__header-stat
+      .report__header-title Total Income
+      .report__header-total = humanized_money_with_symbol(@report.total_income)
 
-    .full-width
-
-    .report__header-title Total Expenses
-    .report__header-total = humanized_money_with_symbol(@report.total_expense)
+    .report__header-stat
+      .report__header-title Total Expenses
+      .report__header-total = humanized_money_with_symbol(@report.total_expense)
 
   .report__body
     - @report.expense_breakdown.each do |breakdown|
@@ -29,13 +29,7 @@
 .report
   .report__header
     = render 'shared/monthly_highlight', title: 'Highest Income', month: @report.highest_income_month, metric: :income
-
-    .full-width
-
     = render 'shared/monthly_highlight', title: 'Highest Expense', month: @report.highest_expense_month, metric: :expense
-
-    .full-width
-
     = render 'shared/monthly_highlight', title: 'Highest Profit', month: @report.highest_profit_month, metric: :profit
 
   .report__body

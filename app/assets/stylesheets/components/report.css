@@ -16,6 +16,8 @@
 
   .report__header {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
     gap: var(--op-space-medium);
     padding: var(--op-space-large);
@@ -32,6 +34,12 @@
     .report__header-total {
       font-size: var(--op-font-medium);
       font-weight: var(--op-font-weight-bold);
+    }
+
+    .report__header-stat {
+      display: flex;
+      align-items: center;
+      gap: var(--op-space-small);
     }
   }
 

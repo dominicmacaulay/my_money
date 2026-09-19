@@ -22,8 +22,7 @@ const MARKS = {
 
 let chartLibrary = null
 
-// Loaded on demand: every controller is eager-loaded, but only a couple of pages
-// draw a chart.
+// Loaded on demand: controllers are eager-loaded, but few pages draw a chart.
 async function loadChart() {
   if (!chartLibrary) {
     const { Chart, registerables } = await import("chart.js")
@@ -45,12 +44,19 @@ export default class extends Controller {
   }
 
   async connect() {
+    // Guards a reconnect landing mid-await and building a second chart on the canvas.
+    const connection = {}
+    this.connection = connection
+
     this.darkMode = window.matchMedia("(prefers-color-scheme: dark)")
     this.retheme = this._retheme.bind(this)
     this.darkMode.addEventListener("change", this.retheme)
 
+    await this._shown()
+    if (this.connection !== connection) return
+
     const Chart = await loadChart()
-    if (!this.element.isConnected) return
+    if (this.connection !== connection) return
 
     const ink = this._ink()
 
@@ -93,9 +99,18 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.connection = null
     this.darkMode.removeEventListener("change", this.retheme)
     this.chart?.destroy()
     this.chart = null
+  }
+
+  // A closed <details> still reports a layout box, so only its toggle is reliable.
+  _shown() {
+    const details = this.element.closest("details")
+    if (!details || details.open) return Promise.resolve()
+
+    return new Promise((resolve) => details.addEventListener("toggle", resolve, { once: true }))
   }
 
   _retheme() {

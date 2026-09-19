@@ -108,8 +108,7 @@ class Report
 
   private
 
-  # Buckets run Monday to Sunday, so the first and last of the year reach a few days
-  # outside it. Every transaction dated within the year still lands in exactly one.
+  # Monday-to-Sunday buckets, so the first and last reach slightly outside the year.
   def week_starts
     (Date.new(year, 1, 1).beginning_of_week..Date.new(year, 12, 31).beginning_of_week).step(7)
   end

@@ -5,6 +5,7 @@
 
 .year-overviews
   - @year_presenter.years.each do |year|
+    - report = Report.new(current_company, year)
     details.accordion open=(year == Date.current.year) data-testid=year
       summary
         span = material_icon('arrow_right', classes: 'accordion__marker')
@@ -13,8 +14,8 @@
       .op-stack
         .home-page
           .home-page__content
-            = render 'pages/yearly_summary', year:
-            = render 'pages/monthly_summary', year:
+            = render 'pages/yearly_summary', report:
+            = render 'pages/monthly_summary', report:
           .home-page__footer
             = render 'pages/tax_breakdown', year:
           = link_to 'View Report', reports_path(year:), class: 'btn btn--no-border btn--min-width margin-auto'

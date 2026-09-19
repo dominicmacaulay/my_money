@@ -20,8 +20,8 @@ RSpec.describe 'Companies' do
     fill_in 'Name', with: name
     click_on 'Create Company'
 
-    expect(page).to have_content("#{name} was successfully created")
-    expect(page).to have_content(name.to_s)
+    expect(page).to have_text("#{name} was successfully created")
+    expect(page).to have_text(name.to_s)
 
     company = Company.all.max_by(&:id)
     expect(company.name).to eq(name)
@@ -37,8 +37,8 @@ RSpec.describe 'Companies' do
     fill_in 'Name', with: name
     click_on 'Update Company'
 
-    expect(page).to have_content("#{name} was successfully updated")
-    expect(page).to have_content(name.to_s)
+    expect(page).to have_text("#{name} was successfully updated")
+    expect(page).to have_text(name.to_s)
 
     company.reload
     expect(company.name).to eq(name)
@@ -50,12 +50,12 @@ RSpec.describe 'Companies' do
         click_on 'Delete'
       end
       click_on "Yes, I'm Sure"
-      expect(page).to have_content("#{company.name} was successfully destroyed")
+      expect(page).to have_text("#{company.name} was successfully destroyed")
     end.to change(Company, :count).by(-1)
   end
 
   it 'can be set as the current company for the app' do
     click_on "Switch to #{other_company.name}"
-    expect(page).to have_content "Current company set to #{other_company.name}"
+    expect(page).to have_text "Current company set to #{other_company.name}"
   end
 end

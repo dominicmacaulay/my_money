@@ -38,17 +38,76 @@ RSpec.describe 'Reports' do
       click_on 'View Report'
     end
 
-    expect(page).to have_content 'Income'
-    expect(page).to have_content total_income.format
+    expect(page).to have_text 'Income'
+    expect(page).to have_text total_income.format
 
-    expect(page).to have_content 'Expenses'
-    expect(page).to have_content category.name
-    expect(page).to have_content total_category_expenses.format
-    expect(page).to have_content category_expenses_total.format
-    expect(page).to have_content subcategory.name
-    expect(page).to have_content subcategory_expenses_total.format
+    expect(page).to have_text 'Expenses'
+    expect(page).to have_text category.name
+    expect(page).to have_text total_category_expenses.format
+    expect(page).to have_text category_expenses_total.format
+    expect(page).to have_text subcategory.name
+    expect(page).to have_text subcategory_expenses_total.format
 
-    expect(page).to have_content category2.name
-    expect(page).to have_content total_category2_expenses.format
+    expect(page).to have_text category2.name
+    expect(page).to have_text total_category2_expenses.format
+  end
+
+  describe 'monthly breakdown' do
+    let(:chart_year) { this_year - 5 }
+
+    let(:canvas_pixels) do
+      <<~JS
+        (() => {
+          const canvas = document.querySelector('.chart__plot canvas')
+          const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data
+          return pixels.some((channel) => channel !== 0)
+        })()
+      JS
+    end
+
+    # Chart.js animates the bars in, so the canvas is blank for a moment after it mounts.
+    def canvas_painted?
+      20.times do
+        return true if page.evaluate_script(canvas_pixels)
+
+        sleep 0.1
+      end
+
+      false
+    end
+
+    before do
+      create(:transaction, :income, company:, date: Date.new(chart_year, 2, 10), amount: 500)
+      create(:transaction, :income, company:, date: Date.new(chart_year, 7, 3), amount: 900)
+      create(:transaction, :expense, company:, categorizable: category, date: Date.new(chart_year, 3, 5), amount: 800)
+
+      visit reports_path(year: chart_year)
+    end
+
+    it 'tabulates every month and names the standout months' do
+      expect(page).to have_css '[data-controller="chart"]'
+
+      expect(page).to have_css 'tr', text: /Feb\s*\$500\.00\s*\$0\.00/
+      expect(page).to have_css 'tr', text: /Mar\s*\$0\.00\s*\$800\.00/
+
+      expect(page).to have_css '.report__header', text: /Highest Income\s+Jul · \$900\.00/
+      expect(page).to have_css '.report__header', text: /Highest Expense\s+Mar · \$800\.00/
+      expect(page).to have_css '.report__header', text: /Highest Profit\s+Jul · \$900\.00/
+    end
+
+    it 'paints the chart', :js do
+      expect(page).to have_css '.chart__plot canvas[style*="display: block"]'
+
+      expect(canvas_painted?).to be true
+    end
+
+    context 'when the year has no transactions' do
+      it 'shows an empty state instead of the chart' do
+        visit reports_path(year: this_year - 6)
+
+        expect(page).to have_text 'No transactions for this year yet.'
+        expect(page).to have_no_css '[data-controller="chart"]'
+      end
+    end
   end
 end

@@ -28,7 +28,8 @@
     gap: var(--op-space-small);
 
 
-    .yearly-summary {
+    .summary-stats {
+      margin-block-start: var(--op-space-medium);
       display: flex;
       flex-wrap: wrap;
       gap: var(--op-space-medium);

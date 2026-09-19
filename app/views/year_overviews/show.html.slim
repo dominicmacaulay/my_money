@@ -1,0 +1,4 @@
+= turbo_frame_tag "year_overview_#{@report.year}"
+  .home-page__content
+    = render 'pages/yearly_summary', report: @report
+    = render 'pages/monthly_summary', report: @report

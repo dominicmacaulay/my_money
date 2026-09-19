@@ -1,0 +1,26 @@
+-# locals: (report:)
+
+- if report.any_transactions?
+  - months = report.monthly_breakdown
+  - series = [{ label: 'Income', data: months.map { |month| month.income.to_f }, color: '--chart-income' },
+              { label: 'Expenses', data: months.map { |month| month.expense.to_f }, color: '--chart-expense' }]
+
+  = render 'shared/chart', type: 'bar', labels: months.map(&:name), series:
+
+  table.sr-only
+    caption = "#{report.year} income and expenses by month"
+    thead
+      tr
+        th Month
+        th Income
+        th Expenses
+    tbody
+      - months.each do |month|
+        tr
+          th = month.name
+          td = humanized_money_with_symbol(month.income)
+          td = humanized_money_with_symbol(month.expense)
+
+- else
+  .text-center.margin-md
+    i No transactions for this year yet.

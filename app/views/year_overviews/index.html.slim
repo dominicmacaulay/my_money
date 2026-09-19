@@ -12,9 +12,7 @@
 
       .op-stack
         .home-page
-          .home-page__content
-            = render 'pages/yearly_summary', year:
-            = render 'pages/monthly_summary', year:
+          = turbo_frame_tag "year_overview_#{year}", src: year_overview_path(year), loading: :lazy
           .home-page__footer
             = render 'pages/tax_breakdown', year:
           = link_to 'View Report', reports_path(year:), class: 'btn btn--no-border btn--min-width margin-auto'

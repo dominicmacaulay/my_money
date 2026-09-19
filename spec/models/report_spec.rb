@@ -95,6 +95,125 @@ RSpec.describe Report do
     end
   end
 
+  describe '#monthly_breakdown' do
+    it 'returns twelve zero-filled months in calendar order' do
+      breakdown = report.monthly_breakdown
+
+      expect(breakdown.size).to eq 12
+      expect(breakdown.map(&:name)).to eq Date::ABBR_MONTHNAMES.compact
+      expect(breakdown.second.income).to eq 0
+      expect(breakdown.second.expense).to eq 0
+    end
+
+    it 'sums income and expenses into the month they occurred' do
+      january = report.monthly_breakdown.first
+      expected_expense = category1_expenses.sum(&:amount) +
+                         category2_expenses.sum(&:amount) +
+                         subcategory_expenses.sum(&:amount)
+
+      expect(january.income).to eq income.sum(&:amount)
+      expect(january.expense).to eq expected_expense
+      expect(january.profit).to eq income.sum(&:amount) - expected_expense
+    end
+  end
+
+  describe '#weekly_breakdown' do
+    let(:week_year) { year + 8 }
+    let(:week_report) { described_class.new(company, week_year) }
+    let(:week_start) { Date.new(week_year, 3, 15).beginning_of_week }
+
+    before do
+      create(:transaction, :income, company:, date: week_start, amount: 900)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: week_start + 2, amount: 400)
+    end
+
+    it 'covers the whole year in Monday-to-Sunday buckets' do
+      weeks = week_report.weekly_breakdown
+
+      expect(weeks.first.name).to eq Date.new(week_year, 1, 1).beginning_of_week.strftime('%b %-d')
+      expect(weeks.last.name).to eq Date.new(week_year, 12, 31).beginning_of_week.strftime('%b %-d')
+      expect(weeks.sum(&:income)).to eq week_report.total_income
+      expect(weeks.sum(&:expense)).to eq week_report.total_expense
+    end
+
+    it 'nets income against expenses within the same week' do
+      week = week_report.weekly_breakdown.find { |candidate| candidate.name == week_start.strftime('%b %-d') }
+
+      expect(week.profit).to eq Money.from_amount(500)
+    end
+
+    it 'splits a week boundary rather than lumping nearby days together' do
+      create(:transaction, :income, company:, date: week_start - 1, amount: 100)
+      previous = week_report.weekly_breakdown.find { |week| week.name == (week_start - 7).strftime('%b %-d') }
+
+      expect(previous.income).to eq Money.from_amount(100)
+    end
+
+    it 'reports a negative week when it spent more than it earned' do
+      loss_week = Date.new(week_year, 6, 15).beginning_of_week
+      create(:transaction, :expense, company:, categorizable: category1, date: loss_week + 1, amount: 250)
+      week = week_report.weekly_breakdown.find { |candidate| candidate.name == loss_week.strftime('%b %-d') }
+
+      expect(week.profit).to eq(-Money.from_amount(250))
+    end
+  end
+
+  describe 'highest months' do
+    let(:highlight_year) { year + 5 }
+    let(:highlight_report) { described_class.new(company, highlight_year) }
+
+    before do
+      create(:transaction, :income, company:, date: Date.new(highlight_year, 2, 10), amount: 500)
+      create(:transaction, :income, company:, date: Date.new(highlight_year, 7, 3), amount: 900)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: Date.new(highlight_year, 3, 5), amount: 800)
+      create(:transaction, :expense, company:, categorizable: category1,
+                                     date: Date.new(highlight_year, 7, 9), amount: 100)
+    end
+
+    it 'names the highest income, expense and profit months' do
+      expect(highlight_report.highest_income_month.name).to eq 'Jul'
+      expect(highlight_report.highest_income_month.income).to eq Money.from_amount(900)
+      expect(highlight_report.highest_expense_month.name).to eq 'Mar'
+      expect(highlight_report.highest_expense_month.expense).to eq Money.from_amount(800)
+      expect(highlight_report.highest_profit_month.name).to eq 'Jul'
+      expect(highlight_report.highest_profit_month.profit).to eq Money.from_amount(800)
+    end
+
+    context 'when every active month lost money' do
+      let(:loss_year) { year + 6 }
+      let(:loss_report) { described_class.new(company, loss_year) }
+
+      before do
+        create(:transaction, :expense, company:, categorizable: category1,
+                                       date: Date.new(loss_year, 1, 4), amount: 300)
+        create(:transaction, :expense, company:, categorizable: category1,
+                                       date: Date.new(loss_year, 2, 4), amount: 50)
+      end
+
+      it 'picks the least negative month rather than an empty one' do
+        expect(loss_report.highest_profit_month.name).to eq 'Feb'
+        expect(loss_report.highest_profit_month.profit).to eq(-Money.from_amount(50))
+      end
+
+      it 'has no highest income month' do
+        expect(loss_report.highest_income_month).to be_nil
+      end
+    end
+
+    context 'when the year has no transactions' do
+      let(:blank_report) { described_class.new(company, year + 7) }
+
+      it 'has no highest months at all' do
+        expect(blank_report.any_transactions?).to be false
+        expect(blank_report.highest_income_month).to be_nil
+        expect(blank_report.highest_expense_month).to be_nil
+        expect(blank_report.highest_profit_month).to be_nil
+      end
+    end
+  end
+
   describe 'edge cases' do
     context 'when there are no transactions for the year' do
       let(:empty_year) { year + 1 }

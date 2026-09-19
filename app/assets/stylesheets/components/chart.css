@@ -1,0 +1,18 @@
+.chart {
+  --chart-income: rgb(63, 107, 171);
+  --chart-expense: rgb(163, 65, 62);
+  --chart-profit: rgb(18, 125, 93);
+
+  .chart__plot {
+    position: relative;
+    block-size: clamp(200px, 30vw, 320px);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-mode="light"]) .chart {
+    --chart-income: rgb(19, 85, 185);
+    --chart-expense: rgb(174, 29, 24);
+    --chart-profit: rgb(110, 150, 121);
+  }
+}

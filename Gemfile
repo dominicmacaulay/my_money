@@ -91,8 +91,8 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'test-prof'
-  gem 'webdrivers'
 
   gem 'shoulda-matchers'
 end

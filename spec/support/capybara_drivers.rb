@@ -25,4 +25,3 @@ end
 
 # hide the annoying "Capybara starting Puma..." STDOUT message
 Capybara.server = :puma, { Silent: true }
-Webdrivers.cache_time = 24.hours.to_i

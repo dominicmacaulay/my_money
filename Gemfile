@@ -19,6 +19,10 @@ gem 'stimulus-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 
+# json 3.x dropped the second positional arg to JSON.parse, which ActiveSupport 8.1
+# still passes (active_support/json/decoding.rb). Unpin once Rails supports json 3.
+gem 'json', '~> 2.18'
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -79,8 +83,6 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
-
-  gem 'rolemodel_rails', github: 'RoleModel/rolemodel_rails'
 
   gem 'dockerfile-rails', '>= 1.7'
 

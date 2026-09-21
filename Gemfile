@@ -21,7 +21,7 @@ gem 'jbuilder'
 
 # json 3.x dropped the second positional arg to JSON.parse, which ActiveSupport 8.1
 # still passes (active_support/json/decoding.rb). Unpin once Rails supports json 3.
-gem 'json', '~> 2.18'
+gem 'json', '~> 3.0'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

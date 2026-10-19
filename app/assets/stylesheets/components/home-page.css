@@ -37,3 +37,104 @@
     }
   }
 }
+
+.yearly-summary__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--op-space-small);
+
+  .yearly-summary__help-toggle {
+    margin-inline-start: auto;
+  }
+}
+
+/* Matches the breakpoint where Optics grows smaller buttons to full size */
+@media (width <= 768px) {
+  .yearly-summary__header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    .yearly-summary__title {
+      grid-column: 1 / -1;
+    }
+
+    .yearly-summary__help-toggle {
+      justify-self: end;
+    }
+  }
+}
+
+.yearly-summary__help {
+  inline-size: min(44rem, calc(100vw - 2 * var(--op-space-medium)));
+  padding: var(--op-space-medium);
+  border: var(--op-border-width) solid var(--op-color-border);
+  border-radius: var(--op-radius-medium);
+  background: var(--op-color-background);
+  color: var(--op-color-on-background);
+  box-shadow: var(--op-shadow-large);
+  opacity: 0;
+  translate: 0 var(--op-space-small);
+  scale: 0.96;
+
+  /* display and overlay are discrete, so they hold until the fade-out finishes */
+  transition:
+    opacity var(--op-transition-modal-time) ease,
+    translate var(--op-transition-modal-time) ease,
+    scale var(--op-transition-modal-time) ease,
+    display var(--op-transition-modal-time) allow-discrete,
+    overlay var(--op-transition-modal-time) allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 var(--op-space-small);
+      scale: 0.96;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    translate: none;
+    scale: none;
+
+    &:popover-open {
+      @starting-style {
+        translate: none;
+        scale: none;
+      }
+    }
+  }
+
+  h3 {
+    margin-block-start: 0;
+  }
+
+  dt {
+    font-weight: var(--op-font-weight-bold);
+  }
+
+  dd {
+    margin-inline-start: 0;
+    margin-block-end: var(--op-space-small);
+  }
+
+  &::backdrop {
+    background: rgb(0 0 0 / 0%);
+    transition:
+      background var(--op-transition-modal-time) ease,
+      display var(--op-transition-modal-time) allow-discrete,
+      overlay var(--op-transition-modal-time) allow-discrete;
+  }
+
+  &:popover-open::backdrop {
+    background: rgb(0 0 0 / 30%);
+
+    @starting-style {
+      background: rgb(0 0 0 / 0%);
+    }
+  }
+}

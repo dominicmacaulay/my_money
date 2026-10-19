@@ -72,6 +72,29 @@ RSpec.describe 'Pages' do
           expect(page).to have_css 'tr', text: /#{last_week.strftime('%b %-d')}\s*\$750\.00/
         end
 
+        it 'switches to weekly profit by week', :js do
+          second_week = Date.new(current_year, 1, 1).beginning_of_week + 7
+
+          expect(page).to have_no_css 'caption', text: 'net profit by week'
+
+          click_on 'Profit'
+
+          expect(page).to have_css '[role="tab"][aria-selected="true"]', text: 'Profit'
+          expect(page).to have_css 'tr', text: /Jan 1\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /#{second_week.strftime('%b %-d')}\s*\$0\.00/
+          expect(page).to have_no_css 'caption', text: 'running balance by week'
+        end
+
+        it 'explains how the chart is calculated', :js do
+          find('button[aria-label="How this chart is calculated"]').click
+
+          expect(page).to have_css '[popover]', text: 'Earlier years are not carried in'
+
+          click_on 'Close'
+
+          expect(page).to have_no_css '[popover]', text: 'Earlier years are not carried in'
+        end
+
         it 'displays the total balance for the current year' do
           total_income = company.income_for_year(current_year)
           total_expenses = company.expense_for_year(current_year)

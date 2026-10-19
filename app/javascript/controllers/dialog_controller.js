@@ -5,6 +5,15 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["dialog"]
 
+  connect() {
+    this.beforeCache = this.close.bind(this)
+    document.addEventListener("turbo:before-cache", this.beforeCache)
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:before-cache", this.beforeCache)
+  }
+
   open() {
     this.dialogTarget.showModal()
   }

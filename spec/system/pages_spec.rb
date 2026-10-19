@@ -88,11 +88,11 @@ RSpec.describe 'Pages' do
         it 'explains how the chart is calculated', :js do
           find('button[aria-label="How this chart is calculated"]').click
 
-          expect(page).to have_css '[popover]', text: 'Earlier years are not carried in'
+          expect(page).to have_css '.modal', text: 'Earlier years are not carried in'
 
-          click_on 'Close'
+          find('button[aria-label="Close"]').click
 
-          expect(page).to have_no_css '[popover]', text: 'Earlier years are not carried in'
+          expect(page).to have_no_css '.modal', text: 'Earlier years are not carried in'
         end
 
         it 'displays the total balance for the current year' do

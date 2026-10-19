@@ -9,7 +9,7 @@
           | Balance
         button#weekly-profit-tab.btn.btn--medium type='button' role='tab' aria-selected='false' aria-controls='weekly-profit-panel' tabindex='-1' data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
           | Profit
-      button.btn.btn--icon.btn--no-border.btn--small.yearly-summary__help-toggle type='button' popovertarget='yearly-summary-help' aria-label='How this chart is calculated'
+      button.btn.btn--icon.btn--no-border.btn--small.yearly-summary__help-toggle type='button' aria-label='How this chart is calculated' command='show-modal' commandfor='yearly-summary-help'
         = material_icon 'help', hover_text: 'How this chart is calculated'
 
   .divider
@@ -21,21 +21,23 @@
       #weekly-profit-panel role='tabpanel' aria-labelledby='weekly-profit-tab' data-tabs-target='panel' hidden=true
         = render 'shared/weekly_profit_chart', report:
 
-      #yearly-summary-help.yearly-summary__help popover=true
-        h3 How this chart is calculated
-        p
-          | Each point is one Monday-to-Sunday week. The first week starts on Jan 1 and the last ends on Dec 31,
-            so they can be shorter than seven days.
-        dl
-          dt Balance
-          dd
-            | The running total of income minus expenses, added up week over week, starting from zero on Jan 1.
+      dialog#yearly-summary-help.modal closedby='any' aria-labelledby='yearly-summary-help-title'
+        .modal__header
+          span#yearly-summary-help-title How this chart is calculated
+          = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, command: 'close', commandfor: 'yearly-summary-help'
+
+        .modal__body
+          p
+            | Each point is one Monday-to-Sunday week. The first week starts on Jan 1 and the last ends on Dec 31,
+              so they can be shorter than seven days.
+          p
+            strong Balance:
+            |  The running total of income minus expenses, added up week over week, starting from zero on Jan 1.
               Earlier years are not carried in, so the final point matches the Total Balance below.
-          dt Profit
-          dd
-            | Each week's income minus its expenses, on its own. A point below zero means you spent more than you
+          p
+            strong Profit:
+            |  Each week's income minus its expenses, on its own. A point below zero means you spent more than you
               earned that week.
-        button.btn.btn--small type='button' popovertarget='yearly-summary-help' popovertargetaction='hide' Close
 
     .summary-stats
       .text-pair

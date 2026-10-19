@@ -7,7 +7,7 @@ module SelectHelper
     label = first(:label, text: from)
     input = find(id: label['for'], visible: :all)
 
-    if input.tag_name == 'input' && input.native.attribute(:'aria-controls').include?('ts-dropdown')
+    if input.tag_name == 'input' && input[:'aria-controls'].include?('ts-dropdown')
       tom_select(input, value)
     elsif input.tag_name == 'tailored-select'
       tailored_select(input, value)

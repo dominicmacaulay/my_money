@@ -37,30 +37,3 @@
     }
   }
 }
-
-.yearly-summary__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--op-space-small);
-
-  .yearly-summary__help-toggle {
-    margin-inline-start: auto;
-  }
-}
-
-/* Matches the breakpoint where Optics grows smaller buttons to full size */
-@media (width <= 768px) {
-  .yearly-summary__header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-
-    .yearly-summary__title {
-      grid-column: 1 / -1;
-    }
-
-    .yearly-summary__help-toggle {
-      justify-self: end;
-    }
-  }
-}

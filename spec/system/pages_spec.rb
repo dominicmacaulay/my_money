@@ -95,6 +95,16 @@ RSpec.describe 'Pages' do
           expect(page).to have_no_css '.modal', text: 'Earlier years are not carried in'
         end
 
+        it 'closes the help when the backdrop is clicked', :js do
+          find('button[aria-label="How this chart is calculated"]').click
+          expect(page).to have_css 'dialog[open]'
+
+          # The backdrop is part of the <dialog> box, so clicking its corner lands outside the content.
+          page.driver.browser.action.move_to_location(5, 5).click.perform
+
+          expect(page).to have_no_css 'dialog[open]'
+        end
+
         it 'displays the total balance for the current year' do
           total_income = company.income_for_year(current_year)
           total_expenses = company.expense_for_year(current_year)

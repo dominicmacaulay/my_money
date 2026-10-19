@@ -1,30 +1,35 @@
 -# locals: (report:)
 
-.card data-controller='tabs' data-tabs-active-class='btn--active'
-  .card__header.yearly-summary__header
-    span.yearly-summary__title #{report.year} Summary
+-# The year overviews page renders one of these per year, so every id carries the year.
+- id = "yearly-summary-#{report.year}"
+
+.card data-controller='tabs dialog' data-tabs-active-class='btn--active'
+  .card__header.flex.justify-between.items-end.gap-sm
+    .op-cluster.gap-sm
+      span #{report.year} Summary
+      - if report.any_transactions?
+        .btn-group role='tablist' aria-label='Chart mode'
+          button.btn.btn--medium.btn--active id="#{id}-balance-tab" type='button' role='tab' aria-selected='true' aria-controls="#{id}-balance-panel" data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
+            | Balance
+          button.btn.btn--medium id="#{id}-profit-tab" type='button' role='tab' aria-selected='false' aria-controls="#{id}-profit-panel" tabindex='-1' data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
+            | Profit
     - if report.any_transactions?
-      .btn-group role='tablist' aria-label='Chart mode'
-        button#running-balance-tab.btn.btn--medium.btn--active type='button' role='tab' aria-selected='true' aria-controls='running-balance-panel' data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
-          | Balance
-        button#weekly-profit-tab.btn.btn--medium type='button' role='tab' aria-selected='false' aria-controls='weekly-profit-panel' tabindex='-1' data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
-          | Profit
-      button.btn.btn--icon.btn--no-border.btn--small.yearly-summary__help-toggle type='button' aria-label='How this chart is calculated' command='show-modal' commandfor='yearly-summary-help'
+      button.btn.btn--icon.btn--no-border.btn--medium type='button' aria-label='How this chart is calculated' data-action='dialog#open'
         = material_icon 'help', hover_text: 'How this chart is calculated'
 
   .divider
 
   .card__body
     - if report.any_transactions?
-      #running-balance-panel role='tabpanel' aria-labelledby='running-balance-tab' data-tabs-target='panel'
+      div id="#{id}-balance-panel" role='tabpanel' aria-labelledby="#{id}-balance-tab" data-tabs-target='panel'
         = render 'shared/running_balance_chart', report:
-      #weekly-profit-panel role='tabpanel' aria-labelledby='weekly-profit-tab' data-tabs-target='panel' hidden=true
+      div id="#{id}-profit-panel" role='tabpanel' aria-labelledby="#{id}-profit-tab" data-tabs-target='panel' hidden=true
         = render 'shared/weekly_profit_chart', report:
 
-      dialog#yearly-summary-help.modal closedby='any' aria-labelledby='yearly-summary-help-title'
+      dialog.modal aria-labelledby="#{id}-help-title" data-dialog-target='dialog' data-action='click->dialog#closeOnBackdrop'
         .modal__header
-          span#yearly-summary-help-title How this chart is calculated
-          = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, command: 'close', commandfor: 'yearly-summary-help'
+          span id="#{id}-help-title" How this chart is calculated
+          = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, data: { action: 'dialog#close' }
 
         .modal__body
           p

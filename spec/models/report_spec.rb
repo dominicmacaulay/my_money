@@ -131,7 +131,7 @@ RSpec.describe Report do
     it 'covers the whole year in Monday-to-Sunday buckets' do
       weeks = week_report.weekly_breakdown
 
-      expect(weeks.first.name).to eq Date.new(week_year, 1, 1).beginning_of_week.strftime('%b %-d')
+      expect(weeks.first.name).to eq 'Jan 1'
       expect(weeks.last.name).to eq Date.new(week_year, 12, 31).beginning_of_week.strftime('%b %-d')
       expect(weeks.sum(&:income)).to eq week_report.total_income
       expect(weeks.sum(&:expense)).to eq week_report.total_expense
@@ -156,6 +156,37 @@ RSpec.describe Report do
       week = week_report.weekly_breakdown.find { |candidate| candidate.name == loss_week.strftime('%b %-d') }
 
       expect(week.profit).to eq(-Money.from_amount(250))
+    end
+  end
+
+  describe '#weekly_running_balance' do
+    let(:balance_year) { year + 9 }
+    let(:balance_report) { described_class.new(company, balance_year) }
+    let(:first_week) { Date.new(balance_year, 1, 1) }
+    let(:march_week) { Date.new(balance_year, 3, 15).beginning_of_week }
+
+    def balance_for(week_start)
+      balance_report.weekly_running_balance.find { |week| week.name == week_start.strftime('%b %-d') }.balance
+    end
+
+    before do
+      create(:transaction, :income, company:, date: Date.new(balance_year - 1, 12, 31), amount: 5000)
+      create(:transaction, :income, company:, date: march_week, amount: 900)
+      create(:transaction, :expense, company:, categorizable: category1, date: march_week + 7, amount: 400)
+    end
+
+    it 'starts from zero without carrying in earlier years' do
+      expect(balance_for(first_week)).to eq Money.from_amount(0)
+    end
+
+    it 'accumulates profit week over week' do
+      expect(balance_for(march_week - 7)).to eq Money.from_amount(0)
+      expect(balance_for(march_week)).to eq Money.from_amount(900)
+      expect(balance_for(march_week + 7)).to eq Money.from_amount(500)
+    end
+
+    it 'ends the year at the total balance' do
+      expect(balance_report.weekly_running_balance.last.balance).to eq balance_report.total_balance
     end
   end
 

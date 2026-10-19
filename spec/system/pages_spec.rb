@@ -64,11 +64,12 @@ RSpec.describe 'Pages' do
           expect(page).to have_text("Total Expense\n#{total_expenses}")
         end
 
-        it 'charts net profit by week' do
-          week_start = Date.new(current_year, 1, 1).beginning_of_week
+        it 'charts the running balance by week' do
+          last_week = Date.new(current_year, 12, 31).beginning_of_week
 
           expect(page).to have_css '[data-chart-type-value="line"]'
-          expect(page).to have_css 'tr', text: /#{week_start.strftime('%b %-d')}\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /Jan 1\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /#{last_week.strftime('%b %-d')}\s*\$750\.00/
         end
 
         it 'displays the total balance for the current year' do

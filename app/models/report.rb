@@ -7,6 +7,8 @@ class Report
     end
   end
 
+  PeriodBalance = Data.define(:name, :balance)
+
   class CategoryExpenseBreakdown
     attr_reader :category, :company, :year
 
@@ -88,9 +90,22 @@ class Report
 
   def weekly_breakdown
     @weekly_breakdown ||= week_starts.map do |starts_on|
-      PeriodTotal.new(name: starts_on.strftime('%b %-d'),
+      # The first bucket's Monday usually falls in December, but it only holds this year's days.
+      PeriodTotal.new(name: [starts_on, Date.new(year)].max.strftime('%b %-d'),
                       income: week_total('income', starts_on),
                       expense: week_total('expense', starts_on))
+    end
+  end
+
+  # Cumulative profit within the year only; earlier years never carry in.
+  def weekly_running_balance
+    @weekly_running_balance ||= begin
+      balance = Money.new(0)
+
+      weekly_breakdown.map do |week|
+        balance += week.profit
+        PeriodBalance.new(name: week.name, balance:)
+      end
     end
   end
 

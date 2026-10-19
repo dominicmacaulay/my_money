@@ -1,0 +1,19 @@
+-# locals: (report:)
+
+- if report.any_transactions?
+  - weeks = report.weekly_running_balance
+  - series = [{ label: 'Running Balance', data: weeks.map { |week| week.balance.to_f }, color: '--chart-profit' }]
+
+  = render 'shared/chart', type: 'line', labels: weeks.map(&:name), series:
+
+  table.sr-only
+    caption = "#{report.year} running balance by week"
+    thead
+      tr
+        th Week of
+        th Balance
+    tbody
+      - weeks.each do |week|
+        tr
+          th = week.name
+          td = humanized_money_with_symbol(week.balance)

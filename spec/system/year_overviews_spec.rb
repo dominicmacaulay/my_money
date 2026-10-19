@@ -68,4 +68,31 @@ RSpec.describe 'Year Overviews' do
       expect(page).to have_css '.text-pair', text: /Highest Profit\s+Jan · \$250\.00/
     end
   end
+
+  it 'keeps the chart tabs and help separate for each year', :js do
+    click_on 'account_circle'
+    click_on 'Year Overviews'
+    find(data_test(last_year)).click
+
+    within data_test(last_year) do
+      click_on 'Profit'
+
+      expect(page).to have_css '[role="tab"][aria-selected="true"]', text: 'Profit'
+    end
+
+    within data_test(this_year) do
+      expect(page).to have_css '[role="tab"][aria-selected="true"]', text: 'Balance'
+    end
+
+    ids = page.evaluate_script("[...document.querySelectorAll('[id]')].map((element) => element.id)")
+    expect(ids.tally.select { |_id, count| count > 1 }).to be_empty
+
+    within data_test(last_year) do
+      find('button[aria-label="How this chart is calculated"]').click
+
+      expect(page).to have_css 'dialog[open]', text: 'Earlier years are not carried in'
+    end
+
+    expect(page).to have_css 'dialog[open]', count: 1
+  end
 end

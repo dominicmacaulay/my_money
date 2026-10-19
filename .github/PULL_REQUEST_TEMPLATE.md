@@ -22,3 +22,7 @@ These can be done by entering `rake` in the terminal
 ## Screenshots
 
 If any UI changes need to be shown off, please add screenshots here.
+
+### Desktop
+
+### Mobile

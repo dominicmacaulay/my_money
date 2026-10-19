@@ -1,12 +1,48 @@
 -# locals: (report:)
 
-.card
-  .card__header #{report.year} Summary
+-# The year overviews page renders one of these per year, so every id carries the year.
+- id = "yearly-summary-#{report.year}"
+
+.card data-controller='tabs dialog' data-tabs-active-class='btn--active'
+  .card__header.flex.justify-between.items-end.gap-sm
+    .op-cluster.gap-sm
+      span #{report.year} Summary
+      - if report.any_transactions?
+        .btn-group role='tablist' aria-label='Chart mode'
+          button.btn.btn--medium.btn--active id="#{id}-balance-tab" type='button' role='tab' aria-selected='true' aria-controls="#{id}-balance-panel" data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
+            | Balance
+          button.btn.btn--medium id="#{id}-profit-tab" type='button' role='tab' aria-selected='false' aria-controls="#{id}-profit-panel" tabindex='-1' data-tabs-target='tab' data-action='tabs#select keydown->tabs#navigate'
+            | Profit
+    - if report.any_transactions?
+      button.btn.btn--icon.btn--no-border.btn--medium type='button' aria-label='How this chart is calculated' data-action='dialog#open'
+        = material_icon 'help', hover_text: 'How this chart is calculated'
 
   .divider
 
   .card__body
-    = render 'shared/weekly_profit_chart', report:
+    - if report.any_transactions?
+      div id="#{id}-balance-panel" role='tabpanel' aria-labelledby="#{id}-balance-tab" data-tabs-target='panel'
+        = render 'shared/running_balance_chart', report:
+      div id="#{id}-profit-panel" role='tabpanel' aria-labelledby="#{id}-profit-tab" data-tabs-target='panel' hidden=true
+        = render 'shared/weekly_profit_chart', report:
+
+      dialog.modal aria-labelledby="#{id}-help-title" data-dialog-target='dialog' data-action='click->dialog#closeOnBackdrop'
+        .modal__header
+          span id="#{id}-help-title" How this chart is calculated
+          = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, data: { action: 'dialog#close' }
+
+        .modal__body
+          p
+            | Each point is one Monday-to-Sunday week. The first week starts on Jan 1 and the last ends on Dec 31,
+              so they can be shorter than seven days.
+          p
+            strong Balance:
+            |  The running total of income minus expenses, added up week over week, starting from zero on Jan 1.
+              Earlier years are not carried in, so the final point matches the Total Balance below.
+          p
+            strong Profit:
+            |  Each week's income minus its expenses, on its own. A point below zero means you spent more than you
+              earned that week.
 
     .summary-stats
       .text-pair

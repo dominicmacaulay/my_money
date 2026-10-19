@@ -64,11 +64,45 @@ RSpec.describe 'Pages' do
           expect(page).to have_text("Total Expense\n#{total_expenses}")
         end
 
-        it 'charts net profit by week' do
-          week_start = Date.new(current_year, 1, 1).beginning_of_week
+        it 'charts the running balance by week' do
+          last_week = Date.new(current_year, 12, 31).beginning_of_week
 
           expect(page).to have_css '[data-chart-type-value="line"]'
-          expect(page).to have_css 'tr', text: /#{week_start.strftime('%b %-d')}\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /Jan 1\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /#{last_week.strftime('%b %-d')}\s*\$750\.00/
+        end
+
+        it 'switches to weekly profit by week', :js do
+          second_week = Date.new(current_year, 1, 1).beginning_of_week + 7
+
+          expect(page).to have_no_css 'caption', text: 'net profit by week'
+
+          click_on 'Profit'
+
+          expect(page).to have_css '[role="tab"][aria-selected="true"]', text: 'Profit'
+          expect(page).to have_css 'tr', text: /Jan 1\s*\$750\.00/
+          expect(page).to have_css 'tr', text: /#{second_week.strftime('%b %-d')}\s*\$0\.00/
+          expect(page).to have_no_css 'caption', text: 'running balance by week'
+        end
+
+        it 'explains how the chart is calculated', :js do
+          find('button[aria-label="How this chart is calculated"]').click
+
+          expect(page).to have_css '.modal', text: 'Earlier years are not carried in'
+
+          find('button[aria-label="Close"]').click
+
+          expect(page).to have_no_css '.modal', text: 'Earlier years are not carried in'
+        end
+
+        it 'closes the help when the backdrop is clicked', :js do
+          find('button[aria-label="How this chart is calculated"]').click
+          expect(page).to have_css 'dialog[open]'
+
+          # The backdrop is part of the <dialog> box, so clicking its corner lands outside the content.
+          page.driver.browser.action.move_to_location(5, 5).click.perform
+
+          expect(page).to have_no_css 'dialog[open]'
         end
 
         it 'displays the total balance for the current year' do

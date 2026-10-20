@@ -27,6 +27,7 @@ RSpec.describe TransactionForm do
           [Date.new(2026, 1, 31), Date.new(2026, 2, 7), Date.new(2026, 2, 14), Date.new(2026, 2, 21)]
         )
         expect(company.transactions.pluck(:description).uniq).to eq(['Rent'])
+        expect(company.transactions.distinct.pluck(:recurrence_id)).to contain_exactly(be_present)
       end
 
       it 'keeps monthly occurrences anchored to the start day' do
@@ -69,6 +70,31 @@ RSpec.describe TransactionForm do
 
         expect { form.save }.not_to change(Transaction, :count)
         expect(form.errors[:amount]).to include('must be greater than 0')
+      end
+    end
+
+    context 'when updating a recurring transaction' do
+      let(:recurrence_id) { SecureRandom.uuid }
+      let!(:past) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 1, 1), amount: '10.00') }
+      let!(:current) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 2, 1), amount: '10.00') }
+      let!(:future) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 3, 1), amount: '10.00') }
+
+      it 'updates only this occurrence by default' do
+        described_class.new({ amount: '20.00' }, transaction: current).save
+
+        expect([past, current, future].map { |t| t.reload.amount.to_s }).to eq(%w[10.00 20.00 10.00])
+      end
+
+      it 'updates this and later occurrences, shifting their dates by the same amount' do
+        described_class.new({ amount: '20.00', date: '2026-02-03', description: 'Gym', occurrences: 'future' },
+                            transaction: current).save
+
+        [past, current, future].each(&:reload)
+        expect([past, current, future].map { |t| t.amount.to_s }).to eq(%w[10.00 20.00 20.00])
+        expect([past, current, future].map(&:date)).to eq(
+          [Date.new(2026, 1, 1), Date.new(2026, 2, 3), Date.new(2026, 3, 3)]
+        )
+        expect(future.description).to eq('Gym')
       end
     end
 

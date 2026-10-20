@@ -20,13 +20,30 @@
         = render 'recurrence', transaction_form: f.object
 
   .card__footer
+    - transaction = @transaction_form.transaction
+    - form_id = dom_id(@transaction_form, transaction.persisted? ? :edit : :new)
     .flex.flex-wrap.justify-between.gap-xs
       - show_delete_button = action_name === 'update' || action_name === 'edit'
-      - if show_delete_button && policy(@transaction_form.transaction).destroy?
-        = button_to 'Delete Transaction', transaction_path(@transaction_form.transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
+      - if show_delete_button && policy(transaction).destroy?
+        - if transaction.recurring?
+          div data-controller='dialog'
+            button.btn.btn--destructive type='button' data-action='dialog#open' Delete Transaction
+            = render layout: 'occurrence_dialog', locals: { title: 'Delete Recurring Transaction', id: 'delete-occurrences' } do
+              = button_to 'Only This Transaction', transaction_path(transaction), method: :delete, class: 'btn btn--destructive'
+              = button_to 'This and Future Transactions', transaction_path(transaction), method: :delete, params: { occurrences: 'future' }, class: 'btn btn--destructive'
+        - else
+          = button_to 'Delete Transaction', transaction_path(transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 
-      .flex.flex-wrap.gap-xs
-        - submit_action = action_name == 'new' ? 'Create' : 'Update'
-        = submit_button @transaction_form, submit_action + ' Transaction', class: 'btn btn--primary'
-        = submit_button @transaction_form, submit_action + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'
-
+      - submit_action = action_name == 'new' ? 'Create' : 'Update'
+      - if transaction.persisted? && transaction.recurring?
+        .flex.flex-wrap.gap-xs data-controller='dialog occurrence-choice'
+          = button_tag submit_action + ' Transaction', type: 'button', value: '', class: 'btn btn--primary', data: { action: 'occurrence-choice#remember dialog#open' }
+          = button_tag submit_action + ' and New', type: 'button', value: 'true', class: 'btn', data: { action: 'occurrence-choice#remember dialog#open' }
+          = render layout: 'occurrence_dialog', locals: { title: 'Update Recurring Transaction', id: 'update-occurrences' } do
+            = hidden_field_tag :submit_and_new, '', form: form_id, data: { occurrence_choice_target: 'submitAndNew' }
+            = button_tag 'Only This Transaction', form: form_id, name: 'transaction[occurrences]', value: 'this', class: 'btn btn--primary'
+            = button_tag 'This and Future Transactions', form: form_id, name: 'transaction[occurrences]', value: 'future', class: 'btn btn--primary'
+      - else
+        .flex.flex-wrap.gap-xs
+          = submit_button @transaction_form, submit_action + ' Transaction', class: 'btn btn--primary'
+          = submit_button @transaction_form, submit_action + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'

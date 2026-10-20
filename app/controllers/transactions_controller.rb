@@ -46,7 +46,7 @@ class TransactionsController < ApplicationController
     authorize @transaction_form.transaction
 
     if @transaction_form.save
-      notice = created_notice(@transaction_form.transactions.size)
+      notice = success_notice(@transaction_form.transactions.size, 'created')
       if params[:submit_and_new] == 'true'
         redirect_to new_transaction_path(transaction_type: @transaction_form.transaction_type,
                                          date: @transaction_form.date),
@@ -81,9 +81,13 @@ class TransactionsController < ApplicationController
   def destroy
     authorize @transaction
 
-    @transaction.destroy
+    destroyed = if params[:occurrences] == 'future'
+                  @transaction.this_and_future_occurrences.destroy_all
+                else
+                  [@transaction.destroy]
+                end
 
-    redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
+    redirect_to transactions_path, notice: success_notice(destroyed.size, 'destroyed')
   end
 
   private
@@ -117,8 +121,8 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params.expect(:id))
   end
 
-  def created_notice(count)
-    count == 1 ? 'Transaction was successfully created.' : "#{count} transactions were successfully created."
+  def success_notice(count, action)
+    count == 1 ? "Transaction was successfully #{action}." : "#{count} transactions were successfully #{action}."
   end
 
   def set_transaction_form
@@ -128,6 +132,6 @@ class TransactionsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def transaction_params
     params.expect(transaction: %i[date description amount transaction_type company_id
-                                  categorizable recurring end_date frequency])
+                                  categorizable recurring end_date frequency occurrences])
   end
 end

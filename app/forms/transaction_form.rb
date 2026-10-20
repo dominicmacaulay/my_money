@@ -19,9 +19,13 @@ class TransactionForm
 
   MAX_OCCURRENCES = 366
 
+  OCCURRENCE_SCOPES = %w[this future].freeze
+
   attribute :recurring, :boolean, default: false
   attribute :end_date, :date
   attribute :frequency, :string
+  # When editing a recurring transaction, whether changes apply to just it or it and every later occurrence.
+  attribute :occurrences, :string, default: 'this'
 
   attr_reader :transaction
 
@@ -32,6 +36,7 @@ class TransactionForm
   validates :frequency, inclusion: { in: FREQUENCIES.keys }, if: :recurring?
   validates :end_date, presence: true, if: :recurring?
   validate :end_date_valid, if: :recurring?
+  validates :occurrences, inclusion: { in: OCCURRENCE_SCOPES }
 
   def self.model_name
     ActiveModel::Name.new(self, nil, 'Transaction')
@@ -51,12 +56,17 @@ class TransactionForm
   def save # rubocop:disable Naming/PredicateMethod
     return false unless valid?
 
-    ActiveRecord::Base.transaction { transactions.each(&:save!) }
+    ActiveRecord::Base.transaction do
+      update_later_occurrences if update_future_occurrences?
+      transactions.each(&:save!)
+    end
     true
   end
 
   # The first occurrence is the wrapped transaction itself; the rest are copies differing only by date.
   def transactions
+    transaction.recurrence_id ||= SecureRandom.uuid if recurring?
+
     occurrence_dates.map.with_index do |occurrence_date, index|
       next transaction if index.zero?
 
@@ -65,6 +75,27 @@ class TransactionForm
   end
 
   private
+
+  def update_future_occurrences?
+    occurrences == 'future' && transaction.persisted? && transaction.recurring?
+  end
+
+  # Later occurrences take the same edits; a date change shifts each of them by the same number of days.
+  def update_later_occurrences
+    changes = transaction.changes_to_save.except('date').transform_values(&:last)
+
+    later_occurrences.find_each do |occurrence|
+      occurrence.update!(changes.merge(date: occurrence.date + date_shift))
+    end
+  end
+
+  def later_occurrences
+    transaction.this_and_future_occurrences.where.not(id: transaction.id)
+  end
+
+  def date_shift
+    transaction.date - transaction.date_in_database
+  end
 
   def occurrence_dates
     return [date] unless recurring?

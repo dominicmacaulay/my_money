@@ -362,6 +362,66 @@ RSpec.describe 'Transactions' do
     end
   end
 
+  context 'when viewing a recurring transaction', :js do
+    let(:recurrence_id) { SecureRandom.uuid }
+    let(:year) { Date.current.year }
+    let!(:past) { create(:transaction, company:, recurrence_id:, date: Date.new(year, 1, 1), description: 'Past') }
+    let!(:current) do
+      create(:transaction, company:, recurrence_id:, date: Date.new(year, 2, 1), description: 'Current')
+    end
+    let!(:future) { create(:transaction, company:, recurrence_id:, date: Date.new(year, 3, 1), description: 'Future') }
+
+    before do
+      visit edit_transaction_path(current)
+    end
+
+    it 'can update only this occurrence' do
+      fill_in 'Description', with: 'Updated'
+      click_on 'Update Transaction'
+      click_on 'Only This Transaction'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      expect([past, current, future].map { |t| t.reload.description }).to eq(%w[Past Updated Future])
+    end
+
+    it 'can update this and future occurrences' do
+      fill_in 'Description', with: 'Updated'
+      click_on 'Update Transaction'
+      click_on 'This and Future Transactions'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      expect([past, current, future].map { |t| t.reload.description }).to eq(%w[Past Updated Updated])
+    end
+
+    it 'can update this and future occurrences and create another' do
+      click_on 'Update and New'
+      click_on 'This and Future Transactions'
+
+      expect(page).to have_text('Please create another')
+      expect(page).to have_text('Create New Transaction')
+    end
+
+    it 'can delete only this occurrence' do
+      click_on 'Delete Transaction'
+
+      expect do
+        click_on 'Only This Transaction'
+        expect(page).to have_text('Transaction was successfully destroyed')
+      end.to change(Transaction, :count).by(-1)
+      expect(Transaction.where(id: [past, future])).to contain_exactly(past, future)
+    end
+
+    it 'can delete this and future occurrences' do
+      click_on 'Delete Transaction'
+
+      expect do
+        click_on 'This and Future Transactions'
+        expect(page).to have_text('2 transactions were successfully destroyed')
+      end.to change(Transaction, :count).by(-2)
+      expect(Transaction.all).to contain_exactly(past)
+    end
+  end
+
   def expect_transactions_to_be_listed(transactions, show_type: true) # rubocop:disable Metrics/AbcSize
     transactions.each do |transaction|
       expect(page).to have_text transaction.date

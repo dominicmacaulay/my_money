@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Transaction < ApplicationRecord
-  # Which occurrences of a recurring series an update or delete applies to.
   OCCURRENCE_SCOPES = %w[this future].freeze
 
   belongs_to :company
@@ -24,7 +23,7 @@ class Transaction < ApplicationRecord
     recurrence_id.present?
   end
 
-  # Includes this transaction. Uses the stored date so pending edits to it don't move the cutoff.
+  # The stored date, so an unsaved date edit doesn't move the cutoff.
   def this_and_future_occurrences
     return self.class.where(id:) unless recurring?
 

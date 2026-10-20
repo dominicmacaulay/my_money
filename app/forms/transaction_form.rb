@@ -6,8 +6,7 @@ class TransactionForm
 
   TRANSACTION_ATTRIBUTES = %i[date description amount transaction_type company_id categorizable].freeze
 
-  # Steps are multiplied from the start date rather than chained, so a monthly series starting on
-  # the 31st lands on the last day of shorter months without drifting earlier for the rest of the series.
+  # Multiplied from the start date rather than chained, so the 31st doesn't drift to the 28th for good.
   FREQUENCIES = {
     'daily' => { days: 1 },
     'weekly' => { weeks: 1 },
@@ -19,16 +18,13 @@ class TransactionForm
 
   MAX_OCCURRENCES = 366
 
-  # What "this and future" copies from the edited transaction onto the later occurrences in its series.
   SERIES_ATTRIBUTES = %w[amount_cents transaction_type categorizable_type categorizable_id].freeze
 
   attribute :recurring, :boolean, default: false
   attribute :end_date, :date
   attribute :frequency, :string
-  # When editing a recurring transaction, whether changes apply to just it or it and every later occurrence.
   attribute :occurrences, :string, default: 'this'
 
-  # How many transactions the last successful #save created, or 1 for an update.
   attr_reader :transaction, :saved_count
 
   delegate(*TRANSACTION_ATTRIBUTES, *TRANSACTION_ATTRIBUTES.map { |attr| :"#{attr}=" }, to: :transaction)
@@ -49,13 +45,10 @@ class TransactionForm
     super(attributes)
   end
 
-  # Only new transactions can recur; editing one never fans out into a series.
   def recurring?
     recurring && transaction.new_record?
   end
 
-  # Only the wrapped transaction is validated and saved as a model. Every other occurrence matches it apart from
-  # its date, so the rest of the series is written with one bulk statement built from its attributes.
   def save # rubocop:disable Naming/PredicateMethod
     return false unless valid?
 
@@ -73,6 +66,7 @@ class TransactionForm
 
   private
 
+  # Copies differ from the validated transaction only by date, so they skip validation.
   def insert_later_occurrences(later_dates)
     return if later_dates.empty?
 
@@ -80,8 +74,6 @@ class TransactionForm
     Transaction.insert_all!(later_dates.map { |later_date| attributes.merge('date' => later_date) }) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  # Later occurrences take on the subject's state wholesale, so each ends up as valid as the subject. Their own
-  # dates and descriptions are kept. One UPDATE, so it can't resurrect rows deleted meanwhile or clobber other columns.
   def update_later_occurrences
     later_occurrences.update_all(transaction.attributes.slice(*SERIES_ATTRIBUTES).merge(updated_at: Time.current)) # rubocop:disable Rails/SkipsModelValidations
   end

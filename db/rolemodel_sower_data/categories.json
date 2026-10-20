@@ -6,7 +6,10 @@
     "name": "Car and truck expenses"
   },
   {
-    "name": "Commissions and fees, contract labor"
+    "name": "Commissions and fees"
+  },
+  {
+    "name": "Contract labor"
   },
   {
     "name": "Depletion"
@@ -18,7 +21,10 @@
     "name": "Employee benefit programs"
   },
   {
-    "name": "Insurance, interest"
+    "name": "Insurance (other than health)"
+  },
+  {
+    "name": "Interest"
   },
   {
     "name": "Legal and professional services"
@@ -49,5 +55,8 @@
   },
   {
     "name": "Wages"
+  },
+  {
+    "name": "Other expenses"
   }
 ]

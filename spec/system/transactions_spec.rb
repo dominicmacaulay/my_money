@@ -397,6 +397,19 @@ RSpec.describe 'Transactions' do
       expect([past, current, future].map(&:description)).to eq(%w[Past Updated Future])
     end
 
+    it 'asks which occurrences to update when the form is submitted with Enter' do
+      fill_in 'Description', with: 'Updated'
+      find_field('Description').send_keys(:enter)
+
+      expect(page).to have_button('This and Future Transactions')
+      expect(current.reload.description).to eq('Current')
+
+      click_on 'This and Future Transactions'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      expect(current.reload.description).to eq('Updated')
+    end
+
     it 'can delete only this occurrence' do
       click_on 'Delete Transaction'
 

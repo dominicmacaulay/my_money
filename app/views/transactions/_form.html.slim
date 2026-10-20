@@ -35,7 +35,9 @@
 
         - if transaction.recurring?
           div data-controller='dialog'
-            = button_tag 'Update Transaction', type: 'button', class: 'btn btn--primary', data: { action: 'dialog#open' }
+            -# A real submit button placed before the dialog's, so pressing Enter in a field lands here and opens the
+            -# dialog instead of submitting through "Only This Transaction".
+            = submit_button @transaction_form, 'Update Transaction', class: 'btn btn--primary', data: { action: 'dialog#open:prevent' }
             = render layout: 'occurrence_dialog', locals: { title: 'Update Recurring Transaction', id: 'update-occurrences' } do
               = submit_button @transaction_form, 'Only This Transaction', name: 'transaction[occurrences]', value: 'this', class: 'btn btn--primary'
               = submit_button @transaction_form, 'This and Future Transactions', name: 'transaction[occurrences]', value: 'future', class: 'btn btn--primary'

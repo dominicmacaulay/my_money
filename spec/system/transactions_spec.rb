@@ -264,6 +264,39 @@ RSpec.describe 'Transactions' do
       expect(second_transaction.description).to eq 'My Second Transaction'
     end
 
+    it 'can be created as a recurring transaction', :js do
+      click_on 'New Transaction'
+
+      fill_in 'Date', with: Date.new(2026, 1, 1)
+      fill_in 'Description', with: 'My Recurring Transaction'
+      select 'Income', from: 'Transaction type'
+      fill_in 'Amount', with: '10000'
+
+      click_on 'Make Recurring'
+      select 'Monthly', from: 'Frequency'
+      fill_in 'End date', with: Date.new(2026, 3, 1)
+
+      expect do
+        click_on 'Create Transaction'
+        expect(page).to have_text('3 transactions were successfully created')
+      end.to change(Transaction, :count).by(3)
+
+      expect(company.transactions.order(:date).pluck(:date)).to eq(
+        [Date.new(2026, 1, 1), Date.new(2026, 2, 1), Date.new(2026, 3, 1)]
+      )
+    end
+
+    it 'can remove the recurrence before creating', :js do
+      click_on 'New Transaction'
+
+      click_on 'Make Recurring'
+      expect(page).to have_field('End date')
+
+      click_on 'Remove Recurrence'
+      expect(page).to have_no_field('End date')
+      expect(page).to have_link('Make Recurring')
+    end
+
     it 'does not show a delete button' do
       click_on 'New Transaction'
 

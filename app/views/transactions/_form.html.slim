@@ -1,5 +1,5 @@
 .card.card--padded
-  = simple_form_for @transaction, html: { autocomplete: 'off', class: 'card__body' } do |f|
+  = simple_form_for @transaction_form, html: { autocomplete: 'off', class: 'card__body' } do |f|
     div data-controller='conditional-input' data-conditional-input-condition-value='expense'
       = f.hidden_field :company_id, value: current_company.id
 
@@ -16,14 +16,17 @@
           input_html: { data: {conditional_input_target: 'conditionalInput' } }
       = f.input :description
 
+      - unless f.object.persisted?
+        = render 'recurrence', transaction_form: f.object
+
   .card__footer
     .flex.flex-wrap.justify-between.gap-xs
       - show_delete_button = action_name === 'update' || action_name === 'edit'
-      - if show_delete_button && policy(@transaction).destroy?
-        = button_to 'Delete Transaction', transaction_path(@transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
+      - if show_delete_button && policy(@transaction_form.transaction).destroy?
+        = button_to 'Delete Transaction', transaction_path(@transaction_form.transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
 
       .flex.flex-wrap.gap-xs
         - submit_action = action_name == 'new' ? 'Create' : 'Update'
-        = submit_button @transaction, submit_action + ' Transaction', class: 'btn btn--primary'
-        = submit_button @transaction, submit_action + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'
+        = submit_button @transaction_form, submit_action + ' Transaction', class: 'btn btn--primary'
+        = submit_button @transaction_form, submit_action + ' and New', class: 'btn', name: 'submit_and_new', value: 'true'
 

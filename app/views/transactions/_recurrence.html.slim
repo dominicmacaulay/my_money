@@ -1,0 +1,12 @@
+= turbo_frame_tag 'transaction_recurrence' do
+  - if transaction_form.recurring?
+    = simple_fields_for :transaction, transaction_form do |f|
+      = f.hidden_field :recurring, value: true
+
+      .form-row
+        = f.input :frequency, collection: recurrence_frequency_options, include_blank: false
+        = f.input :end_date, as: :string, required: true, input_html: { data: { controller: 'date-input' } }
+
+    = link_to 'Remove Recurrence', recurrence_transactions_path, class: 'btn btn--small'
+  - else
+    = link_to 'Make Recurring', recurrence_transactions_path(recurring: true), class: 'btn btn--small'

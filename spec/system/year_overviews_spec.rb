@@ -18,6 +18,13 @@ RSpec.describe 'Year Overviews' do
     visit root_path
   end
 
+  # This year starts open, and its lazy frame pushes the years below it down when it loads. Wait for it so the
+  # click lands on the summary we aim at.
+  def open_last_year
+    within(data_test(this_year)) { expect(page).to have_text 'Total Income' }
+    find("#{data_test(last_year)} > summary").click
+  end
+
   it 'defers each year until its accordion is opened' do
     click_on 'account_circle'
     click_on 'Year Overviews'
@@ -34,7 +41,7 @@ RSpec.describe 'Year Overviews' do
 
     expect(page).to have_text('View your financial data by year')
 
-    find(data_test(last_year)).click
+    open_last_year
     within data_test(last_year) do
       income = last_year_incomes.sum(&:amount).format
       expenses = last_year_expenses.sum(&:amount).format
@@ -45,7 +52,6 @@ RSpec.describe 'Year Overviews' do
       expect(page).to have_text "Total Balance\n#{total}"
     end
 
-    find(data_test(this_year)).click
     within data_test(this_year) do
       income = this_year_incomes.sum(&:amount).format
       expenses = this_year_expenses.sum(&:amount).format
@@ -72,7 +78,7 @@ RSpec.describe 'Year Overviews' do
   it 'keeps the chart tabs and help separate for each year', :js do
     click_on 'account_circle'
     click_on 'Year Overviews'
-    find(data_test(last_year)).click
+    open_last_year
 
     within data_test(last_year) do
       click_on 'Profit'

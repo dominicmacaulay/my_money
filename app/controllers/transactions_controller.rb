@@ -60,18 +60,13 @@ class TransactionsController < ApplicationController
   end
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
-  def update # rubocop:disable Metrics/MethodLength
+  def update
     authorize @transaction
 
     @transaction_form.assign_attributes(transaction_params)
 
     if @transaction_form.save
-      if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type, date: @transaction.date),
-                    notice: 'Transaction was successfully updated. Please create another.'
-      else
-        redirect_to transactions_path, notice: 'Transaction was successfully updated.'
-      end
+      redirect_to transactions_path, notice: 'Transaction was successfully updated.'
     else
       render :edit, status: :unprocessable_content
     end

@@ -393,14 +393,6 @@ RSpec.describe 'Transactions' do
       expect([past, current, future].map { |t| t.reload.description }).to eq(%w[Past Updated Updated])
     end
 
-    it 'can update this and future occurrences and create another' do
-      click_on 'Update and New'
-      click_on 'This and Future Transactions'
-
-      expect(page).to have_text('Please create another')
-      expect(page).to have_text('Create New Transaction')
-    end
-
     it 'can delete only this occurrence' do
       click_on 'Delete Transaction'
 

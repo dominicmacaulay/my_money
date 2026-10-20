@@ -385,12 +385,16 @@ RSpec.describe 'Transactions' do
     end
 
     it 'can update this and future occurrences' do
+      find_field('Amount').send_keys(%i[command backspace]) # Clear the value in place
+      fill_in 'Amount', with: '50.00'
       fill_in 'Description', with: 'Updated'
       click_on 'Update Transaction'
       click_on 'This and Future Transactions'
 
       expect(page).to have_text('Transaction was successfully updated')
-      expect([past, current, future].map { |t| t.reload.description }).to eq(%w[Past Updated Updated])
+      [past, current, future].each(&:reload)
+      expect([past, current, future].map { |t| t.amount.to_s }).to eq([past.amount.to_s, '50.00', '50.00'])
+      expect([past, current, future].map(&:description)).to eq(%w[Past Updated Future])
     end
 
     it 'can delete only this occurrence' do

@@ -43,13 +43,13 @@ class TransactionsController < ApplicationController
   end
 
   # POST /transactions or /transactions.json
-  def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def create # rubocop:disable Metrics/MethodLength
     transaction = Transaction.new
     @transaction_form = TransactionForm.new(transaction, transaction_params)
     authorize transaction
 
     if @transaction_form.save
-      notice = success_notice(@transaction_form.transactions.size, 'created')
+      notice = success_notice(@transaction_form.saved_count, 'created')
       if params[:submit_and_new] == 'true'
         redirect_to new_transaction_path(transaction.slice(:transaction_type, :date)),
                     notice: "#{notice} Please create another."

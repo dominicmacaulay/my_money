@@ -30,6 +30,18 @@ RSpec.describe TransactionForm do
         expect(company.transactions.distinct.pluck(:recurrence_id)).to contain_exactly(be_present)
       end
 
+      it 'copies every attribute but the date and sets timestamps on the bulk-inserted occurrences' do
+        form = new_form(recurring: '1', frequency: 'daily', end_date: '2026-02-02')
+
+        form.save
+
+        expect(form.saved_count).to eq(3)
+        transactions = company.transactions.order(:date)
+        expect(transactions.map(&:amount).uniq).to eq([Money.new(2500, 'USD')])
+        expect(transactions.map(&:transaction_type).uniq).to eq(['income'])
+        expect(transactions.pluck(:created_at, :updated_at).flatten).to all(be_present)
+      end
+
       it 'keeps monthly occurrences anchored to the start day' do
         form = new_form(recurring: '1', frequency: 'monthly', end_date: '2026-04-30')
 
@@ -84,16 +96,36 @@ RSpec.describe TransactionForm do
         expect([past, current, future].map { |t| t.reload.amount.to_s }).to eq(%w[10.00 20.00 10.00])
       end
 
-      it 'updates this and later occurrences, shifting their dates by the same amount' do
+      it "copies this occurrence's state onto later ones, keeping their own dates and descriptions" do
         described_class.new(current, amount: '20.00', date: '2026-02-03', description: 'Gym', occurrences: 'future')
                        .save
 
         [past, current, future].each(&:reload)
         expect([past, current, future].map { |t| t.amount.to_s }).to eq(%w[10.00 20.00 20.00])
         expect([past, current, future].map(&:date)).to eq(
-          [Date.new(2026, 1, 1), Date.new(2026, 2, 3), Date.new(2026, 3, 3)]
+          [Date.new(2026, 1, 1), Date.new(2026, 2, 3), Date.new(2026, 3, 1)]
         )
-        expect(future.description).to eq('Gym')
+        expect(current.description).to eq('Gym')
+        expect(future.description).not_to eq('Gym')
+      end
+
+      it 'brings later occurrences that were edited on their own back in line with this one' do
+        category = create(:category)
+        future.update!(transaction_type: 'expense', categorizable: category, amount: '99.00')
+
+        described_class.new(current, occurrences: 'future').save
+
+        future.reload
+        expect(future).to be_income
+        expect(future.categorizable).to be_nil
+        expect(future.amount.to_s).to eq('10.00')
+        expect(future).to be_valid
+      end
+
+      it 'bumps updated_at on the later occurrences' do
+        expect do
+          described_class.new(current, amount: '20.00', occurrences: 'future').save
+        end.to(change { future.reload.updated_at })
       end
     end
 

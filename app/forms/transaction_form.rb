@@ -19,14 +19,17 @@ class TransactionForm
 
   MAX_OCCURRENCES = 366
 
+  # What "this and future" copies from the edited transaction onto the later occurrences in its series.
+  SERIES_ATTRIBUTES = %w[amount_cents transaction_type categorizable_type categorizable_id].freeze
+
   attribute :recurring, :boolean, default: false
   attribute :end_date, :date
   attribute :frequency, :string
   # When editing a recurring transaction, whether changes apply to just it or it and every later occurrence.
   attribute :occurrences, :string, default: 'this'
 
-  # The saved occurrences, set by #save. The first is the wrapped transaction; the rest are copies differing by date.
-  attr_reader :transaction, :transactions
+  # How many transactions the last successful #save created, or 1 for an update.
+  attr_reader :transaction, :saved_count
 
   delegate(*TRANSACTION_ATTRIBUTES, *TRANSACTION_ATTRIBUTES.map { |attr| :"#{attr}=" }, to: :transaction)
   delegate :id, :persisted?, :column_for_attribute, :has_attribute?, to: :transaction
@@ -51,43 +54,40 @@ class TransactionForm
     recurring && transaction.new_record?
   end
 
+  # Only the wrapped transaction is validated and saved as a model. Every other occurrence matches it apart from
+  # its date, so the rest of the series is written with one bulk statement built from its attributes.
   def save # rubocop:disable Naming/PredicateMethod
     return false unless valid?
 
+    dates = occurrence_dates
+    transaction.recurrence_id = SecureRandom.uuid if dates.many?
+
     ActiveRecord::Base.transaction do
       update_later_occurrences
-      @transactions = build_transactions.each(&:save!)
+      transaction.save!(validate: false)
+      insert_later_occurrences(dates.drop(1))
     end
+    @saved_count = dates.size
     true
   end
 
   private
 
-  def build_transactions
-    transaction.recurrence_id = SecureRandom.uuid if recurring?
+  def insert_later_occurrences(later_dates)
+    return if later_dates.empty?
 
-    occurrence_dates.map.with_index do |occurrence_date, index|
-      next transaction if index.zero?
-
-      transaction.dup.tap { |copy| copy.date = occurrence_date }
-    end
+    attributes = transaction.attributes.except('id', 'created_at', 'updated_at')
+    Transaction.insert_all!(later_dates.map { |later_date| attributes.merge('date' => later_date) }) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  # Later occurrences take the same edits; a date change shifts each of them by the same number of days.
+  # Later occurrences take on the subject's state wholesale, so each ends up as valid as the subject. Their own
+  # dates and descriptions are kept. One UPDATE, so it can't resurrect rows deleted meanwhile or clobber other columns.
   def update_later_occurrences
-    changes = transaction.changes_to_save.except('date').transform_values(&:last)
-
-    later_occurrences.find_each do |occurrence|
-      occurrence.update!(changes.merge(date: occurrence.date + date_shift))
-    end
+    later_occurrences.update_all(transaction.attributes.slice(*SERIES_ATTRIBUTES).merge(updated_at: Time.current)) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def later_occurrences
     transaction.occurrences(occurrences).where.not(id: transaction.id)
-  end
-
-  def date_shift
-    transaction.date - transaction.date_in_database
   end
 
   def occurrence_dates

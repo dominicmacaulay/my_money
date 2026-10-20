@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Transaction < ApplicationRecord
+  # Which occurrences of a recurring series an update or delete applies to.
+  OCCURRENCE_SCOPES = %w[this future].freeze
+
   belongs_to :company
   belongs_to :categorizable, polymorphic: true, optional: true
 
@@ -26,6 +29,10 @@ class Transaction < ApplicationRecord
     return self.class.where(id:) unless recurring?
 
     self.class.where(company_id:, recurrence_id:).where(date: date_in_database..)
+  end
+
+  def occurrences(scope)
+    scope == 'future' ? this_and_future_occurrences : self.class.where(id:)
   end
 
   def categorizable=(categorizable)

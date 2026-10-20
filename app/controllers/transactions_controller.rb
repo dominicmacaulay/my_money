@@ -6,7 +6,6 @@ class TransactionsController < ApplicationController
   TRANSACTION_GROUPING_OPTIONS = %i[all income expense].freeze
 
   before_action :set_transaction, only: %i[edit update destroy]
-  before_action :set_transaction_form, only: %i[edit update]
 
   # GET /transactions or /transactions.json
   def index
@@ -26,30 +25,33 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     authorize Transaction
-    @transaction_form = TransactionForm.new({ transaction_type: params[:transaction_type], date: params[:date] })
+    @transaction_form = TransactionForm.new(Transaction.new(transaction_type: params[:transaction_type],
+                                                            date: params[:date]))
   end
 
   # GET /transactions/recurrence
   def recurrence
     authorize Transaction, :new?
-    render partial: 'recurrence', locals: { transaction_form: TransactionForm.new({ recurring: params[:recurring] }) }
+    transaction_form = TransactionForm.new(Transaction.new, recurring: params[:recurring])
+    render partial: 'recurrence', locals: { transaction_form: }
   end
 
   # GET /transactions/1/edit
   def edit
     authorize @transaction
+    @transaction_form = TransactionForm.new(@transaction)
   end
 
   # POST /transactions or /transactions.json
   def create # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    @transaction_form = TransactionForm.new(transaction_params)
-    authorize @transaction_form.transaction
+    transaction = Transaction.new
+    @transaction_form = TransactionForm.new(transaction, transaction_params)
+    authorize transaction
 
     if @transaction_form.save
       notice = success_notice(@transaction_form.transactions.size, 'created')
       if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction_form.transaction_type,
-                                         date: @transaction_form.date),
+        redirect_to new_transaction_path(transaction.slice(:transaction_type, :date)),
                     notice: "#{notice} Please create another."
       else
         redirect_to transactions_path, notice:
@@ -63,7 +65,7 @@ class TransactionsController < ApplicationController
   def update
     authorize @transaction
 
-    @transaction_form.assign_attributes(transaction_params)
+    @transaction_form = TransactionForm.new(@transaction, transaction_params)
 
     if @transaction_form.save
       redirect_to transactions_path, notice: 'Transaction was successfully updated.'
@@ -76,13 +78,9 @@ class TransactionsController < ApplicationController
   def destroy
     authorize @transaction
 
-    destroyed = if params[:occurrences] == 'future'
-                  @transaction.this_and_future_occurrences.destroy_all
-                else
-                  [@transaction.destroy]
-                end
+    count = @transaction.occurrences(params[:occurrences]).delete_all
 
-    redirect_to transactions_path, notice: success_notice(destroyed.size, 'destroyed')
+    redirect_to transactions_path, notice: success_notice(count, 'destroyed')
   end
 
   private
@@ -118,10 +116,6 @@ class TransactionsController < ApplicationController
 
   def success_notice(count, action)
     count == 1 ? "Transaction was successfully #{action}." : "#{count} transactions were successfully #{action}."
-  end
-
-  def set_transaction_form
-    @transaction_form = TransactionForm.new(transaction: @transaction)
   end
 
   # Only allow a list of trusted parameters through.

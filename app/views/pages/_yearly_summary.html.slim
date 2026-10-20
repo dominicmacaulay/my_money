@@ -26,11 +26,7 @@
       div id="#{id}-profit-panel" role='tabpanel' aria-labelledby="#{id}-profit-tab" data-tabs-target='panel' hidden=true
         = render 'shared/weekly_profit_chart', report:
 
-      dialog.modal aria-labelledby="#{id}-help-title" data-dialog-target='dialog' data-action='click->dialog#closeOnBackdrop'
-        .modal__header
-          span id="#{id}-help-title" How this chart is calculated
-          = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, data: { action: 'dialog#close' }
-
+      = render layout: 'shared/dialog', locals: { title: 'How this chart is calculated', id: "#{id}-help" } do
         .modal__body
           p
             | Each point is one Monday-to-Sunday week. The first week starts on Jan 1 and the last ends on Dec 31,

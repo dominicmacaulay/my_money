@@ -1,0 +1,7 @@
+-# Layout for a native <dialog> driven by the dialog Stimulus controller; the caller yields its body and footer.
+dialog.modal aria-labelledby="#{id}-title" data-dialog-target='dialog' data-action='click->dialog#closeOnBackdrop'
+  .modal__header
+    span id="#{id}-title" = title
+    = button_tag material_icon('close', size: 'x-large', hover_text: 'Close'), type: 'button', class: 'btn btn--no-border btn--icon btn--pill', aria: { label: 'Close' }, data: { action: 'dialog#close' }
+
+  = yield

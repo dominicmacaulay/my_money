@@ -19,65 +19,58 @@ class TransactionForm
 
   MAX_OCCURRENCES = 366
 
-  OCCURRENCE_SCOPES = %w[this future].freeze
-
   attribute :recurring, :boolean, default: false
   attribute :end_date, :date
   attribute :frequency, :string
   # When editing a recurring transaction, whether changes apply to just it or it and every later occurrence.
   attribute :occurrences, :string, default: 'this'
 
-  attr_reader :transaction
+  # The saved occurrences, set by #save. The first is the wrapped transaction; the rest are copies differing by date.
+  attr_reader :transaction, :transactions
 
   delegate(*TRANSACTION_ATTRIBUTES, *TRANSACTION_ATTRIBUTES.map { |attr| :"#{attr}=" }, to: :transaction)
-  delegate :id, :persisted?, :to_key, :to_param, :column_for_attribute, :has_attribute?, to: :transaction
+  delegate :id, :persisted?, :column_for_attribute, :has_attribute?, to: :transaction
 
   validate :transaction_valid
   validates :frequency, inclusion: { in: FREQUENCIES.keys }, if: :recurring?
   validates :end_date, presence: true, if: :recurring?
   validate :end_date_valid, if: :recurring?
-  validates :occurrences, inclusion: { in: OCCURRENCE_SCOPES }
+  validates :occurrences, inclusion: { in: Transaction::OCCURRENCE_SCOPES }
 
   def self.model_name
     ActiveModel::Name.new(self, nil, 'Transaction')
   end
 
-  def initialize(attributes = {}, transaction: Transaction.new)
+  def initialize(transaction = Transaction.new, attributes = {})
     @transaction = transaction
-    @new_transaction = transaction.new_record?
     super(attributes)
   end
 
   # Only new transactions can recur; editing one never fans out into a series.
   def recurring?
-    recurring && @new_transaction
+    recurring && transaction.new_record?
   end
 
   def save # rubocop:disable Naming/PredicateMethod
     return false unless valid?
 
     ActiveRecord::Base.transaction do
-      update_later_occurrences if update_future_occurrences?
-      transactions.each(&:save!)
+      update_later_occurrences
+      @transactions = build_transactions.each(&:save!)
     end
     true
   end
 
-  # The first occurrence is the wrapped transaction itself; the rest are copies differing only by date.
-  def transactions
-    transaction.recurrence_id ||= SecureRandom.uuid if recurring?
+  private
+
+  def build_transactions
+    transaction.recurrence_id = SecureRandom.uuid if recurring?
 
     occurrence_dates.map.with_index do |occurrence_date, index|
       next transaction if index.zero?
 
       transaction.dup.tap { |copy| copy.date = occurrence_date }
     end
-  end
-
-  private
-
-  def update_future_occurrences?
-    occurrences == 'future' && transaction.persisted? && transaction.recurring?
   end
 
   # Later occurrences take the same edits; a date change shifts each of them by the same number of days.
@@ -90,7 +83,7 @@ class TransactionForm
   end
 
   def later_occurrences
-    transaction.this_and_future_occurrences.where.not(id: transaction.id)
+    transaction.occurrences(occurrences).where.not(id: transaction.id)
   end
 
   def date_shift
@@ -102,10 +95,10 @@ class TransactionForm
 
     step = FREQUENCIES.fetch(frequency)
 
-    (0..).lazy
-         .map { |index| date.advance(step.transform_values { |value| value * index }) }
-         .take_while { |occurrence_date| occurrence_date <= end_date }
-         .first(MAX_OCCURRENCES + 1)
+    (0..MAX_OCCURRENCES).lazy
+                        .map { |index| date.advance(step.transform_values { |value| value * index }) }
+                        .take_while { |occurrence_date| occurrence_date <= end_date }
+                        .to_a
   end
 
   def transaction_valid

@@ -21,27 +21,26 @@
 
   .card__footer
     - transaction = @transaction_form.transaction
-    - form_id = dom_id(@transaction_form, transaction.persisted? ? :edit : :new)
     .flex.flex-wrap.justify-between.gap-xs
-      - show_delete_button = action_name === 'update' || action_name === 'edit'
-      - if show_delete_button && policy(transaction).destroy?
+      - if transaction.persisted?
+        - if policy(transaction).destroy?
+          - if transaction.recurring?
+            div data-controller='dialog'
+              button.btn.btn--destructive type='button' data-action='dialog#open' Delete Transaction
+              = render layout: 'occurrence_dialog', locals: { title: 'Delete Recurring Transaction', id: 'delete-occurrences' } do
+                = button_to 'Only This Transaction', transaction_path(transaction), method: :delete, class: 'btn btn--destructive'
+                = button_to 'This and Future Transactions', transaction_path(transaction), method: :delete, params: { occurrences: 'future' }, class: 'btn btn--destructive'
+          - else
+            = button_to 'Delete Transaction', transaction_path(transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
+
         - if transaction.recurring?
           div data-controller='dialog'
-            button.btn.btn--destructive type='button' data-action='dialog#open' Delete Transaction
-            = render layout: 'occurrence_dialog', locals: { title: 'Delete Recurring Transaction', id: 'delete-occurrences' } do
-              = button_to 'Only This Transaction', transaction_path(transaction), method: :delete, class: 'btn btn--destructive'
-              = button_to 'This and Future Transactions', transaction_path(transaction), method: :delete, params: { occurrences: 'future' }, class: 'btn btn--destructive'
+            = button_tag 'Update Transaction', type: 'button', class: 'btn btn--primary', data: { action: 'dialog#open' }
+            = render layout: 'occurrence_dialog', locals: { title: 'Update Recurring Transaction', id: 'update-occurrences' } do
+              = submit_button @transaction_form, 'Only This Transaction', name: 'transaction[occurrences]', value: 'this', class: 'btn btn--primary'
+              = submit_button @transaction_form, 'This and Future Transactions', name: 'transaction[occurrences]', value: 'future', class: 'btn btn--primary'
         - else
-          = button_to 'Delete Transaction', transaction_path(transaction), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn--destructive'
-
-      - if transaction.persisted? && transaction.recurring?
-        div data-controller='dialog'
-          = button_tag 'Update Transaction', type: 'button', class: 'btn btn--primary', data: { action: 'dialog#open' }
-          = render layout: 'occurrence_dialog', locals: { title: 'Update Recurring Transaction', id: 'update-occurrences' } do
-            = button_tag 'Only This Transaction', form: form_id, name: 'transaction[occurrences]', value: 'this', class: 'btn btn--primary'
-            = button_tag 'This and Future Transactions', form: form_id, name: 'transaction[occurrences]', value: 'future', class: 'btn btn--primary'
-      - elsif transaction.persisted?
-        = submit_button @transaction_form, 'Update Transaction', class: 'btn btn--primary'
+          = submit_button @transaction_form, 'Update Transaction', class: 'btn btn--primary'
       - else
         .flex.flex-wrap.gap-xs
           = submit_button @transaction_form, 'Create Transaction', class: 'btn btn--primary'

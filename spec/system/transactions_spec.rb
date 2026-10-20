@@ -225,7 +225,7 @@ RSpec.describe 'Transactions' do
     end
 
     it 'can create another with the last picked date and type prefilled', :js do # rubocop:disable RSpec/ExampleLength
-      date = 3.days.ago.to_date
+      date = [3.days.ago.to_date, Date.current.beginning_of_year].max
       click_on 'New Transaction'
 
       fill_in 'Date', with: date

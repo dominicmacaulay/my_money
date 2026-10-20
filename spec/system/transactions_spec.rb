@@ -264,6 +264,39 @@ RSpec.describe 'Transactions' do
       expect(second_transaction.description).to eq 'My Second Transaction'
     end
 
+    it 'can be created as a recurring transaction', :js do
+      click_on 'New Transaction'
+
+      fill_in 'Date', with: Date.new(2026, 1, 1)
+      fill_in 'Description', with: 'My Recurring Transaction'
+      select 'Income', from: 'Transaction type'
+      fill_in 'Amount', with: '10000'
+
+      click_on 'Make Recurring'
+      select 'Monthly', from: 'Frequency'
+      fill_in 'End date', with: Date.new(2026, 3, 1)
+
+      expect do
+        click_on 'Create Transaction'
+        expect(page).to have_text('3 transactions were successfully created')
+      end.to change(Transaction, :count).by(3)
+
+      expect(company.transactions.order(:date).pluck(:date)).to eq(
+        [Date.new(2026, 1, 1), Date.new(2026, 2, 1), Date.new(2026, 3, 1)]
+      )
+    end
+
+    it 'can remove the recurrence before creating', :js do
+      click_on 'New Transaction'
+
+      click_on 'Make Recurring'
+      expect(page).to have_field('End date')
+
+      click_on 'Remove Recurrence'
+      expect(page).to have_no_field('End date')
+      expect(page).to have_link('Make Recurring')
+    end
+
     it 'does not show a delete button' do
       click_on 'New Transaction'
 
@@ -326,6 +359,75 @@ RSpec.describe 'Transactions' do
         click_on "Yes, I'm Sure"
         expect(page).to have_text('Transaction was successfully destroyed')
       end.to change(Transaction, :count).by(-1)
+    end
+  end
+
+  context 'when viewing a recurring transaction', :js do
+    let(:recurrence_id) { SecureRandom.uuid }
+    let(:year) { Date.current.year }
+    let!(:past) { create(:transaction, company:, recurrence_id:, date: Date.new(year, 1, 1), description: 'Past') }
+    let!(:current) do
+      create(:transaction, company:, recurrence_id:, date: Date.new(year, 2, 1), description: 'Current')
+    end
+    let!(:future) { create(:transaction, company:, recurrence_id:, date: Date.new(year, 3, 1), description: 'Future') }
+
+    before do
+      visit edit_transaction_path(current)
+    end
+
+    it 'can update only this occurrence' do
+      fill_in 'Description', with: 'Updated'
+      click_on 'Update Transaction'
+      click_on 'Only This Transaction'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      expect([past, current, future].map { |t| t.reload.description }).to eq(%w[Past Updated Future])
+    end
+
+    it 'can update this and future occurrences' do
+      find_field('Amount').send_keys(%i[command backspace]) # Clear the value in place
+      fill_in 'Amount', with: '50.00'
+      fill_in 'Description', with: 'Updated'
+      click_on 'Update Transaction'
+      click_on 'This and Future Transactions'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      [past, current, future].each(&:reload)
+      expect([past, current, future].map { |t| t.amount.to_s }).to eq([past.amount.to_s, '50.00', '50.00'])
+      expect([past, current, future].map(&:description)).to eq(%w[Past Updated Future])
+    end
+
+    it 'asks which occurrences to update when the form is submitted with Enter' do
+      fill_in 'Description', with: 'Updated'
+      find_field('Description').send_keys(:enter)
+
+      expect(page).to have_button('This and Future Transactions')
+      expect(current.reload.description).to eq('Current')
+
+      click_on 'This and Future Transactions'
+
+      expect(page).to have_text('Transaction was successfully updated')
+      expect(current.reload.description).to eq('Updated')
+    end
+
+    it 'can delete only this occurrence' do
+      click_on 'Delete Transaction'
+
+      expect do
+        click_on 'Only This Transaction'
+        expect(page).to have_text('Transaction was successfully destroyed')
+      end.to change(Transaction, :count).by(-1)
+      expect(Transaction.where(id: [past, future])).to contain_exactly(past, future)
+    end
+
+    it 'can delete this and future occurrences' do
+      click_on 'Delete Transaction'
+
+      expect do
+        click_on 'This and Future Transactions'
+        expect(page).to have_text('2 transactions were successfully destroyed')
+      end.to change(Transaction, :count).by(-2)
+      expect(Transaction.all).to contain_exactly(past)
     end
   end
 

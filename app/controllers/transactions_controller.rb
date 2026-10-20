@@ -25,27 +25,36 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     authorize Transaction
-    @transaction = Transaction.new
-    @transaction.transaction_type = params[:transaction_type]
-    @transaction.date = params[:date]
+    @transaction_form = TransactionForm.new(Transaction.new(transaction_type: params[:transaction_type],
+                                                            date: params[:date]))
+  end
+
+  # GET /transactions/recurrence
+  def recurrence
+    authorize Transaction, :new?
+    transaction_form = TransactionForm.new(Transaction.new, recurring: params[:recurring])
+    render partial: 'recurrence', locals: { transaction_form: }
   end
 
   # GET /transactions/1/edit
   def edit
     authorize @transaction
+    @transaction_form = TransactionForm.new(@transaction)
   end
 
   # POST /transactions or /transactions.json
   def create # rubocop:disable Metrics/MethodLength
-    @transaction = Transaction.new(transaction_params)
-    authorize @transaction
+    transaction = Transaction.new
+    @transaction_form = TransactionForm.new(transaction, transaction_params)
+    authorize transaction
 
-    if @transaction.save
+    if @transaction_form.save
+      notice = success_notice(@transaction_form.saved_count, 'created')
       if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type, date: @transaction.date),
-                    notice: 'Transaction was successfully created. Please create another.'
+        redirect_to new_transaction_path(transaction.slice(:transaction_type, :date)),
+                    notice: "#{notice} Please create another."
       else
-        redirect_to transactions_path, notice: 'Transaction was successfully created.'
+        redirect_to transactions_path, notice:
       end
     else
       render :new, status: :unprocessable_content
@@ -53,16 +62,13 @@ class TransactionsController < ApplicationController
   end
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
-  def update # rubocop:disable Metrics/MethodLength
+  def update
     authorize @transaction
 
-    if @transaction.update(transaction_params)
-      if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type, date: @transaction.date),
-                    notice: 'Transaction was successfully updated. Please create another.'
-      else
-        redirect_to transactions_path, notice: 'Transaction was successfully updated.'
-      end
+    @transaction_form = TransactionForm.new(@transaction, transaction_params)
+
+    if @transaction_form.save
+      redirect_to transactions_path, notice: 'Transaction was successfully updated.'
     else
       render :edit, status: :unprocessable_content
     end
@@ -72,9 +78,9 @@ class TransactionsController < ApplicationController
   def destroy
     authorize @transaction
 
-    @transaction.destroy
+    count = @transaction.occurrences(params[:occurrences]).delete_all
 
-    redirect_to transactions_path, notice: 'Transaction was successfully destroyed.'
+    redirect_to transactions_path, notice: success_notice(count, 'destroyed')
   end
 
   private
@@ -108,9 +114,13 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params.expect(:id))
   end
 
+  def success_notice(count, action)
+    count == 1 ? "Transaction was successfully #{action}." : "#{count} transactions were successfully #{action}."
+  end
+
   # Only allow a list of trusted parameters through.
   def transaction_params
     params.expect(transaction: %i[date description amount transaction_type company_id
-                                        categorizable])
+                                  categorizable recurring end_date frequency occurrences])
   end
 end

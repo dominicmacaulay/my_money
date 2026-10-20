@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Transaction < ApplicationRecord
+  OCCURRENCE_SCOPES = %w[this future].freeze
+
   belongs_to :company
   belongs_to :categorizable, polymorphic: true, optional: true
 
@@ -16,6 +18,21 @@ class Transaction < ApplicationRecord
   delegate :name, to: :categorizable, prefix: true, allow_nil: true
 
   paginates_per 25
+
+  def recurring?
+    recurrence_id.present?
+  end
+
+  # The stored date, so an unsaved date edit doesn't move the cutoff.
+  def this_and_future_occurrences
+    return self.class.where(id:) unless recurring?
+
+    self.class.where(company_id:, recurrence_id:).where(date: date_in_database..)
+  end
+
+  def occurrences(scope)
+    scope == 'future' ? this_and_future_occurrences : self.class.where(id:)
+  end
 
   def categorizable=(categorizable)
     if categorizable.is_a?(String) # Check if it is a signed global id

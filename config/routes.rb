@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#home"
 
-  resources :transactions, except: :show
+  resources :transactions, except: :show do
+    get :recurrence, on: :collection
+  end
   resources :companies do
     post :set_current, on: :member
   end

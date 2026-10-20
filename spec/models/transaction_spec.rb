@@ -69,4 +69,31 @@ RSpec.describe Transaction do
       end
     end
   end
+
+  describe '#this_and_future_occurrences' do
+    let(:company) { create(:company) }
+    let(:recurrence_id) { SecureRandom.uuid }
+    let!(:past) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 1, 1)) }
+    let!(:current) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 2, 1)) }
+    let!(:future) { create(:transaction, company:, recurrence_id:, date: Date.new(2026, 3, 1)) }
+
+    it 'returns this occurrence and later ones in the same series' do
+      create(:transaction, company:, recurrence_id: SecureRandom.uuid, date: Date.new(2026, 3, 1))
+
+      expect(current.this_and_future_occurrences).to contain_exactly(current, future)
+      expect(past.this_and_future_occurrences).to contain_exactly(past, current, future)
+    end
+
+    it 'uses the stored date when the date has unsaved changes' do
+      current.date = Date.new(2026, 4, 1)
+
+      expect(current.this_and_future_occurrences).to contain_exactly(current, future)
+    end
+
+    it 'returns only itself when not recurring' do
+      transaction = create(:transaction, company:)
+
+      expect(transaction.this_and_future_occurrences).to contain_exactly(transaction)
+    end
+  end
 end

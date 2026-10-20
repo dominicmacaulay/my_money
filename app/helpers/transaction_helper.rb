@@ -7,6 +7,12 @@ module TransactionHelper
     end
   end
 
+  def recurrence_frequency_options
+    TransactionForm::FREQUENCIES.keys.map do |frequency|
+      [frequency.humanize, frequency]
+    end
+  end
+
   def categorizable_options
     categories = current_company.subcategories.to_a.concat(Category.all)
     categories.map do |category|

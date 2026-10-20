@@ -1,0 +1,6 @@
+= render layout: 'shared/dialog', locals: { title:, id: } do
+  .modal__body
+    p This transaction is part of a recurring series. Apply this to only this transaction, or to it and every later one?
+
+  .modal__footer.flex.flex-wrap.justify-end.gap-xs
+    = yield

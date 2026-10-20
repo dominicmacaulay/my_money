@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_20_155433) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_20_163256) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,8 +46,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_20_155433) do
     t.bigint "company_id", null: false
     t.string "categorizable_type"
     t.bigint "categorizable_id"
+    t.uuid "recurrence_id"
     t.index ["categorizable_type", "categorizable_id"], name: "index_transactions_on_categorizable"
     t.index ["company_id"], name: "index_transactions_on_company_id"
+    t.index ["recurrence_id"], name: "index_transactions_on_recurrence_id"
   end
 
   create_table "user_companies", force: :cascade do |t|

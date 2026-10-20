@@ -27,6 +27,7 @@ class TransactionsController < ApplicationController
     authorize Transaction
     @transaction = Transaction.new
     @transaction.transaction_type = params[:transaction_type]
+    @transaction.date = params[:date]
   end
 
   # GET /transactions/1/edit
@@ -41,7 +42,7 @@ class TransactionsController < ApplicationController
 
     if @transaction.save
       if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type),
+        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type, date: @transaction.date),
                     notice: 'Transaction was successfully created. Please create another.'
       else
         redirect_to transactions_path, notice: 'Transaction was successfully created.'
@@ -57,7 +58,7 @@ class TransactionsController < ApplicationController
 
     if @transaction.update(transaction_params)
       if params[:submit_and_new] == 'true'
-        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type),
+        redirect_to new_transaction_path(transaction_type: @transaction.transaction_type, date: @transaction.date),
                     notice: 'Transaction was successfully updated. Please create another.'
       else
         redirect_to transactions_path, notice: 'Transaction was successfully updated.'

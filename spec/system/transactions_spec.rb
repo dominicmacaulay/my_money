@@ -224,6 +224,46 @@ RSpec.describe 'Transactions' do
       expect(transaction.description).to eq 'My New Transaction'
     end
 
+    it 'can create another with the last picked date and type prefilled', :js do # rubocop:disable RSpec/ExampleLength
+      date = [3.days.ago.to_date, Date.current.beginning_of_year].max
+      click_on 'New Transaction'
+
+      fill_in 'Date', with: date
+      fill_in 'Description', with: 'My First Transaction'
+      select 'Expense', from: 'Transaction type'
+      fill_in 'Amount', with: '10000'
+      select category.name, from: 'Category'
+      click_on 'Create and New'
+
+      expect(page).to have_text('Create New Transaction')
+      expect(page).to have_field('Date', with: date.to_s)
+      expect(page).to have_select('Transaction type', selected: 'Expense')
+      expect(page).to have_field('Amount', with: '$0.00')
+      expect(page).to have_field('Description', with: '')
+
+      first_transaction = company.transactions.order(:created_at).last
+      expect(first_transaction).to be_expense
+      expect(first_transaction.amount).to eq Money.new(10_000, 'USD') # 100.00 USD
+      expect(first_transaction.categorizable).to eq category
+      expect(first_transaction.date).to eq date
+      expect(first_transaction.description).to eq 'My First Transaction'
+
+      fill_in 'Description', with: 'My Second Transaction'
+      fill_in 'Amount', with: '5000'
+      select category.name, from: 'Category'
+      click_on 'Create Transaction'
+
+      expect(page).to have_text('Transaction was successfully created')
+      expect(page).to have_text('My Second Transaction')
+
+      second_transaction = company.transactions.order(:created_at).last
+      expect(second_transaction).to be_expense
+      expect(second_transaction.amount).to eq Money.new(5000, 'USD') # 50.00 USD
+      expect(second_transaction.categorizable).to eq category
+      expect(second_transaction.date).to eq date
+      expect(second_transaction.description).to eq 'My Second Transaction'
+    end
+
     it 'does not show a delete button' do
       click_on 'New Transaction'
 
